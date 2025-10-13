@@ -6,6 +6,9 @@ import mongoose from "mongoose";
 
 import dotenv from "dotenv";
 dotenv.config();
+import router from "./router/auth/authRoute.js";
+import userrouter from "./router/auth/userRoute.js";
+
 
 mongoose
   .connect(process.env.MONGODB_URL, {
@@ -41,3 +44,6 @@ app.use(
 
 app.listen(port,()=>console.log(`server started on port:${port}`));
 app.get('/',(req,res)=>res.send("API is working!"))
+
+app.use("/api/auth",router)
+app.use("/api/user",userrouter)
