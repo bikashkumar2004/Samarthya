@@ -1,0 +1,29 @@
+.accordion {
+    max-width: 600px;
+    margin: 0 auto;
+    margin-top: 100px;
+  }
+  .accordion h2{
+    margin-bottom: 20px;
+    font-size: 32px;
+    text-align: center;
+  }
+  .accordion-item {
+    border-bottom: 1px solid #ddd;
+    padding: 20px 0;
+  }
+  
+  .accordion-question {
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .accordion-question span{
+    margin-right: 25px;
+    font-size: 22px;
+    color: #159740;
+  }
+  .accordion-answer {
+    margin-top: 15px;
+    padding-left: 20px;
+  }
+  
