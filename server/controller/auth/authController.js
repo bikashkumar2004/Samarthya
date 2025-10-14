@@ -59,13 +59,13 @@ export const register = async (req, res) => {
       const mailInfo = await nodemailer.sendMail({
         from: process.env.SMTP_MAIL,
         to: email,
-        subject: "Welcome to WEBDEV ",
+        subject: "Welcome to WHITESPACE ",
         html: `
           <h2>Welcome, ${userName}!</h2>
           <p>Your account has been created successfully.</p>
           <p>Email ID: <b>${email}</b></p>
           <br />
-          <p>Thanks for joining WEBDEV</p>
+          <p>Thanks for joining WHITESPACE</p>
         `,
       });
       console.log("Email sent successfully:", mailInfo.messageId);
