@@ -1,0 +1,82 @@
+/* .services{
+    height: 80vh;
+    padding-inline: 100px; 
+} */
+.services{
+    height: 70vh;
+    /* margin-top: 20px; */
+}
+.services .header,
+.services .text{
+    text-align: center;
+}
+.services .text{
+    font-size: 18px;
+}
+.services .service_header{
+    font-size: 35px;
+    color: #043927;
+    margin-bottom: 5px;
+}
+.service_container{
+    height: 60vh;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding-inline: 150px;
+    gap: 30px;
+    margin-top: 60px;
+    /* background: black; */
+}
+.service_header{
+    text-align: center;
+}
+.service_list{
+    background: #f9f9f9;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+    border-radius: 10px;
+    height: 280px;
+    padding-inline: 30px;
+    padding-top: 30px;
+}
+.service_list:nth-child(1){
+    background: #043927;
+    color: #fff;
+}
+.service_list:nth-child(1):hover{
+    background: #f9f9f9;
+    color: black;
+}
+.service_list:hover{
+    background: #043927;
+    color: #fff;
+}
+.service_container .service_icon{
+    display: inline-block;
+    padding: .6rem;
+    width: 35px;
+    height: 30px;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    background: #159740;
+}
+.service_icon .icon{
+    font-size: 2rem;
+    margin-top: -1.5px;
+}
+.service_list h2{
+    font-size: 25px;
+    font-weight: 600;
+    margin-top: 15px;
+}
+.service_list p{
+    font-size: 16px;
+    margin-top: 20px;
+}
+.service_list .action{
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+/* .service_list:nth-child(1){
+    background-image: linear-gradient(164deg, rgba(214, 214, 214, 0.15) 0%,transparent 44%),linear-gradient(97deg, rgba(197, 197, 197, 0.15) 0%,transparent 40%),linear-gradient(265deg, rgba(218, 210, 210, 0.15) 0%,transparent 30%),linear-gradient(316deg, rgba(158, 141, 141, 0.15) 0%,transparent 78%),repeating-linear-gradient(38deg, rgba(189, 174, 174, 0.1) 0px,transparent 3px),repeating-linear-gradient(100deg, rgba(140,140,140,0.1) 0px,transparent 3px),linear-gradient(90deg, rgb(247, 193, 47),rgb(255,188,0));
+} */
