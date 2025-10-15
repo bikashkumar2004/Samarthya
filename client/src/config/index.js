@@ -14,7 +14,7 @@ export const registationFormControl=[
     type:'email'
   },
   {
-    name:'userName',
+    name:'password',
     label:'password',
     placeholder:'Fill password',
     componentType:'input',

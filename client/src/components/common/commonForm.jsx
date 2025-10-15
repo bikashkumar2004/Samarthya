@@ -118,7 +118,7 @@ export default function CommonForm({
           </div>
         ))}
       </div>
-      <Button type="submit" className="mt-4 w-full bg-[#043927] text-white">
+      <Button type="submit" className="mt-4 w-full bg-[#043927] text-white font-semibold">
         {buttonText || "Submit"}
       </Button>
     </form>

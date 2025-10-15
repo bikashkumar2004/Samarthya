@@ -11,7 +11,18 @@ import AuthLayout from "./components/authentication/AuthLayout";
 
 import Register from "./pages/auth/Register.jsx"
 import Login from "./pages/auth/Login.jsx"
+import EmailVerify from "./pages/auth/EmailVerify";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { checkAuth } from "./store/auth-slice";
 export default function App() {
+  const dispatch=useDispatch();
+ 
+  const {user,isAuthenticated,isLoading}=useSelector(state=>state.auth)
+  useEffect(()=>{
+    dispatch(checkAuth())
+  },[dispatch])
+  
   return (
     <div >
       <Routes>
@@ -24,6 +35,7 @@ export default function App() {
         <Route path="/auth" element={<AuthLayout/>}>
           <Route path="register" element={<Register/>}/>
           <Route path="Login" element={<Login/>}/>
+          <Route path="Email-Verify" element={<EmailVerify/>}/>
         </Route>
       </Routes>
     </div>

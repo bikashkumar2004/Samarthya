@@ -1,7 +1,7 @@
 import User from "../../models/userModel.js"
 import bcrypt from "bcryptjs"
 import jwt from 'jsonwebtoken'
-import nodemailer from "../../config/auth/nodemailer.js"
+import transporter from "../../config/auth/nodemailer.js"
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -39,7 +39,7 @@ export const register = async (req, res) => {
     });
 
     const savedUser = await newUser.save();
-    console.log(" User saved:", savedUser.email);
+    console.log("User saved:", savedUser.email);
 
     // Generate token
     const token = jwt.sign({ id: savedUser._id }, process.env.JWT_SECRET, {
@@ -51,27 +51,20 @@ export const register = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
-    // Try sending welcome email, but don't fail registration if it breaks
+    // Send welcome email
     try {
-      const mailInfo = await nodemailer.sendMail({
-        from: process.env.SMTP_MAIL,
+      const info = await transporter.sendMail({
+        from: process.env.SMTP_MAIL, // must be verified in Brevo
         to: email,
-        subject: "Welcome to WHITESPACE ",
-        html: `
-          <h2>Welcome, ${userName}!</h2>
-          <p>Your account has been created successfully.</p>
-          <p>Email ID: <b>${email}</b></p>
-          <br />
-          <p>Thanks for joining WHITESPACE</p>
-        `,
+        subject: "Welcome to WhiteSpace",
+        text: `Hello ${userName},\n\nYour account has been successfully created with email: ${email}\n\nThank you for registering!`,
       });
-      console.log("Email sent successfully:", mailInfo.messageId);
-    } catch (mailError) {
-      console.error(" Email sending failed:", mailError.message);
-      // (Optional) notify admin or log to a monitoring system
+      console.log("Email sent:", info.response);
+    } catch (emailError) {
+      console.error("Email sending failed:", emailError);
     }
 
     // Send response
@@ -84,9 +77,8 @@ export const register = async (req, res) => {
         email: savedUser.email,
       },
     });
-
   } catch (error) {
-    console.error("❌ Register Error:", error.message);
+    console.error("Register Error:", error.message);
     return res.status(500).json({
       success: false,
       message: "Internal Server Error. Please try again.",
@@ -179,7 +171,7 @@ export const authMiddleware = async (req, res, next) => {
   const { token } = req.cookies;
 
   if (!token) {
-    return res.status(400).json({
+    return res.status(401).json({
       success: false,
       message: "Unauthorized user!",
     });
@@ -187,26 +179,25 @@ export const authMiddleware = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    
-    if (decoded.id) {
-      req.userId = decoded.id;
-      
-    } else {
-      return res.json({
+
+    if (!decoded?.id) {
+      return res.status(403).json({
         success: false,
-        message: "Not authorizied. Login again.",
+        message: "Not authorized. Login again.",
       });
     }
-    
-    next();
+
+    req.userId = decoded.id; 
+    next(); 
   } catch (error) {
-    console.error("Unauth Error:", error);
-    return res.status(500).json({
+    console.error("Auth Middleware Error:", error.message);
+    return res.status(401).json({
       success: false,
-      message: "Invalid or expired token",
+      message: "Invalid or expired token.",
     });
   }
 };
+
 
 export const sendVerifyOtp = async (req, res) => {
   try {

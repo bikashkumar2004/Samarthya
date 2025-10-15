@@ -1,18 +1,25 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CommonForm from "../../components/common/commonForm.jsx";
-import { registationFormControl } from "../../components/config/index.js";
+import { registationFormControl } from "../../config/index.js";
 import React, { useState } from "react";
-const initialState={
-  userName:"",
-  email:"",
-  password:""
-}
+import { useDispatch } from "react-redux";
+import { registerUser } from "@/store/auth-slice/index.js";
+const initialState = {
+  userName: "",
+  email: "",
+  password: "",
+};
 
 export default function Register() {
-  const [formData,setFormData]=useState(initialState)
-  const handleSubmit =async(event)=>{
+  const [formData, setFormData] = useState(initialState);
+  const dispatch=useDispatch();
+  const navigate=useNavigate();
+  const handleSubmit = async (event) => {
     event.preventDefault();
-  }
+    dispatch(registerUser(formData)).then((data)=>{
+      
+    })
+  };
   return (
     <div className="mx-auto w-full max-w-md space-y-6 ">
       <div className="text-center">
@@ -26,10 +33,17 @@ export default function Register() {
           onSubmit={handleSubmit}
           buttonText={"Signup"}
         />
-        <p className="cursor-pointer text-[#043927] text-left my-1">Forget Password</p>
+        <p className="cursor-pointer text-[#043927] text-left my-1">
+          Forget Password
+        </p>
 
         <div>
-          <p>Already have an Account?<span className="cursor-pointer underline text-[#043927] pl-2"><Link to={"/auth/login"}>Login here</Link></span></p>
+          <p>
+            Already have an Account?
+            <span className="cursor-pointer underline text-[#043927] pl-2">
+              <Link to={"/auth/login"}>Login here</Link>
+            </span>
+          </p>
         </div>
       </div>
     </div>
