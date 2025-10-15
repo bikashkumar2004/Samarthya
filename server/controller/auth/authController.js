@@ -226,7 +226,7 @@ export const sendVerifyOtp = async (req, res) => {
     const verifyUser = await user.save();
     
 
-    await nodemailer.sendMail({
+    await transporter.sendMail({
       from: process.env.SMTP_MAIL,
       to: verifyUser.email,
       subject: "Account verify OTP",
@@ -342,7 +342,7 @@ export const resetOtp = async (req, res) => {
     user.resetOtpExpireAt = Date.now() + 15 * 60 * 1000;
     const resetOtpUser = await user.save();
 
-    await nodemailer.sendMail({
+    await transporter.sendMail({
       from: process.env.SMTP_MAIL,
       to: resetOtpUser.email,
       subject: "Reset OTP.",
@@ -402,7 +402,7 @@ export const ResetPassword = async (req, res) => {
     user.resetOtpExpireAt=null
 
     const savedUser=await user.save();
-    await nodemailer.sendMail({
+    await transporter.sendMail({
       from: process.env.SMTP_MAIL,
       to: email,
       subject: "Welcome to WEBDEV",

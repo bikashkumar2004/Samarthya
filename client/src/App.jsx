@@ -35,7 +35,7 @@ export default function App() {
         <Route path="/auth" element={<AuthLayout/>}>
           <Route path="register" element={<Register/>}/>
           <Route path="Login" element={<Login/>}/>
-          <Route path="Email-Verify" element={<EmailVerify/>}/>
+          <Route path="send-verify-otp" element={<EmailVerify/>}/>
         </Route>
       </Routes>
     </div>

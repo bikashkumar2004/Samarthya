@@ -11,13 +11,18 @@ const initialState = {
 
 export const registerUser = createAsyncThunk(
   "auth/register",
-  async (formData) => {
-    const response = await axios.post(`${API_URL}/register`, formData, {
-      withCredentials: true,
-    });
-    return response.data;
+  async (formData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${API_URL}/register`, formData, {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data);
+    }
   }
 );
+
 
 export const loginUser = createAsyncThunk("auth/login", async (formData) => {
   const response = await axios.post(`${API_URL}/login`, formData, {
@@ -37,13 +42,20 @@ export const logoutUser = createAsyncThunk("auth/logout", async () => {
 
 export const sendVerifyOTP = createAsyncThunk(
   "auth/send-verify-otp",
-  async (formData) => {
-    const response = await axios.post(`${API_URL}/send-verify-otp`, formData, {
-      withCredentials: true,
-    });
-    return response.data;
+  async ({ formData, otp }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/send-verify-otp`,
+        { ...formData, otp }, // merge both formData and otp into one object
+        { withCredentials: true }
+      );
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || { message: "Failed to send OTP" });
+    }
   }
 );
+
 
 export const verifyAccount = createAsyncThunk(
   "auth/verify-account",

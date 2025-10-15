@@ -104,10 +104,9 @@ export default function CommonForm({
 
   return (
     <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        onSubmit();
-      }}
+      onSubmit={
+        onSubmit
+      }
       className="space-y-4"
     >
       <div className="flex flex-col gap-3">
