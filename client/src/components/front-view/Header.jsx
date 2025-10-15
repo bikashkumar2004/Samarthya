@@ -33,7 +33,7 @@ export default function Header() {
         </div>
 
         {/* Center: Desktop Menu */}
-        <nav className="hidden md:flex flex-1 justify-center space-x-8">
+        {/* <nav className="hidden md:flex flex-1 justify-center space-x-8">
           <a href="/" className="text-[#043927] hover:text-[#159740] transition">
             Home
           </a>
@@ -46,7 +46,21 @@ export default function Header() {
           <a href="/contact" className="text-[#043927] hover:text-[#159740] transition">
             Contact
           </a>
-        </nav>
+        </nav> */}
+        <div className="hidden md:flex flex-1 justify-center space-x-8">
+            <div className="text-[#043927] hover:text-[#159740] transition" onClick={()=>navigate('/')}>
+              Home
+            </div>
+            <div className="text-[#043927] hover:text-[#159740] transition" onClick={()=>navigate('/about')}>
+              About
+            </div>
+            <div className="text-[#043927] hover:text-[#159740] transition" onClick={()=>navigate('/pricing')}>
+              Pricing
+            </div>
+            <div className="text-[#043927] hover:text-[#159740] transition" onClick={()=>navigate('/contact')}>
+              Contact
+            </div>
+        </div>
 
         {/* Right: Login Button (Desktop) */}
         <div className="hidden md:flex flex-shrink-0">
