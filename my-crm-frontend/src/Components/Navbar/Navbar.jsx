@@ -20,7 +20,6 @@ const Navbar = () => {
       </div>
       <div className="navbar-buttons">
         <Link to="/login" className="btn">Login</Link>
-        <Link to="/register" className="btn">Register</Link>
       </div>
     </nav>
   );

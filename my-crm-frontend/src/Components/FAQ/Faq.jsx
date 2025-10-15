@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Faq.css'
-import { FiMinus, FiPlus } from 'react-icons/fi';
+
 import { FaMinusCircle, FaPlusCircle } from 'react-icons/fa';
 
 const faqItems = [
