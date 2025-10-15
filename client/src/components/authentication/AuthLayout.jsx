@@ -15,7 +15,7 @@ export default function AuthLayout() {
         </div>
       </div>
 
-      <div className="flex flex-1 items-center justify-center px-6 py-12 sm:px-8 lg:px-10 bg-[#ffffff] shadow-inner">
+      <div className="flex flex-1 items-center justify-center px-8 py-16 sm:px-8 lg:px-10 bg-[#ffffff] shadow-inner">
         <Outlet/>
       </div>
     </div>
