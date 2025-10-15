@@ -65,10 +65,10 @@ export default function Header() {
         {/* Right: Login Button (Desktop) */}
         <div className="hidden md:flex flex-shrink-0">
           <button
-            onClick={() => navigate("/login")}
+            onClick={()=>navigate("/auth/register")}
             className="flex items-center gap-2 border border-[#159740] rounded-full px-6 py-2 hover:bg-[#159740] transition-all text-[#043927] mr-7"
           >
-            Login <img src={assets.arrow_icon} alt="arrow" />
+            Login <img src={assets.arrow_icon} alt="arrow"  />
           </button>
         </div>
 
@@ -91,7 +91,7 @@ export default function Header() {
           <a href="/pricing" className="block text-[#043927] hover:text-[#159740]">Pricing</a>
           <a href="/contact" className="block text-[#043927] hover:text-[#159740]">Contact</a>
           <button
-            onClick={() => navigate("/login")}
+            onClick={() => navigate("/auth/register")}
             className="w-full border border-[#159740] text-[#043927] px-4 py-2 rounded-lg hover:bg-[#159740] hover:text-white transition"
           >
             Login
