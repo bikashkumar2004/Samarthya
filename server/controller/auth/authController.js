@@ -202,53 +202,65 @@ export const authMiddleware = async (req, res, next) => {
 export const sendVerifyOtp = async (req, res) => {
   try {
     const userId = req.userId;
-    console.log(userId);
-    
+
     if (!userId) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Authentication ID required." });
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized: No user ID found in token.",
+      });
     }
+
     const user = await User.findById(userId);
 
     if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found!" });
+      return res.status(404).json({
+        success: false,
+        message: "User not found!",
+      });
     }
+
     if (user.isAccountVerified) {
-      return res.json({ success: false, message: "Account Already verified" });
+      return res.status(400).json({
+        success: false,
+        message: "Account already verified.",
+      });
     }
+
+    // Generate OTP
     const otp = String(Math.floor(100000 + Math.random() * 900000));
     user.verifyOTP = otp;
-    user.verifyOTPExpireAt = Date.now() + 60 * 60 * 1000;
+    user.verifyOTPExpireAt = Date.now() + 60 * 60 * 1000; // 1 hour
 
-    const verifyUser = await user.save();
-    
+    await user.save();
 
+    // ✅ Send OTP Email
     await transporter.sendMail({
-      from: process.env.SMTP_MAIL,
-      to: verifyUser.email,
-      subject: "Account verify OTP",
-      text: `Your OTP is ${otp}.Verify your account using this OTP.`,
+      from: process.env.SMTP_MAIL, // verified Brevo sender
+      to: user.email,
+      subject: "Your WhiteSpace Verification OTP",
+      text: `Hi ${user.userName},\n\nYour account verification OTP is: ${otp}\n\nThis code is valid for 1 hour.\n\n- WhiteSpace Team`,
     });
+
+    console.log("OTP sent successfully to:", user.email);
+
     return res.status(200).json({
       success: true,
-      message: "Verification OTP",
+      message: "Verification OTP sent successfully.",
       user: {
-        id: verifyUser._id,
-        userName: verifyUser.userName,
-        email: verifyUser.email,
+        id: user._id,
+        userName: user.userName,
+        email: user.email,
       },
     });
   } catch (error) {
-    console.error("Unauth Error:", error);
+    console.error("sendVerifyOtp Error:", error);
     return res.status(500).json({
       success: false,
-      message: "Invalid or expired token",
+      message: "Internal Server Error while sending OTP.",
     });
   }
 };
+
 //verify OTP
 export const verifyEmail = async (req, res) => {
   const { otp } = req.body;
@@ -426,4 +438,3 @@ export const ResetPassword = async (req, res) => {
     });
   }
 };
-

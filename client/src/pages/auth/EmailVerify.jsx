@@ -1,9 +1,15 @@
 import React, { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useDispatch } from "react-redux";
+import { verifyAccount } from "@/store/auth-slice";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 export default function EmailVerify() {
   const inputRef = useRef([]);
+  const dispatch = useDispatch();
+  const navigate=useNavigate();
 
   const handleInput = (e, index) => {
     const value = e.target.value;
@@ -11,7 +17,6 @@ export default function EmailVerify() {
       e.target.value = "";
       return;
     }
-
     if (value.length > 0 && index < inputRef.current.length - 1) {
       inputRef.current[index + 1].focus();
     }
@@ -35,7 +40,9 @@ export default function EmailVerify() {
 
   const handlePaste = (e) => {
     e.preventDefault();
-    const paste = e.clipboardData.getData("text").slice(0, inputRef.current.length);
+    const paste = e.clipboardData
+      .getData("text")
+      .slice(0, inputRef.current.length);
     paste.split("").forEach((char, index) => {
       if (inputRef.current[index]) inputRef.current[index].value = char;
     });
@@ -43,12 +50,29 @@ export default function EmailVerify() {
     if (inputRef.current[lastIndex]) inputRef.current[lastIndex].focus();
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
     const otp = inputRef.current.map((input) => input.value).join("");
-    console.log("Entered OTP:", otp);
-    
-  };
+
+    if (otp.length !== 6) {
+      toast.warning("Please enter all 6 digits of the OTP");
+      return;
+    }
+    const verifyAccountResponse = await dispatch(verifyAccount({ otp }));
+
+    if (verifyAccountResponse.payload?.success) {
+      toast.success(verifyAccountResponse.payload.message);
+      navigate("/");
+    } else {
+      toast.warning(verifyAccountResponse.payload?.message || "Verification failed");
+    }
+  } catch (error) {
+    console.log(error);
+    toast.error("Something went wrong. Please try again.");
+  }
+};
+
 
   return (
     <div className="mx-auto w-full max-w-md space-y-8">
@@ -81,4 +105,3 @@ export default function EmailVerify() {
     </div>
   );
 }
-

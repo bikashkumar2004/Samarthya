@@ -17,7 +17,6 @@ export default function Register() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // 🟢 Registration handler
   const handleRegister = async (event) => {
     event.preventDefault();
 

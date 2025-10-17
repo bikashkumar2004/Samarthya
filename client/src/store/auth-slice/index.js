@@ -59,11 +59,15 @@ export const sendVerifyOTP = createAsyncThunk(
 
 export const verifyAccount = createAsyncThunk(
   "auth/verify-account",
-  async (formData) => {
-    const response = await axios.post(`${API_URL}/verify-account`, formData, {
+  async ({otp},{rejectWithValue}) => {
+    try{
+      const response = await axios.post(`${API_URL}/verify-account`, {otp}, {
       withCredentials: true,
     });
     return response.data;
+    }catch(e){
+      return rejectWithValue(e.response?.data || {message:"Faild verify Account"})
+    }
   }
 );
 
