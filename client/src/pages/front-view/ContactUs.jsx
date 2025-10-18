@@ -1,7 +1,7 @@
 import { assets } from "../../assets/assets";
 
 
-export default function Contact() {
+export default function ContactUs() {
   return (
     <div className="w-full grid place-items-center">
       <h1 className="mt-8 text-3xl font-bold text-center">

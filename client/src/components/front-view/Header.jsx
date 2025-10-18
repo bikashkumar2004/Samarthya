@@ -57,8 +57,8 @@ export default function Header() {
             <div className="text-[#043927] hover:text-[#159740] transition" onClick={()=>navigate('/pricing')}>
               Pricing
             </div>
-            <div className="text-[#043927] hover:text-[#159740] transition" onClick={()=>navigate('/contact')}>
-              Contact
+            <div className="text-[#043927] hover:text-[#159740] transition" onClick={()=>navigate('/contactus')}>
+              Contact Us
             </div>
         </div>
 
