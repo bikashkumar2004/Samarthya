@@ -1,18 +1,24 @@
 import mongoose from "mongoose";
 
-const contactSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  phone: String,
-  whatshapNo: String,
-  source: {
-    type: String,
-    enum: ["WhatsApp", "Email", "Call", "SMS"],
-    required: true,
+const contactSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true, trim: true },
+    email: { type: String, trim: true },
+    phone: { type: String, trim: true },
+    whatsappNo: { type: String, trim: true },
+    source: {
+      type: String,
+      enum: ["WhatsApp", "Email", "Call", "SMS"],
+      required: true,
+    },
+    folderId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Folder",
+      required: true,
+    },
   },
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "CartList" },
-  createdAt: { type: Date, default: Date.now },
-});
+  { timestamps: true }
+);
 
 const ContactDetails = mongoose.model("ContactDetails", contactSchema);
 export default ContactDetails;

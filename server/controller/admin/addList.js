@@ -1,18 +1,17 @@
 import { processExcelFile } from "../../helper/processxl.js";
-import leadSchema from "../../models/contactDetails.js";
-
+import ContactDetails from "../../models/contactDetails.js"; 
+import Folder from "../../models/createList.js";
 
 export const handleContactDetailsUsingXlsx = async (req, res) => {
   try {
     if (!req.file) {
-      return res
-        .status(400)
-        .json({ success: false, message: "No file uploaded" });
+      return res.status(400).json({
+        success: false,
+        message: "No file uploaded",
+      });
     }
 
-    // processExcelFile(filePath, batchSize)
     const result = await processExcelFile(req.file.path, 100);
-
     res.status(200).json({ success: true, ...result });
   } catch (error) {
     console.error("Excel upload error:", error);
@@ -23,31 +22,42 @@ export const handleContactDetailsUsingXlsx = async (req, res) => {
   }
 };
 
-
 export const addContactDetails = async (req, res) => {
   try {
-    const { name, email, phone, whatshapNo, createdAt, source } = req.body;
+    const { folderId, name, email, phone, whatsappNo, source } = req.body;
 
-    if (!name || !email || !phone || !whatshapNo || !createdAt || !source) {
+    // ✅ Basic validation
+    if (!name || !email || !phone || !whatsappNo || !source || !folderId) {
       return res.status(400).json({
         success: false,
-        message: "Some details are missing",
+        message: "All fields are required",
       });
     }
 
-    const newContact = new leadSchema({
+    const folder = await Folder.findById(folderId);
+    if (!folder) {
+      return res.status(404).json({
+        success: false,
+        message: "Folder not found",
+      });
+    }
+
+ 
+    const newContact = new ContactDetails({
       name,
       email,
       phone,
-      whatshapNo,
-      createdAt,
+      whatsappNo,
       source,
+      folderId,
     });
 
     await newContact.save();
-    res.status(200).json({
+
+    res.status(201).json({
       success: true,
       message: "Contact added successfully",
+      data: newContact,
     });
   } catch (error) {
     console.error("Add contact error:", error);
@@ -59,26 +69,27 @@ export const addContactDetails = async (req, res) => {
 export const editList = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, email, phone, whatshapNo, createdAt, source } = req.body;
+    const { name, email, phone, whatsappNo, source, folderId } = req.body;
 
-    const contact = await leadSchema.findById(id);
+    const contact = await ContactDetails.findById(id);
     if (!contact) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Contact not found" });
+      return res.status(404).json({ success: false, message: "Contact not found" });
     }
 
-    contact.name = name || contact.name;
-    contact.email = email || contact.email;
-    contact.phone = phone || contact.phone;
-    contact.whatshapNo = whatshapNo || contact.whatshapNo;
-    contact.createdAt = createdAt || contact.createdAt;
-    contact.source = source || contact.source;
+    // Update only provided fields
+    if (name) contact.name = name;
+    if (email) contact.email = email;
+    if (phone) contact.phone = phone;
+    if (whatsappNo) contact.whatsappNo = whatsappNo;
+    if (source) contact.source = source;
+    if (folderId) contact.folderId = folderId;
 
     await contact.save();
+
     res.status(200).json({
       success: true,
       message: "Contact updated successfully",
+      data: contact,
     });
   } catch (error) {
     console.error("Edit contact error:", error);
@@ -90,12 +101,10 @@ export const editList = async (req, res) => {
 export const deleteList = async (req, res) => {
   try {
     const { id } = req.params;
-    const contact = await leadSchema.findByIdAndDelete(id);
+    const contact = await ContactDetails.findByIdAndDelete(id);
 
     if (!contact) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Contact not found" });
+      return res.status(404).json({ success: false, message: "Contact not found" });
     }
 
     res.status(200).json({
@@ -111,7 +120,8 @@ export const deleteList = async (req, res) => {
 
 export const fetchAllContactList = async (req, res) => {
   try {
-    const contacts = await leadSchema.find({});
+    // Populate folder name
+    const contacts = await ContactDetails.find({}).populate("folderId", "folderName");
     res.status(200).json({
       success: true,
       data: contacts,

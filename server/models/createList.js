@@ -1,8 +1,11 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const CreateList = new mongoose.Schema({
-  Listname: { type: String, required: true },
-  folder: { type: String, require: true },
-});
+const folderSchema = new mongoose.Schema(
+  {
+    folderName: { type: String, required: true, trim: true, unique: true },
+  },
+  { timestamps: true }
+);
 
-module.exports=mongoose.model('CartList',CreateList)
+const Folder = mongoose.model("Folder", folderSchema);
+export default Folder;
