@@ -2,7 +2,7 @@
 import { Route, Routes } from "react-router-dom";
 import About from "./pages/front-view/About";
 import Pricing from "./pages/front-view/Pricing";
-import Contact from "./pages/front-view/Contact";
+import ContactUs from "./pages/front-view/ContactUs";
 import Layout from "./components/front-view/Layout";
 
 import Home from "./pages/front-view/Home";
@@ -15,6 +15,20 @@ import EmailVerify from "./pages/auth/EmailVerify";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { checkAuth } from "./store/auth-slice";
+
+import AdminLayout from "./pages/admin/AdminLayout"
+import DashBoard from "./components/admin/DashBoard";
+import List from "./components/admin/List";
+import Contact from "./components/admin/Contact";
+import Markting from "./components/admin/Markting";
+import Conversation from "./components/admin/Conversation";
+import Workflow from "./components/admin/Workflow";
+
+
+
+
+
+
 export default function App() {
   const dispatch=useDispatch();
  
@@ -30,12 +44,20 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
           <Route path="pricing" element={<Pricing />} />
-          <Route path="contact" element={<Contact />} />
+          <Route path="contactUs" element={<ContactUs />} />
         </Route>
         <Route path="/auth" element={<AuthLayout/>}>
           <Route path="register" element={<Register/>}/>
           <Route path="Login" element={<Login/>}/>
           <Route path="send-verify-otp" element={<EmailVerify/>}/>
+        </Route>
+        <Route path="/admin" element={<AdminLayout/>}>
+          <Route index element={<DashBoard/>}/>
+          <Route path="list" element={<List/>}/>
+          <Route path="contact" element={<Contact/>}/>
+          <Route path="markting" element={<Markting/>}/>
+          <Route path="conversation" element={<Conversation/>}/>
+          <Route path="workflow" element={<Workflow/>}/>
         </Route>
       </Routes>
     </div>
