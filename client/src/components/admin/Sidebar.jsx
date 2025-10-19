@@ -36,7 +36,7 @@ export default function Sidebar({ sidebar, setSidebar }) {
               `flex items-center gap-4 px-5 py-3 rounded-xl font-medium mb-3 transition-all duration-200 ${
                 isActive
                   ? "bg-[#D8FDD2] text-[#043927] font-semibold"
-                  : "hover:bg-[#f2fdf2] text-[#043927]"
+                  : "hover:bg-[#D8FDD2] text-[#043927]"
               }`
             }
           >
