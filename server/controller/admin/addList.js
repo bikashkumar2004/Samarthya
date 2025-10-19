@@ -1,6 +1,7 @@
 import { processExcelFile } from "../../helper/processxl.js";
+import mongoose from "mongoose";
 import ContactDetails from "../../models/contactDetails.js"; 
-import Folder from "../../models/createList.js";
+
 
 export const handleContactDetailsUsingXlsx = async (req, res) => {
   try {
@@ -24,21 +25,13 @@ export const handleContactDetailsUsingXlsx = async (req, res) => {
 
 export const addContactDetails = async (req, res) => {
   try {
-    const { folderId, name, email, phone, whatsappNo, source } = req.body;
+    const { name, email, phone, whatsappNo, status } = req.body;
 
     // ✅ Basic validation
-    if (!name || !email || !phone || !whatsappNo || !source || !folderId) {
+    if (!name || !email || !phone || !whatsappNo || !status ) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
-      });
-    }
-
-    const folder = await Folder.findById(folderId);
-    if (!folder) {
-      return res.status(404).json({
-        success: false,
-        message: "Folder not found",
       });
     }
 
@@ -48,8 +41,7 @@ export const addContactDetails = async (req, res) => {
       email,
       phone,
       whatsappNo,
-      source,
-      folderId,
+      status,
     });
 
     await newContact.save();
@@ -68,8 +60,21 @@ export const addContactDetails = async (req, res) => {
 
 export const editList = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { name, email, phone, whatsappNo, source, folderId } = req.body;
+    const id = req.params.id.trim(); // Correct: trim the string directly
+    console.log(id);
+    if(!id){
+      return res.status(201).json({
+        success:false,
+        message:"Id not found"
+      })
+    }
+    
+    const { name, email, phone, whatsappNo, status } = req.body;
+
+    // Optional: validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ success: false, message: "Invalid contact ID" });
+    }
 
     const contact = await ContactDetails.findById(id);
     if (!contact) {
@@ -81,8 +86,7 @@ export const editList = async (req, res) => {
     if (email) contact.email = email;
     if (phone) contact.phone = phone;
     if (whatsappNo) contact.whatsappNo = whatsappNo;
-    if (source) contact.source = source;
-    if (folderId) contact.folderId = folderId;
+    if (status) contact.status = status;
 
     await contact.save();
 
@@ -98,9 +102,18 @@ export const editList = async (req, res) => {
 };
 
 
+
 export const deleteList = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id.trim();
+    console.log(id);
+    
+    if(!id){
+      return res.status(201).json({
+        success:false,
+        message:"Id not found"
+      })
+    }
     const contact = await ContactDetails.findByIdAndDelete(id);
 
     if (!contact) {
