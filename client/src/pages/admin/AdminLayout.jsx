@@ -13,8 +13,8 @@ const AdminLayout = () => {
 
   return (
     <div className='flex flex-col items-start justify-start h-screen'>
-      layout
-      <nav className='w-full px-8 min-h-14 flex items-center justify-between border-b border-gray-200'>
+      
+      <nav className='w-full px-8 min-h-14 flex items-center justify-between border-b border-gray-200 bg-[#dbe9db]'>
         {/* <img src={assets.logo} alt="" onClick={()=> navigate('/')} className='cursor-pointer w-32 sm:w-44'/> */}
         {
           sidebar ? <X onClick={()=> setSidebar(false)} className='w-6 h-6 text-gray-600 sm:hidden'/> 
