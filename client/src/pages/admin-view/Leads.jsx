@@ -33,6 +33,8 @@ export default function LeadsAd() {
   const [formData, setfromdata] = useState(initialState);
   const [openCreateProductDialog, setopenCreateProductDialog] = useState(false);
   const [currentEditedId, setcurrentEditedId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+
 
   const dispatch = useDispatch();
   const { contactList } = useSelector((state) => state.contactList);
@@ -93,6 +95,15 @@ export default function LeadsAd() {
       event.target.value = null;
     }
   }
+  const filteredContacts = contactList.filter((contact) => {
+  const term = searchTerm.toLowerCase();
+  return (
+    contact.name?.toLowerCase().includes(term) ||
+    contact.email?.toLowerCase().includes(term) ||
+    contact.phone?.toLowerCase().includes(term)
+  );
+});
+
 
   useEffect(() => {
     dispatch(fetchAllContactList());
@@ -106,7 +117,7 @@ export default function LeadsAd() {
           <h1 className="font-bold text-2xl sm:text-3xl">
             {contactList?.length || 0} Contacts
           </h1>
-          <div className="flex flex-wrap gap-2 sm:gap-3">
+          <div className="flex gap-2 sm:gap-3 items-center">
             {/* Hidden file input + styled button */}
             <div>
               <input
@@ -142,6 +153,8 @@ export default function LeadsAd() {
               type="text"
               placeholder="Search by name, email, phone number..."
               className="pl-10 pr-4 py-2 border border-gray-300 rounded-md shadow-sm w-full focus:ring-2 focus:ring-gray-200"
+              value={searchTerm}
+              onChange={(e)=>setSearchTerm(e.target.value)}
             />
           </div>
         </div>
@@ -160,8 +173,8 @@ export default function LeadsAd() {
 
       {/* Contact List */}
       <div className="divide-y divide-gray-100">
-        {contactList && contactList.length > 0 ? (
-          contactList.map((contactItem) => (
+        {filteredContacts && filteredContacts.length > 0 ? (
+          filteredContacts.map((contactItem) => (
             <Admincard
               key={contactItem._id}
               setfromdata={setfromdata}
