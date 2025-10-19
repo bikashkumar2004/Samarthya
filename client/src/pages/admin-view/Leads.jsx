@@ -1,170 +1,139 @@
-import { useState } from "react";
-import { HiDotsVertical } from "react-icons/hi"; // vertical three-dot icon
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import React, { Fragment, useEffect, useState } from "react";
+import { Search } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addNewContact,
+  deleteContactList,
+  editContactList,
+  fetchAllContactList,
+} from "@/store/admin-slice";
+import { toast } from "sonner";
+import Admincard from "./Admincard";
 
-export default function Leads() {
-  const [leads, setLeads] = useState([
-    { id: 1, name: "John Doe", status: "New", phone: "1234567890", email: "john@example.com" },
-    { id: 2, name: "Jane Smith", status: "Contacted", phone: "9876543210", email: "jane@example.com" },
-  ]);
+const initialState = {
+  name: "",
+  email: "",
+  phone: "",
+  whatsappNo: "",
+  status: "",
+};
 
-  const [showSidebar, setShowSidebar] = useState(false);
-  const [form, setForm] = useState({ name: "", status: "", phone: "", email: "" });
-  const [editId, setEditId] = useState(null);
-  const [dropdownOpen, setDropdownOpen] = useState(null); // stores id of open dropdown
+export default function LeadsAd() {
+  const [formData, setfromdata] = useState(initialState);
+  const [openCreateProductDialog, setopenCreateProductDialog] = useState(false);
+  const [currentEditedId, setcurrentEditedId] = useState(null);
 
-  const handleAddOrEdit = () => {
-    if (editId) {
-      setLeads(leads.map(l => (l.id === editId ? { ...l, ...form } : l)));
-      setEditId(null);
+  const dispatch = useDispatch();
+  const { contactList } = useSelector((state) => state.contactList);
+
+  function onSubmit(event) {
+    event.preventDefault();
+    if (currentEditedId !== null) {
+      dispatch(editContactList({ id: currentEditedId, formData })).then((data) => {
+        if (data?.payload?.success) {
+          dispatch(fetchAllContactList());
+          setopenCreateProductDialog(false);
+          setfromdata(initialState);
+          toast("Contact edited successfully.");
+        }
+      });
     } else {
-      setLeads([...leads, { id: Date.now(), ...form }]);
+      dispatch(addNewContact(formData)).then((data) => {
+        if (data.payload?.success) {
+          dispatch(fetchAllContactList());
+          setopenCreateProductDialog(false);
+          setfromdata(initialState);
+          toast("Contact added successfully.");
+        }
+      });
     }
-    setForm({ name: "", status: "", phone: "", email: "" });
-    setShowSidebar(false);
-  };
+  }
 
-  const handleEdit = (lead) => {
-    setForm({ name: lead.name, status: lead.status, phone: lead.phone, email: lead.email });
-    setEditId(lead.id);
-    setShowSidebar(true);
-    setDropdownOpen(null);
-  };
+  function handleDelete(contactId) {
+    dispatch(deleteContactList(contactId)).then((data) => {
+      if (data.payload?.success) {
+        dispatch(fetchAllContactList());
+        toast("Contact deleted successfully.");
+      }
+    });
+  }
 
-  const handleDelete = (id) => {
-    setLeads(leads.filter(l => l.id !== id));
-    setDropdownOpen(null);
-  };
+  useEffect(() => {
+    dispatch(fetchAllContactList());
+  }, [dispatch]);
 
   return (
-    <div className="p-6 min-h-screen bg-gray-100 relative">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Leads</h1>
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          onClick={() => setShowSidebar(true)}
-        >
-          Create Lead
-        </button>
-      </div>
-
-      <table className="w-full bg-white rounded shadow overflow-hidden">
-        <thead className="bg-blue-500 text-white">
-          <tr>
-            <th className="p-2 text-left">Name</th>
-            <th className="p-2 text-left">Status</th>
-            <th className="p-2 text-left">Phone</th>
-            <th className="p-2 text-left">Email</th>
-            <th className="p-2 text-left"></th> {/* Empty header for dropdown */}
-          </tr>
-        </thead>
-        <tbody>
-          {leads.map((lead) => (
-            <tr key={lead.id} className="border-b hover:bg-gray-50 relative">
-              <td className="p-2">{lead.name}</td>
-              <td className="p-2">{lead.status}</td>
-              <td className="p-2">{lead.phone}</td>
-              <td className="p-2">{lead.email}</td>
-              <td className="p-2 relative">
-                <button
-                  onClick={() => setDropdownOpen(dropdownOpen === lead.id ? null : lead.id)}
-                  className="p-1 rounded hover:bg-gray-200"
-                >
-                  <HiDotsVertical size={20} />
-                </button>
-                {dropdownOpen === lead.id && (
-                  <div className="absolute right-0 mt-2 w-28 bg-white border rounded shadow z-10">
-                    <button
-                      className="block w-full text-left px-2 py-1 hover:bg-gray-100"
-                      onClick={() => {
-                        setDropdownOpen(null);
-                        alert(`Viewing ${lead.name}`);
-                      }}
-                    >
-                      View
-                    </button>
-                    <button
-                      className="block w-full text-left px-2 py-1 hover:bg-gray-100"
-                      onClick={() => handleEdit(lead)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="block w-full text-left px-2 py-1 hover:bg-gray-100"
-                      onClick={() => handleDelete(lead.id)}
-                    >
-                      Remove
-                    </button>
-                  </div>
-                )}
-              </td>
-            </tr>
-          ))}
-          {leads.length === 0 && (
-            <tr>
-              <td colSpan="5" className="p-4 text-center text-gray-500">
-                No leads found.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-
-      {/* Sidebar Form */}
-      {showSidebar && (
-        <div className="fixed top-0 right-0 w-96 h-full bg-white shadow-lg p-6 z-20 transition-transform transform translate-x-0">
-          <h2 className="text-xl font-bold mb-4">{editId ? "Edit Lead" : "Create Lead"}</h2>
-          <div className="flex flex-col gap-3">
-            <input
-              type="text"
-              placeholder="Name"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="p-2 border rounded"
-            />
-            <input
-              type="text"
-              placeholder="Status"
-              value={form.status}
-              onChange={(e) => setForm({ ...form, status: e.target.value })}
-              className="p-2 border rounded"
-            />
-            <input
-              type="text"
-              placeholder="Phone"
-              value={form.phone}
-              onChange={(e) => setForm({ ...form, phone: e.target.value })}
-              className="p-2 border rounded"
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-              className="p-2 border rounded"
-            />
-            <div className="flex justify-end gap-2 mt-4">
-              <button
-                className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
-                onClick={() => setShowSidebar(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                onClick={handleAddOrEdit}
-              >
-                {editId ? "Update" : "Create"}
-              </button>
-            </div>
+    <Fragment>
+      {/* Header Section */}
+      <div className="my-5 flex flex-col w-full px-4 sm:px-8 lg:px-10 bg-white border border-gray-200 rounded-md shadow-sm py-5">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+          <h1 className="font-bold text-2xl sm:text-3xl">
+            {contactList?.length || 0} Contacts
+          </h1>
+          <div className="flex flex-wrap gap-2 sm:gap-3">
+            <Button className="border border-gray-300 rounded-md bg-white text-black text-sm sm:text-lg font-semibold px-4 sm:px-5 py-2 shadow-sm hover:bg-gray-100 transition">
+              Import Contact
+            </Button>
+            <Button className="border border-gray-700 rounded-lg bg-black text-white text-sm sm:text-lg font-semibold px-4 sm:px-5 py-2 shadow-sm hover:bg-gray-800 transition">
+              Create a Contact
+            </Button>
           </div>
         </div>
-      )}
-      {showSidebar && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-30 z-10"
-          onClick={() => setShowSidebar(false)}
-        />
-      )}
-    </div>
+
+        {/* Search Section */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-6 gap-3">
+          <div className="relative w-full sm:w-96">
+            <Search className="absolute left-3 top-2.5 text-gray-500 w-5 h-5" />
+            <Input
+              type="text"
+              placeholder="Search by name, email, phone number..."
+              className="pl-10 pr-4 py-2 border border-gray-300 rounded-md shadow-sm w-full focus:ring-2 focus:ring-gray-200"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Table Header */}
+      <div className="hidden sm:block border-t border-b border-gray-200 mt-3 bg-gray-100">
+        <div className="grid grid-cols-5 px-6 sm:px-10 py-3 font-semibold text-gray-700 text-xs sm:text-sm uppercase tracking-wide">
+          <span>Name</span>
+          <span>Status</span>
+          <span>Phone</span>
+          <span>Email</span>
+          <span className="text-right">Actions</span>
+        </div>
+      </div>
+
+      {/* Contact List */}
+      <div className="divide-y divide-gray-100">
+        {contactList && contactList.length > 0 ? (
+          contactList.map((contactItem) => (
+            <Admincard
+              key={contactItem._id}
+              setfromdata={setfromdata}
+              setopenCreateProductDialog={setopenCreateProductDialog}
+              setcurrentEditedId={setcurrentEditedId}
+              handleDelete={handleDelete}
+              contact={contactItem}
+            />
+          ))
+        ) : (
+          <div className="flex flex-col items-center justify-center text-center py-20 bg-white">
+            <h2 className="text-2xl font-semibold mb-2">
+              You don't have contacts in this list yet
+            </h2>
+            <p className="text-gray-600 mb-6 text-lg max-w-md">
+              Add new contacts to this list and continue enriching your contact
+              database.
+            </p>
+            <Button className="border border-gray-300 rounded-lg bg-white text-black text-lg font-semibold px-5 py-2 shadow-sm hover:bg-gray-100 transition">
+              Create a new contact
+            </Button>
+          </div>
+        )}
+      </div>
+    </Fragment>
   );
 }

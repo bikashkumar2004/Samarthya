@@ -27,8 +27,6 @@ import Workflows from "./pages/admin-view/Workflows";
 
 
 
-
-
 export default function App() {
   const dispatch=useDispatch();
  
@@ -46,11 +44,13 @@ export default function App() {
           <Route path="pricing" element={<Pricing />} />
           <Route path="contactUs" element={<ContactUs />} />
         </Route>
+
         <Route path="/auth" element={<AuthLayout/>}>
           <Route path="register" element={<Register/>}/>
           <Route path="Login" element={<Login/>}/>
           <Route path="send-verify-otp" element={<EmailVerify/>}/>
         </Route>
+
         <Route path="/admin" element={<AdminLayouts/>}>
             <Route path="Dashboard" element={<Dashbords/>}/>
             <Route path="Leads" element={<Leads/>}/>
@@ -58,7 +58,6 @@ export default function App() {
             <Route path="Marketing" element={<Marketings/>}/>
             <Route path="Conversations" element={<Conversations/>}/>
             <Route path="Workflow" element={<Workflows/>}/>
-
         </Route>
       </Routes>
     </div>
