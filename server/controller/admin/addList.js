@@ -24,6 +24,7 @@ export const handleContactUpload = async (req, res) => {
   }
 };
 
+
 export const addContactDetails = async (req, res) => {
   try {
     const { name, email, phone, whatsappNo, status } = req.body;
@@ -59,7 +60,6 @@ export const addContactDetails = async (req, res) => {
 export const editList = async (req, res) => {
   try {
     const id = req.params.id.trim(); // Correct: trim the string directly
-    console.log(id);
     if (!id) {
       return res.status(201).json({
         success: false,
@@ -67,7 +67,8 @@ export const editList = async (req, res) => {
       });
     }
 
-    const { name, email, phone, whatsappNo, status } = req.body;
+     const { name, email, phone, whatsappNo, status } = req.body
+console.log(req.body);
 
     // Optional: validate ObjectId
     if (!mongoose.Types.ObjectId.isValid(id)) {

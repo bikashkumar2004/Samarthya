@@ -38,3 +38,52 @@ export const loginFormControl=[
     type:'password'
   }
 ]
+export const addContactFormElements = [
+  {
+    label: "Name",
+    name: "name",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter full name",
+    required: true,
+  },
+  {
+    label: "Email",
+    name: "email",
+    componentType: "input",
+    type: "email",
+    placeholder: "Enter email address",
+  },
+  {
+    label: "Phone",
+    name: "phone",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter phone number",
+  },
+  {
+    label: "WhatsApp Number",
+    name: "whatsappNo",
+    componentType: "input",
+    type: "text",
+    placeholder: "Enter WhatsApp number",
+  },
+  {
+    label: "Status",
+    name: "status",
+    componentType: "select",
+    options: [
+      { id: "New", label: "New" },
+      { id: "Pending", label: "Pending" },
+      { id: "Rejected", label: "Rejected" },
+      { id: "Assigned", label: "Assigned" },
+      { id: "Imported", label: "Imported" },
+      { id: "Contacted", label: "Contacted" },
+      { id: "Interested", label: "Interested" },
+      { id: "No Replay", label: "No Replay" },
+      { id: "Engaging", label: "Engaging" },
+    ],
+    required: true,
+    placeholder: "Select status",
+  },
+];

@@ -8,9 +8,18 @@ import {
   deleteContactList,
   editContactList,
   fetchAllContactList,
+  uploadContactList,
 } from "@/store/admin-slice";
 import { toast } from "sonner";
 import Admincard from "./Admincard";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import CommonForm from "@/components/common/commonForm";
+import { addContactFormElements } from "@/config";
 
 const initialState = {
   name: "",
@@ -28,17 +37,20 @@ export default function LeadsAd() {
   const dispatch = useDispatch();
   const { contactList } = useSelector((state) => state.contactList);
 
+  // Add/Edit contact
   function onSubmit(event) {
     event.preventDefault();
     if (currentEditedId !== null) {
-      dispatch(editContactList({ id: currentEditedId, formData })).then((data) => {
-        if (data?.payload?.success) {
-          dispatch(fetchAllContactList());
-          setopenCreateProductDialog(false);
-          setfromdata(initialState);
-          toast("Contact edited successfully.");
+      dispatch(editContactList({ id: currentEditedId, formData })).then(
+        (data) => {
+          if (data?.payload?.success) {
+            dispatch(fetchAllContactList());
+            setopenCreateProductDialog(false);
+            setfromdata(initialState);
+            toast("Contact edited successfully.");
+          }
         }
-      });
+      );
     } else {
       dispatch(addNewContact(formData)).then((data) => {
         if (data.payload?.success) {
@@ -51,6 +63,7 @@ export default function LeadsAd() {
     }
   }
 
+  // Delete contact
   function handleDelete(contactId) {
     dispatch(deleteContactList(contactId)).then((data) => {
       if (data.payload?.success) {
@@ -58,6 +71,27 @@ export default function LeadsAd() {
         toast("Contact deleted successfully.");
       }
     });
+  }
+
+  // Import contacts from file
+  async function handleImportContact(event) {
+    const file = event.target.files[0]; // pick first selected file
+    if (!file) return;
+
+    try {
+      const result = await dispatch(uploadContactList(file));
+      if (result?.payload?.success) {
+        toast.success("Contacts imported successfully!");
+        dispatch(fetchAllContactList());
+      } else {
+        toast.error(result?.payload?.message || "Failed to import contacts");
+      }
+    } catch (error) {
+      console.error("Import error:", error);
+      toast.error("Something went wrong while importing contacts.");
+    } finally {
+      event.target.value = null;
+    }
   }
 
   useEffect(() => {
@@ -73,10 +107,28 @@ export default function LeadsAd() {
             {contactList?.length || 0} Contacts
           </h1>
           <div className="flex flex-wrap gap-2 sm:gap-3">
-            <Button className="border border-gray-300 rounded-md bg-white text-black text-sm sm:text-lg font-semibold px-4 sm:px-5 py-2 shadow-sm hover:bg-gray-100 transition">
-              Import Contact
-            </Button>
-            <Button className="border border-gray-700 rounded-lg bg-black text-white text-sm sm:text-lg font-semibold px-4 sm:px-5 py-2 shadow-sm hover:bg-gray-800 transition">
+            {/* Hidden file input + styled button */}
+            <div>
+              <input
+                type="file"
+                accept=".xlsx, .xls"
+                className="hidden"
+                id="file-upload"
+                onChange={handleImportContact}
+              />
+              <label
+                htmlFor="file-upload"
+                className="cursor-pointer border border-gray-300 rounded-md bg-white text-black text-sm sm:text-lg font-semibold px-4 sm:px-5 py-2 shadow-sm hover:bg-gray-100 transition"
+              >
+                Import Contact
+              </label>
+            </div>
+
+            {/* Create contact button */}
+            <Button
+              className="border border-gray-700 rounded-lg bg-black text-white text-sm sm:text-lg font-semibold px-4 sm:px-5 py-2 shadow-sm hover:bg-gray-800 transition"
+              onClick={() => setopenCreateProductDialog(true)}
+            >
               Create a Contact
             </Button>
           </div>
@@ -134,6 +186,38 @@ export default function LeadsAd() {
           </div>
         )}
       </div>
+
+      {/* Slide-out Sheet for Add/Edit */}
+      <Sheet
+        open={openCreateProductDialog}
+        onOpenChange={() => {
+          setopenCreateProductDialog(false);
+          setcurrentEditedId(null);
+          setfromdata(initialState);
+        }}
+      >
+        <SheetContent
+          side="right"
+          className="w-[400px] bg-white text-[#043927] border-r p-6"
+          overlayClassName="bg-transparent"
+        >
+          <SheetHeader className="pb-4 border-b">
+            <SheetTitle>
+              {currentEditedId !== null ? "Edit Details" : "Add New Contact"}
+            </SheetTitle>
+          </SheetHeader>
+
+          <div className="px-5 py-6">
+            <CommonForm
+              formData={formData}
+              setFormData={setfromdata}
+              formControls={addContactFormElements}
+              buttonText={currentEditedId !== null ? "Edit" : "Add"}
+              onSubmit={onSubmit}
+            />
+          </div>
+        </SheetContent>
+      </Sheet>
     </Fragment>
   );
 }

@@ -2,7 +2,7 @@ import xlsx from "xlsx";
 import fs from "fs";
 import Contact from "../models/contactDetails.js";
 
-export async function processExcelFile(filePath, batchSize = 100, folderId = null) {
+export async function processExcelFile(filePath, batchSize = 100) {
   try {
     const workbook = xlsx.readFile(filePath);
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
@@ -10,7 +10,8 @@ export async function processExcelFile(filePath, batchSize = 100, folderId = nul
 
     if (!jsonData.length) throw new Error("Excel sheet is empty");
 
-    // Normalize keys (convert Excel headers to lowercase)
+    const allowedStatus = ["New", "Pending", "Rejected", "Assigned","Imported","Contacted","Interested","No Replay","Engaging"];
+
     const normalized = jsonData.map((row) => {
       const newRow = {};
       for (const key in row) {
@@ -19,32 +20,28 @@ export async function processExcelFile(filePath, batchSize = 100, folderId = nul
       return newRow;
     });
 
-    // Prepare valid contacts
     const validContacts = normalized
       .filter(
-        (row) =>
-          row.name && row.email && row.phone && row.source
+        (row) => row.name && row.status && allowedStatus.includes(row.status)
       )
       .map((row) => ({
         name: row.name,
-        email: row.email,
-        phone: row.phone,
-        whatshapNo: row.whatsappno || row["whatsapp no"] || "",
-        source: row.source,
-        FolderId: folderId || null,
+        email: row.email || "",
+        phone: row.phone || "",
+        whatsappNo: row.whatsappno || row["whatsapp no"] || "",
+        status: row.status,
       }));
 
     if (validContacts.length === 0) {
       throw new Error("No valid contact records found in Excel");
     }
 
-    // Batch insert
     for (let i = 0; i < validContacts.length; i += batchSize) {
       const batch = validContacts.slice(i, i + batchSize);
       await Contact.insertMany(batch);
     }
 
-    fs.unlinkSync(filePath); // cleanup
+    fs.unlinkSync(filePath); 
 
     return {
       success: true,
@@ -57,4 +54,3 @@ export async function processExcelFile(filePath, batchSize = 100, folderId = nul
     throw error;
   }
 }
-
