@@ -1,13 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import {
-  House,
-  SquarePen,
-  Hash,
-  Image,
-  Eraser,
-  Scissors,
-} from "lucide-react";
+import { House, SquarePen, Hash, Image, Eraser, Scissors } from "lucide-react";
 
 const navItems = [
   { to: "/admin", label: "Dashboard", Icon: House },
@@ -26,6 +19,10 @@ export default function Sidebar({ sidebar, setSidebar }) {
         ${sidebar ? "translate-x-0" : "max-sm:-translate-x-full"}`}
     >
       <div className="mt-4 px-3 space-y-1">
+        <div className="hidden sm:flex font-bold text-[#043927] justify-center items-center text-3xl mb-4">
+          Brevo
+        </div>
+
         {navItems.map(({ to, label, Icon }) => (
           <NavLink
             key={to}
