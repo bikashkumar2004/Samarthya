@@ -18,7 +18,7 @@ import { checkAuth } from "./store/auth-slice";
 
 import AdminLayout from "./pages/admin/AdminLayout"
 import DashBoard from "./components/admin/DashBoard";
-import List from "./components/admin/List";
+import Lead from "./components/admin/Lead";
 import Contact from "./components/admin/Contact";
 import Markting from "./components/admin/Markting";
 import Conversation from "./components/admin/Conversation";
@@ -53,7 +53,7 @@ export default function App() {
         </Route>
         <Route path="/admin" element={<AdminLayout/>}>
           <Route index element={<DashBoard/>}/>
-          <Route path="list" element={<List/>}/>
+          <Route path="lead" element={<Lead/>}/>
           <Route path="contact" element={<Contact/>}/>
           <Route path="markting" element={<Markting/>}/>
           <Route path="conversation" element={<Conversation/>}/>
