@@ -9,6 +9,7 @@ dotenv.config();
 import router from "./router/auth/authRoute.js";
 import userrouter from "./router/auth/userRoute.js";
 import contactLists from './router/admin/contactList.js'
+import folder from "./router/admin/folderList.js"
 
 
 mongoose
@@ -48,4 +49,5 @@ app.get('/',(req,res)=>res.send("API is working!"))
 
 app.use("/api/auth",router)
 app.use("/api/user",userrouter)
-app.use("/api/admin/contactList",contactLists)
+app.use("/api/admin/contactList",contactLists);
+app.use("/api/admin/folder",folder)
