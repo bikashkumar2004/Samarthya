@@ -1,4 +1,3 @@
-
 import { Route, Routes } from "react-router-dom";
 import About from "./pages/front-view/About";
 import Pricing from "./pages/front-view/Pricing";

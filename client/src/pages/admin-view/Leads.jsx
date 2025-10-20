@@ -193,7 +193,7 @@ export default function LeadsAd() {
               Add new contacts to this list and continue enriching your contact
               database.
             </p>
-            <Button className="border border-gray-300 rounded-lg bg-white text-black text-lg font-semibold px-5 py-2 shadow-sm hover:bg-gray-100 transition">
+            <Button className="border border-gray-300 rounded-lg bg-white text-black text-lg font-semibold px-5 py-2 shadow-sm hover:bg-gray-100 transition" onClick={() => setopenCreateProductDialog(true)}>
               Create a new contact
             </Button>
           </div>
