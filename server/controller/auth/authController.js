@@ -87,53 +87,61 @@ export const register = async (req, res) => {
 };
 
 
-// Login
+
+
 export const login = async (req, res) => {
-  const { email, password } = req.body;
-
-  if (!email || !password) {
-    return res.status(400).json({
-      success: false,
-      message: "Email and Password required!",
-    });
-  }
-
   try {
-    const checkUser = await User.findOne({ email });
-    if (!checkUser) {
-      return res.json({
+    const { email, password } = req.body;
+
+    // 1. Validate input
+    if (!email || !password) {
+      return res.status(400).json({
         success: false,
-        message: "Invalid Email",
+        message: "Email and password are required.",
       });
     }
 
-    const checkPassword = await bcrypt.compare(password, checkUser.password);
-    if (!checkPassword) {
-      return res.json({
+    //  2. Check if user exists
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({
         success: false,
-        message: "Invalid Password",
+        message: "Invalid email or password.",
       });
     }
 
-    const token = jwt.sign({ id: checkUser._id }, process.env.JWT_SECRET, {
+    // 3. Compare password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or password.",
+      });
+    }
+
+    //  4. Generate JWT
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
 
+    //  5. Set cookie securely
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production", // true in production
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
-    //sending welcome email
 
+    //  6. Send response (omit sensitive data)
     return res.status(200).json({
       success: true,
       message: "Login successful",
       user: {
-        id: checkUser._id,
-        userName: checkUser.userName,
-        email: checkUser.email,
+        id: user._id,
+        userName: user.userName,
+        email: user.email,
+        role: user.role, // include role if you use admin/user roles
+        isAccountVerified: user.isAccountVerified, // include if verification system is used
       },
     });
   } catch (error) {
@@ -144,6 +152,7 @@ export const login = async (req, res) => {
     });
   }
 };
+
 
 // Logout
 export const logout = async (req, res) => {

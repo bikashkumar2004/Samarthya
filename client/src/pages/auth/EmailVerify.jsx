@@ -63,7 +63,7 @@ const handleSubmit = async (e) => {
 
     if (verifyAccountResponse.payload?.success) {
       toast.success(verifyAccountResponse.payload.message);
-      navigate("/");
+      navigate("/auth/login");
     } else {
       toast.warning(verifyAccountResponse.payload?.message || "Verification failed");
     }

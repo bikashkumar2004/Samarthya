@@ -6,18 +6,13 @@ const contactSchema = new mongoose.Schema(
     email: { type: String, trim: true },
     phone: { type: String, trim: true },
     whatsappNo: { type: String, trim: true },
-    source: {
+    status: {
       type: String,
-      enum: ["WhatsApp", "Email", "Call", "SMS"],
-      required: true,
-    },
-    folderId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Folder",
+      enum: ["New", "Pending", "Rejected", "Assigned","Imported","Contacted","Interested","No Replay","Engaging"],
       required: true,
     },
   },
-  { timestamps: true }
+  
 );
 
 const ContactDetails = mongoose.model("ContactDetails", contactSchema);

@@ -1,7 +1,7 @@
 import express from "express";
 import { upload } from "../../helper/uploadxls.js";
 import {
-  handleContactDetailsUsingXlsx,
+  handleContactUpload,
   addContactDetails,
   editList,
   deleteList,
@@ -10,7 +10,7 @@ import {
 
 const router = express.Router();
 
-router.post("/upload-xlsx", upload.single("file"), handleContactDetailsUsingXlsx);
+router.post("/upload-xlsx", upload.single("file"), handleContactUpload);
 router.post("/add", addContactDetails);
 router.put("/edit/:id", editList);
 router.delete("/delete/:id", deleteList);

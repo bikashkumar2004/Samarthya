@@ -23,13 +23,30 @@ export const registerUser = createAsyncThunk(
   }
 );
 
+export const loginUser = createAsyncThunk(
+  "auth/login",
+  async (formData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${API_URL}/login`, formData, {
+        withCredentials: true,
+      });
+      console.log("Login Response:", response.data);
 
-export const loginUser = createAsyncThunk("auth/login", async (formData) => {
-  const response = await axios.post(`${API_URL}/login`, formData, {
-    withCredentials: true,
-  });
-  return response.data;
-});
+      if (response.data.success) {
+        // Return the full response
+        return response.data;
+      }
+
+      return rejectWithValue(response.data.message || "Login failed");
+    } catch (error) {
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong during login";
+      return rejectWithValue(message);
+    }
+  }
+);
 
 export const logoutUser = createAsyncThunk("auth/logout", async () => {
   const response = await axios.post(
@@ -51,22 +68,29 @@ export const sendVerifyOTP = createAsyncThunk(
       );
       return response.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data || { message: "Failed to send OTP" });
+      return rejectWithValue(
+        err.response?.data || { message: "Failed to send OTP" }
+      );
     }
   }
 );
 
-
 export const verifyAccount = createAsyncThunk(
   "auth/verify-account",
-  async ({otp},{rejectWithValue}) => {
-    try{
-      const response = await axios.post(`${API_URL}/verify-account`, {otp}, {
-      withCredentials: true,
-    });
-    return response.data;
-    }catch(e){
-      return rejectWithValue(e.response?.data || {message:"Faild verify Account"})
+  async ({ otp }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/verify-account`,
+        { otp },
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (e) {
+      return rejectWithValue(
+        e.response?.data || { message: "Faild verify Account" }
+      );
     }
   }
 );
@@ -130,9 +154,10 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.isAuthenticated = !!action.payload.success; // Assuming 'success' means authentication worked
+        state.isAuthenticated = !!action.payload.success;
         state.user = action.payload.user || null;
       })
+
       .addCase(loginUser.rejected, (state) => {
         state.isLoading = false;
         state.isAuthenticated = false;

@@ -1,6 +1,6 @@
 import xlsx from "xlsx";
 import fs from "fs";
-import leadSchema from "../models/contactDetails.js";
+import Contact from "../models/contactDetails.js";
 
 export async function processExcelFile(filePath, batchSize = 100) {
   try {
@@ -10,16 +10,47 @@ export async function processExcelFile(filePath, batchSize = 100) {
 
     if (!jsonData.length) throw new Error("Excel sheet is empty");
 
-    for (let i = 0; i < jsonData.length; i += batchSize) {
-      const batch = jsonData.slice(i, i + batchSize);
-      await leadSchema.insertMany(batch);
+    const allowedStatus = ["New", "Pending", "Rejected", "Assigned","Imported","Contacted","Interested","No Replay","Engaging"];
+
+    const normalized = jsonData.map((row) => {
+      const newRow = {};
+      for (const key in row) {
+        newRow[key.trim().toLowerCase()] = row[key];
+      }
+      return newRow;
+    });
+
+    const validContacts = normalized
+      .filter(
+        (row) => row.name && row.status && allowedStatus.includes(row.status)
+      )
+      .map((row) => ({
+        name: row.name,
+        email: row.email || "",
+        phone: row.phone || "",
+        whatsappNo: row.whatsappno || row["whatsapp no"] || "",
+        status: row.status,
+      }));
+
+    if (validContacts.length === 0) {
+      throw new Error("No valid contact records found in Excel");
     }
 
-    fs.unlinkSync(filePath);
-    return { totalRecords: jsonData.length, message: "Contacts uploaded successfully" };
+    for (let i = 0; i < validContacts.length; i += batchSize) {
+      const batch = validContacts.slice(i, i + batchSize);
+      await Contact.insertMany(batch);
+    }
+
+    fs.unlinkSync(filePath); 
+
+    return {
+      success: true,
+      totalRecords: jsonData.length,
+      importedRecords: validContacts.length,
+      message: "Contacts uploaded successfully",
+    };
   } catch (error) {
     if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
     throw error;
   }
 }
-
