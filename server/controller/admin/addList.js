@@ -145,3 +145,23 @@ export const fetchAllContactList = async (req, res) => {
     res.status(500).json({ success: false, message: "Error occurred" });
   }
 };
+
+export const showcontactDetails=async(req,res)=>{
+  try{
+    const id=req.params.id.trim();
+    const contactList=await ContactDetails.findById(id)
+    if(!contactList){
+      return res.status(400).json({
+        success:false,
+        message:"Contact not found."
+      })
+    }
+    res.status(200).json({
+      success:true,
+      data:contactList
+    })
+  }catch(e){
+    console.error("Fetch contacts error:", error);
+    res.status(500).json({ success: false, message: "Error occurred" });
+  }
+}

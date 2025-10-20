@@ -1,4 +1,4 @@
-import DetailDialog from "@/components/admin/DetailDialog";
+import DetailDialog from "@/components/admin-view/DetailDialog";
 import { EllipsisVertical } from "lucide-react";
 import React, { useState } from "react";
 
@@ -14,18 +14,17 @@ export default function Admincard({
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 sm:gap-0 px-6 sm:px-10 py-4 items-start sm:items-center border-b border-gray-200 bg-white hover:bg-gray-50 transition relative">
-      
-      {isOpen && (
-        <DetailDialog isOpen={isOpen} setIsOpen={setIsOpen} />
-      )}
+      {isOpen && <DetailDialog isOpen={isOpen} setIsOpen={setIsOpen} />}
       {/* Name */}
       <div className="flex flex-col">
         <span className="font-semibold text-gray-900 sm:hidden">Name:</span>
-        <span onClick={() => setIsOpen(true)} className="text-gray-800 font-medium cursor-pointer hover:underline">
+        <span
+          onClick={() => setIsOpen(true)}
+          className="text-gray-800 font-medium cursor-pointer hover:underline"
+        >
           {contact?.name || "-"}
         </span>
       </div>
-      
 
       {/* Status */}
       <div className="flex flex-col">

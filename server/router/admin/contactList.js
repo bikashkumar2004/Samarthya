@@ -6,6 +6,7 @@ import {
   editList,
   deleteList,
   fetchAllContactList,
+  showcontactDetails,
 } from "../../controller/admin/addList.js";
 
 const router = express.Router();
@@ -15,5 +16,6 @@ router.post("/add", addContactDetails);
 router.put("/edit/:id", editList);
 router.delete("/delete/:id", deleteList);
 router.get("/get", fetchAllContactList);
+router.get("/get/:id",showcontactDetails)
 
 export default router;
