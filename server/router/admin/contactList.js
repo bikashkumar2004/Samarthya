@@ -8,6 +8,7 @@ import {
   fetchAllContactList,
   showcontactDetails,
 } from "../../controller/admin/addList.js";
+import { initiateCall } from "../../controller/admin/calliniciate.js";
 
 const router = express.Router();
 
@@ -16,6 +17,7 @@ router.post("/add", addContactDetails);
 router.put("/edit/:id", editList);
 router.delete("/delete/:id", deleteList);
 router.get("/get", fetchAllContactList);
-router.get("/get/:id",showcontactDetails)
+router.get("/get/:id",showcontactDetails);
+router.post("/call/:id",initiateCall)
 
 export default router;
