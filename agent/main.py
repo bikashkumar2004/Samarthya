@@ -5,21 +5,6 @@ import websockets
 import os
 from dotenv import load_dotenv
 from pharmacy_functions import FUNCTION_MAP
-import urllib.parse
-from motor.motor_asyncio import AsyncIOMotorClient
-
-MONGO_URI = os.getenv("MONGO_URI")
-mongo = AsyncIOMotorClient(MONGO_URI)
-db = mongo["crm"]
-
-async def fetch_agent_config(agent_id: str):
-    doc = await db.agents.find_one({"_id": agent_id})
-    if not doc:
-        # fallback to config.json
-        return load_config()
-    # Transform Mongo doc to Deepgram agent config schema the same shape as config.json
-    return doc["config"]
-
 
 load_dotenv()
 
@@ -163,49 +148,23 @@ async def twilio_receiver(twilio_ws, audio_queue, streamsid_queue):
             break
 
 
-async def twilio_handler(twilio_ws, path):
-    # Parse query
-    parsed = urllib.parse.urlparse(path)
-    qs = urllib.parse.parse_qs(parsed.query)
-    agent_id = (qs.get("agentId") or ["default"])[0]
-    customer_id = (qs.get("customerId") or ["unknown"])[0]
-    session_id = (qs.get("sessionId") or ["no-session"])[0]
-
+async def twilio_handler(twilio_ws):
     audio_queue = asyncio.Queue()
     streamsid_queue = asyncio.Queue()
-    transcript_events = []  # collect transcripts per call
 
     async with sts_connect() as sts_ws:
-        config_message = await fetch_agent_config(agent_id)
+        config_message = load_config()
         await sts_ws.send(json.dumps(config_message))
 
-        # Wrap original handlers to capture transcripts
-        async def capture_text(decoded):
-            # Append any textual events for storage; adjust keys to your schema
-            transcript_events.append(decoded)
+        await asyncio.wait(
+            [
+                asyncio.ensure_future(sts_sender(sts_ws, audio_queue)),
+                asyncio.ensure_future(sts_receiver(sts_ws, twilio_ws, streamsid_queue)),
+                asyncio.ensure_future(twilio_receiver(twilio_ws, audio_queue, streamsid_queue)),
+            ]
+        )
 
-        async def handle_text_message(decoded, twilio_ws, sts_ws, streamsid):
-            await handle_barge_in(decoded, twilio_ws, streamsid)
-            await capture_text(decoded)
-            if decoded["type"] == "FunctionCallRequest":
-                await handle_function_call_request(decoded, sts_ws)
-
-        # Run pumps
-        sender = asyncio.create_task(sts_sender(sts_ws, audio_queue))
-        receiver = asyncio.create_task(sts_receiver(sts_ws, twilio_ws, streamsid_queue))
-        rx = asyncio.create_task(twilio_receiver(twilio_ws, audio_queue, streamsid_queue))
-
-        try:
-            await asyncio.gather(sender, receiver, rx)
-        finally:
-            await twilio_ws.close()
-            # Persist the transcript and metadata
-            await db.calls.insert_one({
-                "sessionId": session_id,
-                "customerId": customer_id,
-                "agentId": agent_id,
-                "transcript": transcript_events,
-            })
+        await twilio_ws.close()
 
 
 async def main():
