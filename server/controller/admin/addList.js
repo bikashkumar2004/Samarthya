@@ -1,55 +1,47 @@
 import { processExcelFile } from "../../helper/processxl.js";
-import ContactDetails from "../../models/contactDetails.js"; 
-import Folder from "../../models/createList.js";
+import mongoose from "mongoose";
+import ContactDetails from "../../models/contactDetails.js";
 
-export const handleContactDetailsUsingXlsx = async (req, res) => {
+export const handleContactUpload = async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({
-        success: false,
-        message: "No file uploaded",
-      });
+      return res
+        .status(400)
+        .json({ success: false, message: "No file uploaded" });
     }
 
-    const result = await processExcelFile(req.file.path, 100);
-    res.status(200).json({ success: true, ...result });
+    const result = await processExcelFile(req.file.path);
+    res.status(200).json({
+      success: true,
+      ...result,
+    });
   } catch (error) {
-    console.error("Excel upload error:", error);
     res.status(500).json({
       success: false,
-      message: error.message || "Some error occurred",
+      message:
+        error.message || "Something went wrong while processing the file",
     });
   }
 };
 
+
 export const addContactDetails = async (req, res) => {
   try {
-    const { folderId, name, email, phone, whatsappNo, source } = req.body;
+    const { name, email, phone, whatsappNo, status } = req.body;
 
-    // ✅ Basic validation
-    if (!name || !email || !phone || !whatsappNo || !source || !folderId) {
+    if (!name || !email || !phone || !whatsappNo || !status) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
       });
     }
 
-    const folder = await Folder.findById(folderId);
-    if (!folder) {
-      return res.status(404).json({
-        success: false,
-        message: "Folder not found",
-      });
-    }
-
- 
     const newContact = new ContactDetails({
       name,
       email,
       phone,
       whatsappNo,
-      source,
-      folderId,
+      status,
     });
 
     await newContact.save();
@@ -65,15 +57,31 @@ export const addContactDetails = async (req, res) => {
   }
 };
 
-
 export const editList = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { name, email, phone, whatsappNo, source, folderId } = req.body;
+    const id = req.params.id.trim(); // Correct: trim the string directly
+    if (!id) {
+      return res.status(201).json({
+        success: false,
+        message: "Id not found",
+      });
+    }
+
+     const { name, email, phone, whatsappNo, status } = req.body
+console.log(req.body);
+
+    // Optional: validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid contact ID" });
+    }
 
     const contact = await ContactDetails.findById(id);
     if (!contact) {
-      return res.status(404).json({ success: false, message: "Contact not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Contact not found" });
     }
 
     // Update only provided fields
@@ -81,8 +89,7 @@ export const editList = async (req, res) => {
     if (email) contact.email = email;
     if (phone) contact.phone = phone;
     if (whatsappNo) contact.whatsappNo = whatsappNo;
-    if (source) contact.source = source;
-    if (folderId) contact.folderId = folderId;
+    if (status) contact.status = status;
 
     await contact.save();
 
@@ -97,14 +104,23 @@ export const editList = async (req, res) => {
   }
 };
 
-
 export const deleteList = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id.trim();
+    console.log(id);
+
+    if (!id) {
+      return res.status(201).json({
+        success: false,
+        message: "Id not found",
+      });
+    }
     const contact = await ContactDetails.findByIdAndDelete(id);
 
     if (!contact) {
-      return res.status(404).json({ success: false, message: "Contact not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Contact not found" });
     }
 
     res.status(200).json({
@@ -117,14 +133,12 @@ export const deleteList = async (req, res) => {
   }
 };
 
-
 export const fetchAllContactList = async (req, res) => {
   try {
-    // Populate folder name
-    const contacts = await ContactDetails.find({}).populate("folderId", "folderName");
+    const listOfContacts = await ContactDetails.find({});
     res.status(200).json({
       success: true,
-      data: contacts,
+      data: listOfContacts,
     });
   } catch (error) {
     console.error("Fetch contacts error:", error);

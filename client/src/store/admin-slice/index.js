@@ -10,6 +10,27 @@ const initialState = {
   successMessage: null,
 };
 
+export const uploadContactList = createAsyncThunk(
+  "admin/contactList/uploadContactList",
+  async (file, { rejectWithValue }) => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await axios.post(`${API_URL}/upload-xlsx`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      });
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error.message);
+    }
+  }
+);
+
 export const addNewContact = createAsyncThunk(
   "admin/contactList/addContact",
   async (contactData, { rejectWithValue }) => {
@@ -27,9 +48,9 @@ export const addNewContact = createAsyncThunk(
 
 export const editContactList = createAsyncThunk(
   "admin/contactList/editContact",
-  async ({ id, updates }, { rejectWithValue }) => {
+  async ({ id, formData }, { rejectWithValue }) => {
     try {
-      const response = await axios.put(`${API_URL}/edit/${id}`, updates, {
+      const response = await axios.put(`${API_URL}/edit/${id}`, formData, {
         withCredentials: true,
         headers: { "Content-Type": "application/json" },
       });

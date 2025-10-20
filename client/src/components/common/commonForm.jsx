@@ -64,23 +64,64 @@ export default function CommonForm({
 
       case types.SELECT:
         return (
-          <Select
-            value={value}
-            onValueChange={(val) =>
-              setFormData({ ...formData, [controlItem.name]: val })
-            }
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder={controlItem.placeholder || "Select"} />
-            </SelectTrigger>
-            <SelectContent>
-              {controlItem.options?.map((optionItem) => (
-                <SelectItem key={optionItem.id} value={optionItem.value}>
-                  {optionItem.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="flex flex-col gap-1 w-full">
+            {controlItem.label && (
+              <label className="text-sm font-medium text-gray-700">
+                {controlItem.label}
+              </label>
+            )}
+
+            <Select
+              value={value}
+              onValueChange={(val) =>
+                setFormData({ ...formData, [controlItem.name]: val })
+              }
+            >
+              <SelectTrigger
+                className="
+            w-full 
+            h-11 
+            px-3 
+            text-sm 
+            font-medium 
+            rounded-md 
+            border border-gray-300 
+            bg-white 
+            focus:ring-2 focus:ring-[#043927] 
+            focus:border-[#043927] 
+            outline-none 
+            transition 
+            duration-200 
+            hover:border-gray-400
+          "
+              >
+                <SelectValue
+                  placeholder={controlItem.placeholder || "Select"}
+                />
+              </SelectTrigger>
+
+              <SelectContent className="bg-white border border-gray-200 rounded-md shadow-md">
+                {controlItem.options?.map((optionItem) => (
+                  <SelectItem
+                    key={optionItem.id}
+                    value={optionItem.id}
+                    className="
+                text-sm 
+                font-medium 
+                text-gray-700 
+                hover:bg-gray-100 
+                cursor-pointer 
+                px-3 
+                py-2 
+                rounded-md
+              "
+                  >
+                    {optionItem.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         );
 
       default:
@@ -103,21 +144,21 @@ export default function CommonForm({
   }
 
   return (
-    <form
-      onSubmit={
-        onSubmit
-      }
-      className="space-y-4"
-    >
+    <form onSubmit={onSubmit} className="space-y-4">
       <div className="flex flex-col gap-3">
         {formControls.map((controlItem) => (
           <div className="grid w-full gap-1.5 px-0 mx-0" key={controlItem.name}>
-            <Label className="mb-1 ml-0 text-left text-[#043927]">{controlItem.label}</Label>
+            <Label className="mb-1 ml-0 text-left text-[#043927]">
+              {controlItem.label}
+            </Label>
             {renderInputByComponentType(controlItem)}
           </div>
         ))}
       </div>
-      <Button type="submit" className="mt-4 w-full bg-[#043927] text-white font-semibold">
+      <Button
+        type="submit"
+        className="mt-4 w-full bg-[#043927] text-white font-semibold"
+      >
         {buttonText || "Submit"}
       </Button>
     </form>

@@ -16,15 +16,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { checkAuth } from "./store/auth-slice";
 
-import AdminLayout from "./pages/admin/AdminLayout"
-import DashBoard from "./components/admin/DashBoard";
-import Lead from "./components/admin/Lead";
-import Contact from "./components/admin/Contact";
-import Markting from "./components/admin/Markting";
-import Conversation from "./components/admin/Conversation";
-import Workflow from "./components/admin/Workflow";
-
-
+import AdminLayouts from "./components/admin-view/AdminLayouts";
+import Dashbords from "./pages/admin-view/Dashbords";
+import Leads from "./pages/admin-view/Leads";
+import Contacts from "./pages/admin-view/Contacts";
+import Marketings from "./pages/admin-view/Marketings";
+import Conversations from "./pages/admin-view/Conversations";
+import Workflows from "./pages/admin-view/Workflows";
 
 
 
@@ -46,18 +44,20 @@ export default function App() {
           <Route path="pricing" element={<Pricing />} />
           <Route path="contactUs" element={<ContactUs />} />
         </Route>
+
         <Route path="/auth" element={<AuthLayout/>}>
           <Route path="register" element={<Register/>}/>
           <Route path="Login" element={<Login/>}/>
           <Route path="send-verify-otp" element={<EmailVerify/>}/>
         </Route>
-        <Route path="/admin" element={<AdminLayout/>}>
-          <Route index element={<DashBoard/>}/>
-          <Route path="lead" element={<Lead/>}/>
-          <Route path="contact" element={<Contact/>}/>
-          <Route path="markting" element={<Markting/>}/>
-          <Route path="conversation" element={<Conversation/>}/>
-          <Route path="workflow" element={<Workflow/>}/>
+
+        <Route path="/admin" element={<AdminLayouts/>}>
+            <Route path="Dashboard" element={<Dashbords/>}/>
+            <Route path="Leads" element={<Leads/>}/>
+            <Route path="Contacts" element={<Contacts/>}/>
+            <Route path="Marketing" element={<Marketings/>}/>
+            <Route path="Conversations" element={<Conversations/>}/>
+            <Route path="Workflow" element={<Workflows/>}/>
         </Route>
       </Routes>
     </div>
