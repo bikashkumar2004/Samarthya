@@ -1,5 +1,0 @@
-[dependency-groups]
-dev = [
-    "flask-sock>=0.7.0",
-    "google-generativeai>=0.8.5",
-]
