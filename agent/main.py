@@ -44,6 +44,21 @@ def load_config():
     with open("config.json", "r") as f:
         return json.load(f)
 
+def build_config(ctx):
+    cfg = load_config()  # loads config.json
+    purpose = (ctx.get("purpose") or "").strip()
+    if purpose:
+        base_prompt = cfg["agent"]["think"]["prompt"]
+        cfg["agent"]["think"]["prompt"] = (
+            f"{base_prompt}\n\n"
+            f"Call purpose: {purpose}.\n"
+            f"Always steer the conversation to accomplish this goal while following verification and safety steps."
+        )
+        # optional: make the greeting reflect the purpose
+        base_greeting = cfg["agent"].get("greeting", "How can I assist you?")
+        cfg["agent"]["greeting"] = f"{base_greeting} This call is about: {purpose}."
+    return cfg
+
 
 def execute_function_call(func_name, arguments):
     """
@@ -155,7 +170,8 @@ async def sts_receiver(sts_ws, twilio_ws, streamsid_queue):
             }))
 
 
-async def twilio_receiver(twilio_ws, audio_queue, streamsid_queue, ctx):  # added ctx
+# Add an event so handler knows when 'purpose' is available
+async def twilio_receiver(twilio_ws, audio_queue, streamsid_queue, ctx, ready_evt):
     BUFFER_SIZE = 20 * 160
     inbuffer = bytearray()
     async for message in twilio_ws:
@@ -166,10 +182,12 @@ async def twilio_receiver(twilio_ws, audio_queue, streamsid_queue, ctx):  # adde
             streamsid = start.get("streamSid")
             if streamsid:
                 streamsid_queue.put_nowait(streamsid)
-            # NEW: capture identifiers from Twilio start event
-            ctx["call_id"] = start.get("callSid") or ctx.get("call_id")  # Twilio CallSid as durable call_id
+            # capture IDs and purpose from customParameters
+            ctx["call_id"] = start.get("callSid") or ctx.get("call_id")
             cp = start.get("customParameters") or {}
             ctx["customer_id"] = cp.get("customer_id") or ctx.get("customer_id")
+            ctx["purpose"] = cp.get("purpose") or ctx.get("purpose")
+            ready_evt.set()  # signal that we have purpose
         elif event == "media":
             media = data.get("media", {})
             payload = media.get("payload")
@@ -183,21 +201,36 @@ async def twilio_receiver(twilio_ws, audio_queue, streamsid_queue, ctx):  # adde
             inbuffer = inbuffer[BUFFER_SIZE:]
 
 
+
 async def twilio_handler(twilio_ws):
-    # Per-call context captured from Twilio start
-    ctx = {"call_id": None, "customer_id": None}  # NEW
+    ctx = {"call_id": None, "customer_id": None, "purpose": None}
+    purpose_ready = asyncio.Event()
 
     audio_queue = asyncio.Queue()
     streamsid_queue = asyncio.Queue()
 
     async with sts_connect() as sts_ws:
-        await sts_ws.send(json.dumps(load_config()))
+        # start Twilio receiver first so we can read 'start' quickly
+        twilio_task = asyncio.create_task(
+            twilio_receiver(twilio_ws, audio_queue, streamsid_queue, ctx, purpose_ready)
+        )
+
+        # wait briefly for purpose; if not present, fall back to base Settings
+        try:
+            await asyncio.wait_for(purpose_ready.wait(), timeout=2.0)
+            settings = build_config(ctx)
+        except asyncio.TimeoutError:
+            settings = load_config()
+
+        # now send Settings to Deepgram STS
+        await sts_ws.send(json.dumps(settings))
+
+        # start the audio pipeline tasks
         sender_task = asyncio.create_task(sts_sender(sts_ws, audio_queue))
         receiver_task = asyncio.create_task(sts_receiver(sts_ws, twilio_ws, streamsid_queue))
-        twilio_task = asyncio.create_task(twilio_receiver(twilio_ws, audio_queue, streamsid_queue, ctx))  # pass ctx
 
         try:
-            await twilio_task
+            await twilio_task  # ends on Twilio 'stop'
         finally:
             for t in (sender_task, receiver_task):
                 t.cancel()
@@ -208,18 +241,13 @@ async def twilio_handler(twilio_ws):
             transcript_code.save_transcripts()
 
             if transcript_code.TRANSCRIPTS:
-                # Prefer Twilio CallSid and frontend-provided customer_id from 'start'
                 final_call_id = ctx["call_id"] or f"call-{uuid.uuid4()}"
-                final_customer_id = ctx["customer_id"]  # may be None if not provided
+                final_customer_id = ctx["customer_id"]
                 model.store_call_to_db(
                     call_id=final_call_id,
                     customer_id=final_customer_id,
                     transcript=transcript_code.TRANSCRIPTS,
-                    # call_start_iso optional; computed from transcript if omitted
-                    # store_to_mongo=True (default in your model.py)
                 )
-                # Optional: clear buffer for next call
-                # transcript_code.TRANSCRIPTS.clear()
 
             await twilio_ws.close()
 
