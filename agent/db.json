@@ -1,71 +1,61 @@
 [
   {
-    "call_id": "call-abc54687-b674-4b7d-a92a-e0776ba72b6e",
-    "customer_id": "customer-12345",
-    "call_start": "2025-10-21T16:28:41",
-    "call_duration": 67.0,
+    "call_id": "call-9d81642f-4556-4fc6-885d-503699da91d1",
+    "customer_id": null,
+    "call_start": "2025-10-21T19:44:38",
+    "call_duration": 0.0,
     "summary": "assistant: Hello! I'm your pharmacy assistant, How...",
     "sentiment": "Neutral",
     "transcript": [
       {
         "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:28:41",
+        "timestamp_iso": "2025-10-21T19:44:38",
+        "content": "Hello! I'm your pharmacy assistant, How can I assist you today?"
+      }
+    ]
+  },
+  {
+    "call_id": "call-5820d403-5164-48b4-98b8-6ac068722a8d",
+    "customer_id": null,
+    "call_start": "2025-10-21T19:48:18",
+    "call_duration": 0.0,
+    "summary": "assistant: Hello! I'm your pharmacy assistant, How...",
+    "sentiment": "Neutral",
+    "transcript": [
+      {
+        "role": "assistant",
+        "timestamp_iso": "2025-10-21T19:48:18",
+        "content": "Hello! I'm your pharmacy assistant, How can I assist you today?"
+      }
+    ]
+  },
+  {
+    "call_id": "call-ca5d8bf8-3b26-41bd-871c-b6c927976899",
+    "customer_id": null,
+    "call_start": "2025-10-21T19:52:49",
+    "call_duration": 20.0,
+    "summary": "assistant: Hello! I'm your pharmacy assistant, How...",
+    "sentiment": "Neutral",
+    "transcript": [
+      {
+        "role": "assistant",
+        "timestamp_iso": "2025-10-21T19:52:49",
         "content": "Hello! I'm your pharmacy assistant, How can I assist you today?"
       },
       {
         "role": "user",
-        "timestamp_iso": "2025-10-21T16:28:49",
-        "content": "Hello. I want to know about pharmacy."
+        "timestamp_iso": "2025-10-21T19:52:58",
+        "content": "I was looking for something for viral fever."
       },
       {
         "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:28:50",
-        "content": "Could you please clarify what specific information about pharmacy you're interested in?"
+        "timestamp_iso": "2025-10-21T19:52:59",
+        "content": "For viral fever, common medications may include acetaminophen (Tylenol) or ibuprofen (Advil) to help reduce fever and alleviate discomfort."
       },
       {
         "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:28:54",
-        "content": "Are you looking for details on medications, services offered, or something else?"
-      },
-      {
-        "role": "user",
-        "timestamp_iso": "2025-10-21T16:29:03",
-        "content": "Tell about medicine."
-      },
-      {
-        "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:29:04",
-        "content": "Could you please specify the name of the medicine you're interested in?"
-      },
-      {
-        "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:29:08",
-        "content": "For example, you can ask about common medications like aspirin, ibuprofen, or any specific drug you have in mind."
-      },
-      {
-        "role": "user",
-        "timestamp_iso": "2025-10-21T16:29:18",
-        "content": "Tell me about aspirin."
-      },
-      {
-        "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:29:20",
-        "content": "Aspirin, also known as Acetylsalicylic Acid, is a non-steroidal anti-inflammatory drug (NSAID) commonly used for pain relief and fever reduction."
-      },
-      {
-        "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:29:31",
-        "content": "Here are some key details:\n\n- **Description**: It helps alleviate mild to moderate pain and can reduce fever."
-      },
-      {
-        "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:29:40",
-        "content": "- **Price**: $5.99 for a quantity of 30 tablets."
-      },
-      {
-        "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:29:48",
-        "content": "If you have any more questions or if you need assistance with an order, feel free to ask!"
+        "timestamp_iso": "2025-10-21T19:53:09",
+        "content": "Would you like more information about either of these drugs, or do you have a specific medication in mind?"
       }
     ]
   }

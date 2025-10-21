@@ -1,0 +1,27 @@
+[
+  {
+    "role": "assistant",
+    "timestamp_iso": "2025-10-21T19:55:01",
+    "content": "Hello! I'm your pharmacy assistant, How can I assist you today?"
+  },
+  {
+    "role": "user",
+    "timestamp_iso": "2025-10-21T19:55:09",
+    "content": "Hi. Can you tell me?"
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2025-10-21T19:55:10",
+    "content": "Of course!"
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2025-10-21T19:55:11",
+    "content": "What would you like to know?"
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2025-10-21T19:55:12",
+    "content": "Please provide me with the name of the drug or any specific information you're looking for."
+  }
+]
