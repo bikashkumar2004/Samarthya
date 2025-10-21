@@ -1,79 +1,163 @@
+# model.py
 import os
 import json
 import datetime
-import google.generativeai as genai
+from typing import List, Dict, Optional, Tuple
+from pathlib import Path
 
-# Configure Gemini API
-genai.configure(api_key=os.getenv("API_KEY"))
+# The transcript entries are expected to be dicts with:
+# { "role": "user"|"assistant", "timestamp_iso": "YYYY-MM-DDTHH:MM:SS", "content": "..." }
 
+ISO_FMT = "%Y-%m-%dT%H:%M:%S"
 
-def generate_summary_and_sentiment(transcript):
+def _now_iso() -> str:
+    return datetime.datetime.now().strftime(ISO_FMT)
+
+def _parse_iso(ts: str) -> datetime.datetime:
+    # Fallback to now on parse error to keep pipeline resilient
     try:
-        full_text = "\n".join([f"{t['role']}: {t['content']}" for t in transcript if t.get('content')])
-        if not full_text:
-            return "No content", "Neutral"
+        return datetime.datetime.strptime(ts, ISO_FMT)
+    except Exception:
+        return datetime.datetime.now()
 
-        # Latest SDK correct API call
-        response = genai.chat.completions.create(
-            model="gemini-1.5-t",
-            messages=[
-                {"role": "system", "content": "You are an assistant that generates short call summaries and sentiment."},
-                {"role": "user", "content": f"Summarize in 20 words and provide sentiment of this call:\n{full_text}"}
-            ]
-        )
+def _safe_parent(path: str) -> None:
+    p = Path(path)
+    if p.parent:
+        p.parent.mkdir(parents=True, exist_ok=True)
 
-        content = response.choices[0].message.content
+def _atomic_write_json(path: str, data) -> None:
+    _safe_parent(path)
+    p = Path(path)
+    tmp = p.with_suffix(p.suffix + ".tmp")
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+        f.flush()
+        os.fsync(f.fileno())
+    os.replace(tmp, p)
 
-        if "Sentiment:" in content:
-            parts = content.split("Sentiment:")
-            summary = parts[0].strip()
-            sentiment = parts[1].strip()
-        else:
-            summary = content.strip()
-            sentiment = "Neutral"
+def _turn_counts(transcript: List[Dict]) -> Dict[str, int]:
+    counts = {"user": 0, "assistant": 0}
+    for t in transcript:
+        r = t.get("role")
+        if r in counts:
+            counts[r] += 1
+    return counts
 
-        return summary, sentiment
+def _first_agent_utterance(transcript: List[Dict]) -> Optional[str]:
+    for t in transcript:
+        if t.get("role") == "assistant" and t.get("content"):
+            return str(t.get("content"))
+    return None
 
-    except Exception as e:
-        print(f"[model] Gemini API failed, using fallback. Error: {e}")
-        fallback_summary = (full_text[:50] + "...") if full_text else "No content"
-        return fallback_summary, "Neutral"
+def _last_user_utterance(transcript: List[Dict]) -> Optional[str]:
+    for t in reversed(transcript):
+        if t.get("role") == "user" and t.get("content"):
+            return str(t.get("content"))
+    return None
 
+def _compute_times(transcript: List[Dict]) -> Tuple[str, str, float]:
+    if not transcript:
+        now = _now_iso()
+        return now, now, 0.0
+    start_iso = str(transcript[0].get("timestamp_iso")) or _now_iso()
+    end_iso = str(transcript[-1].get("timestamp_iso")) or start_iso
+    start_dt = _parse_iso(start_iso)
+    end_dt = _parse_iso(end_iso)
+    duration = max((end_dt - start_dt).total_seconds(), 0.0)
+    return start_iso, end_iso, duration
 
-def store_call_to_db(call_id, customer_id, call_start, transcript, db_file="db.json"):
-    try:
-        call_duration = None
-        if transcript:
-            start_time = datetime.datetime.fromisoformat(transcript[0]["timestamp_iso"])
-            end_time = datetime.datetime.fromisoformat(transcript[-1]["timestamp_iso"])
-            call_duration = (end_time - start_time).total_seconds()
+def _summarize_and_sentiment(transcript: List[Dict]) -> Tuple[str, str]:
+    # Lightweight, dependency-free fallback:
+    # Build a brief summary from the first user and last assistant turns,
+    # and set sentiment to Neutral unless clear cues exist.
+    first_user = next((t["content"] for t in transcript if t.get("role") == "user" and t.get("content")), None)
+    last_agent = next((t["content"] for t in reversed(transcript) if t.get("role") == "assistant" and t.get("content")), None)
+    if first_user and last_agent:
+        summary = f"Caller asked: {first_user[:120]}. Agent responded: {last_agent[:120]}."
+    elif first_user:
+        summary = f"Caller asked: {first_user[:160]}."
+    elif last_agent:
+        summary = f"Agent responded: {last_agent[:160]}."
+    else:
+        summary = "No content."
+    sentiment = "Neutral"
+    return summary, sentiment
 
-        summary, sentiment = generate_summary_and_sentiment(transcript)
+def build_call_record(
+    call_id: str,
+    customer_id: Optional[str],
+    transcript: List[Dict],
+    call_start_iso_override: Optional[str] = None,
+    last_partial_sentiment: Optional[str] = None,
+    last_partial_updated_iso: Optional[str] = None,
+) -> Dict:
+    call_start_iso, call_end_iso, call_duration_seconds = _compute_times(transcript)
+    if call_start_iso_override:
+        # If provided, use override for start but recompute duration accordingly.
+        call_start_iso = call_start_iso_override
+        # Recompute duration with overridden start
+        sdt = _parse_iso(call_start_iso)
+        edt = _parse_iso(call_end_iso)
+        call_duration_seconds = max((edt - sdt).total_seconds(), 0.0)
 
-        call_record = {
-            "call_id": call_id,
-            "customer_id": customer_id,
-            "call_start": call_start,
-            "call_duration": call_duration,
-            "summary": summary,
-            "sentiment": sentiment,
-            "transcript": transcript
-        }
+    turn_counts = _turn_counts(transcript)
+    first_agent = _first_agent_utterance(transcript)
+    last_user = _last_user_utterance(transcript)
+    summary, sentiment_overall = _summarize_and_sentiment(transcript)
 
-        if os.path.exists(db_file):
-            with open(db_file, "r", encoding="utf-8") as f:
-                db = json.load(f)
-        else:
-            db = []
+    created_at_iso = call_start_iso
+    updated_at_iso = call_end_iso
 
-        # Avoid duplicate call_id
-        if not any(c["call_id"] == call_id for c in db):
-            db.append(call_record)
+    record = {
+        "call_id": call_id,
+        "customer_id": customer_id,
+        "call_start_iso": call_start_iso,
+        "call_end_iso": call_end_iso,
+        "call_duration_seconds": call_duration_seconds,
+        "summary": summary,
+        "sentiment_overall": sentiment_overall,
+        "turn_counts": {"user": turn_counts.get("user", 0), "assistant": turn_counts.get("assistant", 0)},
+        "first_agent_utterance": first_agent,
+        "last_user_utterance": last_user,
+        "transcript": transcript,
+        "realtime": {
+            "last_partial_sentiment": last_partial_sentiment,
+            "last_partial_updated_iso": last_partial_updated_iso,
+        },
+        "created_at_iso": created_at_iso,
+        "updated_at_iso": updated_at_iso,
+    }
+    return record
 
-        with open(db_file, "w", encoding="utf-8") as f:
-            json.dump(db, f, indent=2)
+def store_call_to_db(
+    call_id: str,
+    customer_id: Optional[str],
+    transcript: List[Dict],
+    call_start_iso: Optional[str] = None,
+    last_partial_sentiment: Optional[str] = None,
+    last_partial_updated_iso: Optional[str] = None,
+    db_file: str = "local_db/db.json",
+    write_per_call_file: bool = False,
+) -> Dict:
+    """
+    Replace db.json with the latest call record.
+    Optionally still write a per-call artifact under local_db/calls/{call_id}.json.
+    """
+    record = build_call_record(
+        call_id=call_id,
+        customer_id=customer_id,
+        transcript=transcript,
+        call_start_iso_override=call_start_iso,
+        last_partial_sentiment=last_partial_sentiment,
+        last_partial_updated_iso=last_partial_updated_iso,
+    )  # [attached_file:5]
 
-        print(f"[model] Saved call {call_id} to {db_file}")
+    # Always replace the file with the latest record
+    _atomic_write_json(db_file, record)  # [attached_file:5]
 
-    except Exception as e:
-        print(f"[model] Error storing call to DB: {e}")
+    if write_per_call_file:
+        per_call_path = f"local_db/calls/{call_id}.json"
+        _atomic_write_json(per_call_path, record)  # [attached_file:5]
+
+    print(f"[model] Saved call {call_id} to {db_file}")
+    return record

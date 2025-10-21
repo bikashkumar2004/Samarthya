@@ -5,6 +5,7 @@ import websockets
 import os
 import uuid
 from dotenv import load_dotenv
+import contextlib 
 from functions.testing.pharmacy_functions import FUNCTION_MAP
 import functions.transcript.transcript_code as transcript_code
 import functions.transcript.model as model
@@ -199,6 +200,8 @@ async def twilio_handler(twilio_ws):
     Main handler for each Twilio WebSocket connection
     This coordinates all the different parts of the call handling
     """
+    # Per-call state (optional but better than one CALL_ID for the whole server)
+    call_id = f"call-{uuid.uuid4()}"  # new [attached_file:2]
     # Create queues for communication between different parts
     audio_queue = asyncio.Queue()      # Queue for audio data
     streamsid_queue = asyncio.Queue()  # Queue for stream ID
@@ -212,14 +215,43 @@ async def twilio_handler(twilio_ws):
         # 1. Send audio to Deepgram (sts_sender)
         # 2. Receive responses from Deepgram (sts_receiver)  
         # 3. Receive audio from Twilio (twilio_receiver)
-        await asyncio.gather(
-            sts_sender(sts_ws, audio_queue),
-            sts_receiver(sts_ws, twilio_ws, streamsid_queue),
-            twilio_receiver(twilio_ws, audio_queue, streamsid_queue)
-        )
-    
-    # Close the Twilio connection when done
-    await twilio_ws.close()
+        # Create tasks instead of a bare gather [attached_file:2]
+        sender_task = asyncio.create_task(sts_sender(sts_ws, audio_queue))
+        receiver_task = asyncio.create_task(sts_receiver(sts_ws, twilio_ws, streamsid_queue))
+        twilio_task = asyncio.create_task(twilio_receiver(twilio_ws, audio_queue, streamsid_queue))
+
+        try:
+            # Return when Twilio signals event == "stop" and twilio_receiver finishes [attached_file:2]
+            await twilio_task
+        finally:
+            # Stop the other two tasks so the handler can exit promptly [attached_file:2]
+            for t in (sender_task, receiver_task):
+                t.cancel()
+            with contextlib.suppress(asyncio.CancelledError):
+                await sender_task
+                await receiver_task
+
+            # Persist transcripts to disk [attached_file:1]
+            transcript_code.save_transcripts()  # [attached_file:1]
+
+            # Store the call into DB if any transcript collected [attached_file:2]
+            if transcript_code.TRANSCRIPTS:
+                call_start = transcript_code.TRANSCRIPTS[0]["timestamp_iso"]  # [attached_file:1]
+                try:
+                    model.store_call_to_db(
+                        call_id=call_id,                 # or CALL_ID if you prefer single-session ID [attached_file:2]
+                        customer_id=CUSTOMER_ID,         # from env [attached_file:2]
+                        #call_start=call_start_iso,           # first entry ts [attached_file:1]
+                        transcript=transcript_code.TRANSCRIPTS,  # full list [attached_file:1]
+                    )
+                except Exception as e:
+                    print(f"store_call_to_db failed: {e}")  # keep the call from crashing [attached_file:2]
+
+                # Optional: clear memory for next call if you keep the server alive [attached_file:1]
+                #transcript_code.TRANSCRIPTS.clear()  # [attached_file:1]
+
+            # Close Twilio socket [attached_file:2]
+            await twilio_ws.close()
 
 
 async def main():
@@ -236,22 +268,10 @@ async def main():
         # Keep the server running indefinitely
         await asyncio.Future()  # Run forever
     finally:
-        # When server stops, save all transcript data
-        transcript_code.save_transcripts()
-        
-        # If we have transcripts, save the call data to database
-        if transcript_code.TRANSCRIPTS:
-            call_start = transcript_code.TRANSCRIPTS[0]["timestamp_iso"]
-            model.store_call_to_db(
-                call_id=CALL_ID,
-                customer_id=CUSTOMER_ID,
-                call_start=call_start,
-                transcript=transcript_code.TRANSCRIPTS
-            )
-        
-        # Properly close the server
+        # Only manage server shutdown here; per-call storage happens in twilio_handler
         server.close()
         await server.wait_closed()
+
 
 
 if __name__ == "__main__":
@@ -259,15 +279,8 @@ if __name__ == "__main__":
         # Start the main async function
         asyncio.run(main())
     except KeyboardInterrupt:
-        # If user presses Ctrl+C, save transcripts before exiting
+        # Optional: last-resort flush of transcripts if you want a safety net
+        # (per-call store happens in twilio_handler on 'stop')
+        # You can keep or remove the next line depending on your preference.
         transcript_code.save_transcripts()
-        
-        # Save call data to database if available
-        if transcript_code.TRANSCRIPTS:
-            call_start = transcript_code.TRANSCRIPTS[0]["timestamp_iso"]
-            model.store_call_to_db(
-                call_id=CALL_ID,
-                customer_id=CUSTOMER_ID,
-                call_start=call_start,
-                transcript=transcript_code.TRANSCRIPTS
-            )
+        pass
