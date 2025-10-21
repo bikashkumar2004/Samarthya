@@ -5,15 +5,12 @@ const API_URL = "http://localhost:4000/api/admin/contactList";
 
 const initialState = {
   isLoading: false,
-  contactDetails: null, // ✅ correct field name (was productDetails)
+  contactDetails: null, 
   contactList: [],
   error: null,
   successMessage: null,
 };
 
-/**
- * Fetch a single contact by ID
- */
 export const showContactList = createAsyncThunk(
   "admin/contactList/show",
   async (id, { rejectWithValue }) => {
@@ -22,9 +19,9 @@ export const showContactList = createAsyncThunk(
         withCredentials: true,
       });
 
-      return response.data; // expected to contain contact details
+      return response.data; 
     } catch (error) {
-      console.error("❌ Fetch contact details error:", error);
+      console.error(" Fetch contact details error:", error);
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch contact details"
       );
@@ -50,7 +47,7 @@ const contactDetailsSlice = createSlice({
       })
       .addCase(showContactList.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.contactDetails = action.payload.data || action.payload; // ✅ store details
+        state.contactDetails = action.payload.data || action.payload; 
         state.successMessage = "Contact fetched successfully";
       })
       .addCase(showContactList.rejected, (state, action) => {

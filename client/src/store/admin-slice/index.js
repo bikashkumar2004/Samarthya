@@ -74,24 +74,8 @@ export const deleteContactList = createAsyncThunk(
     }
   }
 );
-// export const showContactList = createAsyncThunk(
-//   "admin/contactList/show", 
-//   async (id, { rejectWithValue }) => {
-//     try {
-//       const response = await axios.get(`${API_URL}/get/${id}`, {
-//         withCredentials: true, //  include cookies if your backend uses auth
-//       });
 
-//       // Return the contact data directly
-//       return response.data;
-//     } catch (error) {
-//       console.error(" Fetch contact details error:", error);
-//       return rejectWithValue(
-//         error.response?.data?.message || "Failed to fetch contact details"
-//       );
-//     }
-//   }
-// );
+
 
 
 export const fetchAllContactList = createAsyncThunk(

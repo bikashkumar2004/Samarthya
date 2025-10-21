@@ -52,7 +52,7 @@ export default function Register() {
           formControls={registationFormControl}
           formData={formData}
           setFormData={setFormData}
-          onSubmit={handleRegister} // ✅ Only one handleSubmit
+          onSubmit={handleRegister} 
           buttonText={"Signup"}
         />
 
