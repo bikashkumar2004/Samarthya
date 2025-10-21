@@ -1,63 +1,63 @@
 {
-  "call_id": "call-69e36c88-6116-4376-87b2-52a8e293a249",
-  "customer_id": null,
-  "call_start_iso": "2025-10-21T22:47:46",
-  "call_end_iso": "2025-10-21T22:48:20",
-  "call_duration_seconds": 34.0,
-  "summary": "Caller asked: Hi. What is your company name?. Agent responded: Have a great day!.",
+  "call_id": "CA9fbc8bddf5bb7bb829d117a084b25325",
+  "customer_id": "68f7ab37b25ca02ed22919ac",
+  "call_start_iso": "2025-10-21T23:19:37",
+  "call_end_iso": "2025-10-21T23:20:05",
+  "call_duration_seconds": 28.0,
+  "summary": "Caller asked: Was looking for some pharmacy related things. Can I get it to you here?. Agent responded: If you have any questions or need assistance in the future, feel free to ask..",
   "sentiment_overall": "Neutral",
   "turn_counts": {
-    "user": 2,
-    "assistant": 6
+    "user": 3,
+    "assistant": 5
   },
   "first_agent_utterance": "How can I assist you?",
-  "last_user_utterance": "Okay. Thank you. I think this was a wrong number. I dialed instantly. Thank you.",
+  "last_user_utterance": "Thanks. No problem.",
   "transcript": [
     {
       "role": "assistant",
-      "timestamp_iso": "2025-10-21T22:47:46",
+      "timestamp_iso": "2025-10-21T23:19:37",
       "content": "How can I assist you?"
     },
     {
       "role": "user",
-      "timestamp_iso": "2025-10-21T22:47:51",
-      "content": "Hi. What is your company name?"
+      "timestamp_iso": "2025-10-21T23:19:47",
+      "content": "Was looking for some pharmacy related things. Can I get it to you here?"
     },
     {
       "role": "assistant",
-      "timestamp_iso": "2025-10-21T22:47:52",
-      "content": "I'm here as a professional pharmacy assistant to help you with drug information, placing orders, and looking up existing orders."
+      "timestamp_iso": "2025-10-21T23:19:49",
+      "content": "Absolutely!"
     },
     {
       "role": "assistant",
-      "timestamp_iso": "2025-10-21T22:47:59",
-      "content": "If you have any questions or need assistance with something specific, feel free to ask!"
+      "timestamp_iso": "2025-10-21T23:19:50",
+      "content": "Please let me know what specific pharmacy-related information or services you need, and I'll be happy to assist you."
     },
     {
       "role": "user",
-      "timestamp_iso": "2025-10-21T22:48:13",
-      "content": "Okay. Thank you. I think this was a wrong number. I dialed instantly. Thank you."
+      "timestamp_iso": "2025-10-21T23:20:00",
+      "content": "Put"
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2025-10-21T23:20:01",
+      "content": "Thanks. No problem."
     },
     {
       "role": "assistant",
-      "timestamp_iso": "2025-10-21T22:48:14",
-      "content": "No problem at all!"
+      "timestamp_iso": "2025-10-21T23:20:03",
+      "content": "You're welcome!"
     },
     {
       "role": "assistant",
-      "timestamp_iso": "2025-10-21T22:48:15",
-      "content": "If you have any questions in the future or need assistance, feel free to reach out."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-21T22:48:20",
-      "content": "Have a great day!"
+      "timestamp_iso": "2025-10-21T23:20:05",
+      "content": "If you have any questions or need assistance in the future, feel free to ask."
     }
   ],
   "realtime": {
     "last_partial_sentiment": null,
     "last_partial_updated_iso": null
   },
-  "created_at_iso": "2025-10-21T22:47:46",
-  "updated_at_iso": "2025-10-21T22:48:20"
+  "created_at_iso": "2025-10-21T23:19:37",
+  "updated_at_iso": "2025-10-21T23:20:05"
 }

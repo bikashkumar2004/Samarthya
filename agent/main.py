@@ -155,102 +155,72 @@ async def sts_receiver(sts_ws, twilio_ws, streamsid_queue):
             }))
 
 
-async def twilio_receiver(twilio_ws, audio_queue, streamsid_queue):
-    """
-    Receives audio and control messages from Twilio phone service
-    This handles incoming voice data from phone calls
-    """
-    BUFFER_SIZE = 20 * 160  # Size of audio chunks to process (optimized for speech)
-    inbuffer = bytearray()  # Buffer to collect audio data
-    
-    # Listen for messages from Twilio
+async def twilio_receiver(twilio_ws, audio_queue, streamsid_queue, ctx):  # added ctx
+    BUFFER_SIZE = 20 * 160
+    inbuffer = bytearray()
     async for message in twilio_ws:
         data = json.loads(message)
         event = data.get("event")
-        
         if event == "start":
-            # Call is starting - get the stream ID
-            streamsid = data.get("start", {}).get("streamSid")
-            if streamsid: 
+            start = data.get("start", {})
+            streamsid = start.get("streamSid")
+            if streamsid:
                 streamsid_queue.put_nowait(streamsid)
-                
+            # NEW: capture identifiers from Twilio start event
+            ctx["call_id"] = start.get("callSid") or ctx.get("call_id")  # Twilio CallSid as durable call_id
+            cp = start.get("customParameters") or {}
+            ctx["customer_id"] = cp.get("customer_id") or ctx.get("customer_id")
         elif event == "media":
-            # Audio data received from caller
             media = data.get("media", {})
-            payload = media.get("payload")  # Base64 encoded audio
-            track = media.get("track")      # Direction (inbound/outbound)
-            
-            # Only process incoming audio from caller
+            payload = media.get("payload")
+            track = media.get("track")
             if payload and track == "inbound":
-                # Decode base64 audio and add to buffer
                 inbuffer.extend(base64.b64decode(payload))
-                
         elif event == "stop":
-            # Call ended
             break
-        
-        # When buffer has enough data, send it for processing
         while len(inbuffer) >= BUFFER_SIZE:
             audio_queue.put_nowait(inbuffer[:BUFFER_SIZE])
             inbuffer = inbuffer[BUFFER_SIZE:]
 
 
 async def twilio_handler(twilio_ws):
-    """
-    Main handler for each Twilio WebSocket connection
-    This coordinates all the different parts of the call handling
-    """
-    # Per-call state (optional but better than one CALL_ID for the whole server)
-    call_id = f"call-{uuid.uuid4()}"  # new [attached_file:2]
-    # Create queues for communication between different parts
-    audio_queue = asyncio.Queue()      # Queue for audio data
-    streamsid_queue = asyncio.Queue()  # Queue for stream ID
-    
-    # Connect to Deepgram and start processing
+    # Per-call context captured from Twilio start
+    ctx = {"call_id": None, "customer_id": None}  # NEW
+
+    audio_queue = asyncio.Queue()
+    streamsid_queue = asyncio.Queue()
+
     async with sts_connect() as sts_ws:
-        # Send configuration to Deepgram to set up the AI agent
         await sts_ws.send(json.dumps(load_config()))
-        
-        # Run all three main processes simultaneously:
-        # 1. Send audio to Deepgram (sts_sender)
-        # 2. Receive responses from Deepgram (sts_receiver)  
-        # 3. Receive audio from Twilio (twilio_receiver)
-        # Create tasks instead of a bare gather [attached_file:2]
         sender_task = asyncio.create_task(sts_sender(sts_ws, audio_queue))
         receiver_task = asyncio.create_task(sts_receiver(sts_ws, twilio_ws, streamsid_queue))
-        twilio_task = asyncio.create_task(twilio_receiver(twilio_ws, audio_queue, streamsid_queue))
+        twilio_task = asyncio.create_task(twilio_receiver(twilio_ws, audio_queue, streamsid_queue, ctx))  # pass ctx
 
         try:
-            # Return when Twilio signals event == "stop" and twilio_receiver finishes [attached_file:2]
             await twilio_task
         finally:
-            # Stop the other two tasks so the handler can exit promptly [attached_file:2]
             for t in (sender_task, receiver_task):
                 t.cancel()
             with contextlib.suppress(asyncio.CancelledError):
                 await sender_task
                 await receiver_task
 
-            # Persist transcripts to disk [attached_file:1]
-            transcript_code.save_transcripts()  # [attached_file:1]
+            transcript_code.save_transcripts()
 
-            # Store the call into DB if any transcript collected [attached_file:2]
             if transcript_code.TRANSCRIPTS:
-                call_start = transcript_code.TRANSCRIPTS[0]["timestamp_iso"]  # [attached_file:1]
-                try:
-                    model.store_call_to_db(
-                        call_id=call_id,                 # or CALL_ID if you prefer single-session ID [attached_file:2]
-                        customer_id=CUSTOMER_ID,         # from env [attached_file:2]
-                        #call_start=call_start_iso,           # first entry ts [attached_file:1]
-                        transcript=transcript_code.TRANSCRIPTS,  # full list [attached_file:1]
-                    )
-                except Exception as e:
-                    print(f"store_call_to_db failed: {e}")  # keep the call from crashing [attached_file:2]
+                # Prefer Twilio CallSid and frontend-provided customer_id from 'start'
+                final_call_id = ctx["call_id"] or f"call-{uuid.uuid4()}"
+                final_customer_id = ctx["customer_id"]  # may be None if not provided
+                model.store_call_to_db(
+                    call_id=final_call_id,
+                    customer_id=final_customer_id,
+                    transcript=transcript_code.TRANSCRIPTS,
+                    # call_start_iso optional; computed from transcript if omitted
+                    # store_to_mongo=True (default in your model.py)
+                )
+                # Optional: clear buffer for next call
+                # transcript_code.TRANSCRIPTS.clear()
 
-                # Optional: clear memory for next call if you keep the server alive [attached_file:1]
-                #transcript_code.TRANSCRIPTS.clear()  # [attached_file:1]
-
-            # Close Twilio socket [attached_file:2]
             await twilio_ws.close()
 
 
