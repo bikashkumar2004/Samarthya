@@ -11,32 +11,34 @@ const client = twilio(
 
 export const initiateCall = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { customerId } = req.params;
+    console.log(customerId);
+    
 
-    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+    if (!customerId || !mongoose.Types.ObjectId.isValid(customerId)) {
       return res
         .status(400)
         .json({ success: false, message: "Invalid Customer ID" });
     }
 
-    const contact = await ContactDetails.findById(id).lean();
+    const contact = await ContactDetails.findById(customerId).lean();
     if (!contact || !contact.phone) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: "Contact not found or has no phone number",
-        });
+      return res.status(404).json({
+        success: false,
+        message: "Contact not found or has no phone number",
+      });
     }
 
     const wsUrl = process.env.MEDIA_WS_URL;
 
     const twiml = `<?xml version="1.0" encoding="UTF-8"?>
-<Response>
-    <Connect>
-        <Stream url="${wsUrl}" />
-    </Connect>
-</Response>`;
+        <Response>
+          <Connect>
+            <Stream url="${wsUrl}">
+              <Parameter name="customer_id" value="${customerId}" />
+            </Stream>
+          </Connect>
+        </Response>`;
 
     const call = await client.calls.create({
       to: contact.phone,

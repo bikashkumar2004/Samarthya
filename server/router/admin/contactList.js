@@ -19,7 +19,7 @@ router.put("/edit/:id", editList);
 router.delete("/delete/:id", deleteList);
 router.get("/get", fetchAllContactList);
 router.get("/get/:id",showcontactDetails);
-router.post("/call/:id",initiateCall);
+router.post("/call/:customerId",initiateCall);
 
 
 
