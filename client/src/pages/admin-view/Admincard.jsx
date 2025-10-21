@@ -88,7 +88,8 @@ export default function AdminCard({
 
         {/* Dropdown Menu */}
         {openMenu && (
-          <div className="absolute right-0 top-6 bg-white border border-gray-200 rounded-md shadow-md z-10 w-36">
+          <div className="absolute right-0 top-6 bg-white border border-gray-200 rounded-md shadow-md z-50 w-36">
+
             <button
               onClick={() => {
                 setfromdata(contact);

@@ -178,7 +178,7 @@ export default function LeadsAd() {
             <Admincard
               key={contactItem._id}
               setfromdata={setfromdata}
-              //setopenCreateProductDialog={setopenCreateProductDialog}
+              setopenCreateProductDialog={setopenCreateProductDialog}
               handleDelete={handleDelete}
               setcurrentEditedId={setcurrentEditedId}
               contact={contactItem}
