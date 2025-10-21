@@ -1,72 +1,63 @@
-[
-  {
-    "call_id": "call-abc54687-b674-4b7d-a92a-e0776ba72b6e",
-    "customer_id": "customer-12345",
-    "call_start": "2025-10-21T16:28:41",
-    "call_duration": 67.0,
-    "summary": "assistant: Hello! I'm your pharmacy assistant, How...",
-    "sentiment": "Neutral",
-    "transcript": [
-      {
-        "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:28:41",
-        "content": "Hello! I'm your pharmacy assistant, How can I assist you today?"
-      },
-      {
-        "role": "user",
-        "timestamp_iso": "2025-10-21T16:28:49",
-        "content": "Hello. I want to know about pharmacy."
-      },
-      {
-        "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:28:50",
-        "content": "Could you please clarify what specific information about pharmacy you're interested in?"
-      },
-      {
-        "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:28:54",
-        "content": "Are you looking for details on medications, services offered, or something else?"
-      },
-      {
-        "role": "user",
-        "timestamp_iso": "2025-10-21T16:29:03",
-        "content": "Tell about medicine."
-      },
-      {
-        "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:29:04",
-        "content": "Could you please specify the name of the medicine you're interested in?"
-      },
-      {
-        "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:29:08",
-        "content": "For example, you can ask about common medications like aspirin, ibuprofen, or any specific drug you have in mind."
-      },
-      {
-        "role": "user",
-        "timestamp_iso": "2025-10-21T16:29:18",
-        "content": "Tell me about aspirin."
-      },
-      {
-        "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:29:20",
-        "content": "Aspirin, also known as Acetylsalicylic Acid, is a non-steroidal anti-inflammatory drug (NSAID) commonly used for pain relief and fever reduction."
-      },
-      {
-        "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:29:31",
-        "content": "Here are some key details:\n\n- **Description**: It helps alleviate mild to moderate pain and can reduce fever."
-      },
-      {
-        "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:29:40",
-        "content": "- **Price**: $5.99 for a quantity of 30 tablets."
-      },
-      {
-        "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:29:48",
-        "content": "If you have any more questions or if you need assistance with an order, feel free to ask!"
-      }
-    ]
-  }
-]
+{
+  "call_id": "CA9fbc8bddf5bb7bb829d117a084b25325",
+  "customer_id": "68f7ab37b25ca02ed22919ac",
+  "call_start_iso": "2025-10-21T23:19:37",
+  "call_end_iso": "2025-10-21T23:20:05",
+  "call_duration_seconds": 28.0,
+  "summary": "Caller asked: Was looking for some pharmacy related things. Can I get it to you here?. Agent responded: If you have any questions or need assistance in the future, feel free to ask..",
+  "sentiment_overall": "Neutral",
+  "turn_counts": {
+    "user": 3,
+    "assistant": 5
+  },
+  "first_agent_utterance": "How can I assist you?",
+  "last_user_utterance": "Thanks. No problem.",
+  "transcript": [
+    {
+      "role": "assistant",
+      "timestamp_iso": "2025-10-21T23:19:37",
+      "content": "How can I assist you?"
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2025-10-21T23:19:47",
+      "content": "Was looking for some pharmacy related things. Can I get it to you here?"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2025-10-21T23:19:49",
+      "content": "Absolutely!"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2025-10-21T23:19:50",
+      "content": "Please let me know what specific pharmacy-related information or services you need, and I'll be happy to assist you."
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2025-10-21T23:20:00",
+      "content": "Put"
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2025-10-21T23:20:01",
+      "content": "Thanks. No problem."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2025-10-21T23:20:03",
+      "content": "You're welcome!"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2025-10-21T23:20:05",
+      "content": "If you have any questions or need assistance in the future, feel free to ask."
+    }
+  ],
+  "realtime": {
+    "last_partial_sentiment": null,
+    "last_partial_updated_iso": null
+  },
+  "created_at_iso": "2025-10-21T23:19:37",
+  "updated_at_iso": "2025-10-21T23:20:05"
+}

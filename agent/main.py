@@ -5,6 +5,7 @@ import websockets
 import os
 import uuid
 from dotenv import load_dotenv
+import contextlib 
 from functions.testing.pharmacy_functions import FUNCTION_MAP
 import functions.transcript.transcript_code as transcript_code
 import functions.transcript.model as model
@@ -42,6 +43,21 @@ def load_config():
     """
     with open("config.json", "r") as f:
         return json.load(f)
+
+def build_config(ctx):
+    cfg = load_config()  # loads config.json
+    purpose = (ctx.get("purpose") or "").strip()
+    if purpose:
+        base_prompt = cfg["agent"]["think"]["prompt"]
+        cfg["agent"]["think"]["prompt"] = (
+            f"{base_prompt}\n\n"
+            f"Call purpose: {purpose}.\n"
+            f"Always steer the conversation to accomplish this goal while following verification and safety steps."
+        )
+        # optional: make the greeting reflect the purpose
+        base_greeting = cfg["agent"].get("greeting", "How can I assist you?")
+        cfg["agent"]["greeting"] = f"{base_greeting} This call is about: {purpose}."
+    return cfg
 
 
 def execute_function_call(func_name, arguments):
@@ -154,72 +170,86 @@ async def sts_receiver(sts_ws, twilio_ws, streamsid_queue):
             }))
 
 
-async def twilio_receiver(twilio_ws, audio_queue, streamsid_queue):
-    """
-    Receives audio and control messages from Twilio phone service
-    This handles incoming voice data from phone calls
-    """
-    BUFFER_SIZE = 20 * 160  # Size of audio chunks to process (optimized for speech)
-    inbuffer = bytearray()  # Buffer to collect audio data
-    
-    # Listen for messages from Twilio
+# Add an event so handler knows when 'purpose' is available
+async def twilio_receiver(twilio_ws, audio_queue, streamsid_queue, ctx, ready_evt):
+    BUFFER_SIZE = 20 * 160
+    inbuffer = bytearray()
     async for message in twilio_ws:
         data = json.loads(message)
         event = data.get("event")
-        
         if event == "start":
-            # Call is starting - get the stream ID
-            streamsid = data.get("start", {}).get("streamSid")
-            if streamsid: 
+            start = data.get("start", {})
+            streamsid = start.get("streamSid")
+            if streamsid:
                 streamsid_queue.put_nowait(streamsid)
-                
+            # capture IDs and purpose from customParameters
+            ctx["call_id"] = start.get("callSid") or ctx.get("call_id")
+            cp = start.get("customParameters") or {}
+            ctx["customer_id"] = cp.get("customer_id") or ctx.get("customer_id")
+            ctx["purpose"] = cp.get("purpose") or ctx.get("purpose")
+            ready_evt.set()  # signal that we have purpose
         elif event == "media":
-            # Audio data received from caller
             media = data.get("media", {})
-            payload = media.get("payload")  # Base64 encoded audio
-            track = media.get("track")      # Direction (inbound/outbound)
-            
-            # Only process incoming audio from caller
+            payload = media.get("payload")
+            track = media.get("track")
             if payload and track == "inbound":
-                # Decode base64 audio and add to buffer
                 inbuffer.extend(base64.b64decode(payload))
-                
         elif event == "stop":
-            # Call ended
             break
-        
-        # When buffer has enough data, send it for processing
         while len(inbuffer) >= BUFFER_SIZE:
             audio_queue.put_nowait(inbuffer[:BUFFER_SIZE])
             inbuffer = inbuffer[BUFFER_SIZE:]
 
 
+
 async def twilio_handler(twilio_ws):
-    """
-    Main handler for each Twilio WebSocket connection
-    This coordinates all the different parts of the call handling
-    """
-    # Create queues for communication between different parts
-    audio_queue = asyncio.Queue()      # Queue for audio data
-    streamsid_queue = asyncio.Queue()  # Queue for stream ID
-    
-    # Connect to Deepgram and start processing
+    ctx = {"call_id": None, "customer_id": None, "purpose": None}
+    purpose_ready = asyncio.Event()
+
+    audio_queue = asyncio.Queue()
+    streamsid_queue = asyncio.Queue()
+
     async with sts_connect() as sts_ws:
-        # Send configuration to Deepgram to set up the AI agent
-        await sts_ws.send(json.dumps(load_config()))
-        
-        # Run all three main processes simultaneously:
-        # 1. Send audio to Deepgram (sts_sender)
-        # 2. Receive responses from Deepgram (sts_receiver)  
-        # 3. Receive audio from Twilio (twilio_receiver)
-        await asyncio.gather(
-            sts_sender(sts_ws, audio_queue),
-            sts_receiver(sts_ws, twilio_ws, streamsid_queue),
-            twilio_receiver(twilio_ws, audio_queue, streamsid_queue)
+        # start Twilio receiver first so we can read 'start' quickly
+        twilio_task = asyncio.create_task(
+            twilio_receiver(twilio_ws, audio_queue, streamsid_queue, ctx, purpose_ready)
         )
-    
-    # Close the Twilio connection when done
-    await twilio_ws.close()
+
+        # wait briefly for purpose; if not present, fall back to base Settings
+        try:
+            await asyncio.wait_for(purpose_ready.wait(), timeout=2.0)
+            settings = build_config(ctx)
+        except asyncio.TimeoutError:
+            settings = load_config()
+
+        # now send Settings to Deepgram STS
+        await sts_ws.send(json.dumps(settings))
+
+        # start the audio pipeline tasks
+        sender_task = asyncio.create_task(sts_sender(sts_ws, audio_queue))
+        receiver_task = asyncio.create_task(sts_receiver(sts_ws, twilio_ws, streamsid_queue))
+
+        try:
+            await twilio_task  # ends on Twilio 'stop'
+        finally:
+            for t in (sender_task, receiver_task):
+                t.cancel()
+            with contextlib.suppress(asyncio.CancelledError):
+                await sender_task
+                await receiver_task
+
+            transcript_code.save_transcripts()
+
+            if transcript_code.TRANSCRIPTS:
+                final_call_id = ctx["call_id"] or f"call-{uuid.uuid4()}"
+                final_customer_id = ctx["customer_id"]
+                model.store_call_to_db(
+                    call_id=final_call_id,
+                    customer_id=final_customer_id,
+                    transcript=transcript_code.TRANSCRIPTS,
+                )
+
+            await twilio_ws.close()
 
 
 async def main():
@@ -236,22 +266,10 @@ async def main():
         # Keep the server running indefinitely
         await asyncio.Future()  # Run forever
     finally:
-        # When server stops, save all transcript data
-        transcript_code.save_transcripts()
-        
-        # If we have transcripts, save the call data to database
-        if transcript_code.TRANSCRIPTS:
-            call_start = transcript_code.TRANSCRIPTS[0]["timestamp_iso"]
-            model.store_call_to_db(
-                call_id=CALL_ID,
-                customer_id=CUSTOMER_ID,
-                call_start=call_start,
-                transcript=transcript_code.TRANSCRIPTS
-            )
-        
-        # Properly close the server
+        # Only manage server shutdown here; per-call storage happens in twilio_handler
         server.close()
         await server.wait_closed()
+
 
 
 if __name__ == "__main__":
@@ -259,15 +277,8 @@ if __name__ == "__main__":
         # Start the main async function
         asyncio.run(main())
     except KeyboardInterrupt:
-        # If user presses Ctrl+C, save transcripts before exiting
+        # Optional: last-resort flush of transcripts if you want a safety net
+        # (per-call store happens in twilio_handler on 'stop')
+        # You can keep or remove the next line depending on your preference.
         transcript_code.save_transcripts()
-        
-        # Save call data to database if available
-        if transcript_code.TRANSCRIPTS:
-            call_start = transcript_code.TRANSCRIPTS[0]["timestamp_iso"]
-            model.store_call_to_db(
-                call_id=CALL_ID,
-                customer_id=CUSTOMER_ID,
-                call_start=call_start,
-                transcript=transcript_code.TRANSCRIPTS
-            )
+        pass
