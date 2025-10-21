@@ -1,72 +1,63 @@
-[
-  {
-    "call_id": "call-abc54687-b674-4b7d-a92a-e0776ba72b6e",
-    "customer_id": "customer-12345",
-    "call_start": "2025-10-21T16:28:41",
-    "call_duration": 67.0,
-    "summary": "assistant: Hello! I'm your pharmacy assistant, How...",
-    "sentiment": "Neutral",
-    "transcript": [
-      {
-        "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:28:41",
-        "content": "Hello! I'm your pharmacy assistant, How can I assist you today?"
-      },
-      {
-        "role": "user",
-        "timestamp_iso": "2025-10-21T16:28:49",
-        "content": "Hello. I want to know about pharmacy."
-      },
-      {
-        "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:28:50",
-        "content": "Could you please clarify what specific information about pharmacy you're interested in?"
-      },
-      {
-        "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:28:54",
-        "content": "Are you looking for details on medications, services offered, or something else?"
-      },
-      {
-        "role": "user",
-        "timestamp_iso": "2025-10-21T16:29:03",
-        "content": "Tell about medicine."
-      },
-      {
-        "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:29:04",
-        "content": "Could you please specify the name of the medicine you're interested in?"
-      },
-      {
-        "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:29:08",
-        "content": "For example, you can ask about common medications like aspirin, ibuprofen, or any specific drug you have in mind."
-      },
-      {
-        "role": "user",
-        "timestamp_iso": "2025-10-21T16:29:18",
-        "content": "Tell me about aspirin."
-      },
-      {
-        "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:29:20",
-        "content": "Aspirin, also known as Acetylsalicylic Acid, is a non-steroidal anti-inflammatory drug (NSAID) commonly used for pain relief and fever reduction."
-      },
-      {
-        "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:29:31",
-        "content": "Here are some key details:\n\n- **Description**: It helps alleviate mild to moderate pain and can reduce fever."
-      },
-      {
-        "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:29:40",
-        "content": "- **Price**: $5.99 for a quantity of 30 tablets."
-      },
-      {
-        "role": "assistant",
-        "timestamp_iso": "2025-10-21T16:29:48",
-        "content": "If you have any more questions or if you need assistance with an order, feel free to ask!"
-      }
-    ]
-  }
-]
+{
+  "call_id": "call-69e36c88-6116-4376-87b2-52a8e293a249",
+  "customer_id": null,
+  "call_start_iso": "2025-10-21T22:47:46",
+  "call_end_iso": "2025-10-21T22:48:20",
+  "call_duration_seconds": 34.0,
+  "summary": "Caller asked: Hi. What is your company name?. Agent responded: Have a great day!.",
+  "sentiment_overall": "Neutral",
+  "turn_counts": {
+    "user": 2,
+    "assistant": 6
+  },
+  "first_agent_utterance": "How can I assist you?",
+  "last_user_utterance": "Okay. Thank you. I think this was a wrong number. I dialed instantly. Thank you.",
+  "transcript": [
+    {
+      "role": "assistant",
+      "timestamp_iso": "2025-10-21T22:47:46",
+      "content": "How can I assist you?"
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2025-10-21T22:47:51",
+      "content": "Hi. What is your company name?"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2025-10-21T22:47:52",
+      "content": "I'm here as a professional pharmacy assistant to help you with drug information, placing orders, and looking up existing orders."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2025-10-21T22:47:59",
+      "content": "If you have any questions or need assistance with something specific, feel free to ask!"
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2025-10-21T22:48:13",
+      "content": "Okay. Thank you. I think this was a wrong number. I dialed instantly. Thank you."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2025-10-21T22:48:14",
+      "content": "No problem at all!"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2025-10-21T22:48:15",
+      "content": "If you have any questions in the future or need assistance, feel free to reach out."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2025-10-21T22:48:20",
+      "content": "Have a great day!"
+    }
+  ],
+  "realtime": {
+    "last_partial_sentiment": null,
+    "last_partial_updated_iso": null
+  },
+  "created_at_iso": "2025-10-21T22:47:46",
+  "updated_at_iso": "2025-10-21T22:48:20"
+}

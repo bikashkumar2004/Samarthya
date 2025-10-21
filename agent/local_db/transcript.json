@@ -1,42 +1,42 @@
 [
   {
     "role": "assistant",
-    "timestamp_iso": "2025-10-21T20:00:13",
+    "timestamp_iso": "2025-10-21T22:47:46",
     "content": "How can I assist you?"
   },
   {
     "role": "user",
-    "timestamp_iso": "2025-10-21T20:00:20",
-    "content": "Hi. I was looking for some medicine."
+    "timestamp_iso": "2025-10-21T22:47:51",
+    "content": "Hi. What is your company name?"
   },
   {
     "role": "assistant",
-    "timestamp_iso": "2025-10-21T20:00:21",
-    "content": "Of course!"
+    "timestamp_iso": "2025-10-21T22:47:52",
+    "content": "I'm here as a professional pharmacy assistant to help you with drug information, placing orders, and looking up existing orders."
   },
   {
     "role": "assistant",
-    "timestamp_iso": "2025-10-21T20:00:22",
-    "content": "What medicine are you looking for?"
+    "timestamp_iso": "2025-10-21T22:47:59",
+    "content": "If you have any questions or need assistance with something specific, feel free to ask!"
   },
   {
     "role": "user",
-    "timestamp_iso": "2025-10-21T20:00:28",
-    "content": "I'm looking for"
+    "timestamp_iso": "2025-10-21T22:48:13",
+    "content": "Okay. Thank you. I think this was a wrong number. I dialed instantly. Thank you."
   },
   {
     "role": "assistant",
-    "timestamp_iso": "2025-10-21T20:00:38",
-    "content": "It seems like your message got cut off."
+    "timestamp_iso": "2025-10-21T22:48:14",
+    "content": "No problem at all!"
   },
   {
     "role": "assistant",
-    "timestamp_iso": "2025-10-21T20:17:29",
-    "content": "How can I assist you?"
+    "timestamp_iso": "2025-10-21T22:48:15",
+    "content": "If you have any questions in the future or need assistance, feel free to reach out."
   },
   {
     "role": "assistant",
-    "timestamp_iso": "2025-10-21T20:17:45",
-    "content": "How can I assist you?"
+    "timestamp_iso": "2025-10-21T22:48:20",
+    "content": "Have a great day!"
   }
 ]
