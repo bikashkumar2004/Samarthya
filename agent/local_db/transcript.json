@@ -1,0 +1,42 @@
+[
+  {
+    "role": "assistant",
+    "timestamp_iso": "2025-10-21T20:00:13",
+    "content": "How can I assist you?"
+  },
+  {
+    "role": "user",
+    "timestamp_iso": "2025-10-21T20:00:20",
+    "content": "Hi. I was looking for some medicine."
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2025-10-21T20:00:21",
+    "content": "Of course!"
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2025-10-21T20:00:22",
+    "content": "What medicine are you looking for?"
+  },
+  {
+    "role": "user",
+    "timestamp_iso": "2025-10-21T20:00:28",
+    "content": "I'm looking for"
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2025-10-21T20:00:38",
+    "content": "It seems like your message got cut off."
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2025-10-21T20:17:29",
+    "content": "How can I assist you?"
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2025-10-21T20:17:45",
+    "content": "How can I assist you?"
+  }
+]
