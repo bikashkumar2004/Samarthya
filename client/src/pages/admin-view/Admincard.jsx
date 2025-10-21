@@ -1,8 +1,10 @@
-import DetailDialog from "@/components/admin-view/DetailDialog";
 import { EllipsisVertical } from "lucide-react";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { showContactList } from "@/store/admin-slice/showDetails";
+import DetailDialog from "@/components/admin-view/DetailDialog";
 
-export default function Admincard({
+export default function AdminCard({
   contact,
   setfromdata,
   setopenCreateProductDialog,
@@ -11,22 +13,30 @@ export default function Admincard({
 }) {
   const [openMenu, setOpenMenu] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
+  const handleOpenDetails = async () => {
+    setIsOpen(true);
+    if (contact?._id) {
+      dispatch(showContactList(contact._id));
+    }
+  };
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 sm:gap-0 px-6 sm:px-10 py-4 items-start sm:items-center border-b border-gray-200 bg-white hover:bg-gray-50 transition relative">
+    
       {isOpen && <DetailDialog isOpen={isOpen} setIsOpen={setIsOpen} />}
-      {/* Name */}
+
+
       <div className="flex flex-col">
         <span className="font-semibold text-gray-900 sm:hidden">Name:</span>
         <span
-          onClick={() => setIsOpen(true)}
+          onClick={handleOpenDetails}
           className="text-gray-800 font-medium cursor-pointer hover:underline"
         >
           {contact?.name || "-"}
         </span>
       </div>
 
-      {/* Status */}
       <div className="flex flex-col">
         <span className="font-semibold text-gray-900 sm:hidden">Status:</span>
         <span
@@ -76,7 +86,7 @@ export default function Admincard({
           onClick={() => setOpenMenu(!openMenu)}
         />
 
-        {/* Dropdown menu */}
+        {/* Dropdown Menu */}
         {openMenu && (
           <div className="absolute right-0 top-6 bg-white border border-gray-200 rounded-md shadow-md z-10 w-36">
             <button

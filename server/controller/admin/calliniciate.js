@@ -16,37 +16,37 @@ export const initiateCall = async (req, res) => {
     console.log(" Customer ID:", id);
 
     if (!id) {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Customer ID is required" 
+      return res.status(400).json({
+        success: false,
+        message: "Customer ID is required",
       });
     }
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Invalid Customer ID" 
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Customer ID",
       });
     }
 
     const contact = await ContactDetails.findById(id).lean();
-    
+
     if (!contact) {
-      return res.status(404).json({ 
-        success: false, 
-        message: "Contact not found" 
+      return res.status(404).json({
+        success: false,
+        message: "Contact not found",
       });
     }
 
     if (!contact.phone) {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Contact has no phone number" 
+      return res.status(400).json({
+        success: false,
+        message: "Contact has no phone number",
       });
     }
 
-    const wsUrl = process.env.MEDIA_WS_URL;
-    
+    const wsUrl = process.env.MEDIA_WS_URL_BIKASH;
+
     const twiml = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
     <Connect>
@@ -63,7 +63,7 @@ export const initiateCall = async (req, res) => {
       twiml: twiml,
     });
 
-    console.log("✅Call SID:", call.sid);
+    console.log("Call SID:", call.sid);
     console.log(" Call Status:", call.status);
 
     res.status(201).json({
@@ -73,9 +73,8 @@ export const initiateCall = async (req, res) => {
       to: contact.phone,
       status: call.status,
     });
-
   } catch (error) {
-    console.error("❌ Call initiation error:", error);
+    console.error("Call initiation error:", error);
     res.status(500).json({
       success: false,
       message: "Failed to initiate call",

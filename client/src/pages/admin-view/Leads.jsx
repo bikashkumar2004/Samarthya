@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/sheet";
 import CommonForm from "@/components/common/commonForm";
 import { addContactFormElements } from "@/config";
+import DetailDialog from "../../components/admin-view/DetailDialog"; 
 
 const initialState = {
   name: "",
@@ -35,6 +36,9 @@ export default function LeadsAd() {
   const [currentEditedId, setcurrentEditedId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
+
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
 
   const dispatch = useDispatch();
   const { contactList } = useSelector((state) => state.contactList);
@@ -75,11 +79,10 @@ export default function LeadsAd() {
     });
   }
 
-  // Import contacts from file
+  // Import contacts
   async function handleImportContact(event) {
-    const file = event.target.files[0]; // pick first selected file
+    const file = event.target.files[0];
     if (!file) return;
-
     try {
       const result = await dispatch(uploadContactList(file));
       if (result?.payload?.success) {
@@ -95,15 +98,15 @@ export default function LeadsAd() {
       event.target.value = null;
     }
   }
-  const filteredContacts = contactList.filter((contact) => {
-  const term = searchTerm.toLowerCase();
-  return (
-    contact.name?.toLowerCase().includes(term) ||
-    contact.email?.toLowerCase().includes(term) ||
-    contact.phone?.toLowerCase().includes(term)
-  );
-});
 
+  const filteredContacts = contactList.filter((contact) => {
+    const term = searchTerm.toLowerCase();
+    return (
+      contact.name?.toLowerCase().includes(term) ||
+      contact.email?.toLowerCase().includes(term) ||
+      contact.phone?.toLowerCase().includes(term)
+    );
+  });
 
   useEffect(() => {
     dispatch(fetchAllContactList());
@@ -111,14 +114,12 @@ export default function LeadsAd() {
 
   return (
     <Fragment>
-      {/* Header Section */}
       <div className="my-5 flex flex-col w-full px-4 sm:px-8 lg:px-10 bg-white border border-gray-200 rounded-md shadow-sm py-5">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
           <h1 className="font-bold text-2xl sm:text-3xl">
             {contactList?.length || 0} Contacts
           </h1>
           <div className="flex gap-2 sm:gap-3 items-center">
-            {/* Hidden file input + styled button */}
             <div>
               <input
                 type="file"
@@ -135,7 +136,6 @@ export default function LeadsAd() {
               </label>
             </div>
 
-            {/* Create contact button */}
             <Button
               className="border border-gray-700 rounded-lg bg-black text-white text-sm sm:text-lg font-semibold px-4 sm:px-5 py-2 shadow-sm hover:bg-gray-800 transition"
               onClick={() => setopenCreateProductDialog(true)}
@@ -154,7 +154,7 @@ export default function LeadsAd() {
               placeholder="Search by name, email, phone number..."
               className="pl-10 pr-4 py-2 border border-gray-300 rounded-md shadow-sm w-full focus:ring-2 focus:ring-gray-200"
               value={searchTerm}
-              onChange={(e)=>setSearchTerm(e.target.value)}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
@@ -178,10 +178,14 @@ export default function LeadsAd() {
             <Admincard
               key={contactItem._id}
               setfromdata={setfromdata}
-              setopenCreateProductDialog={setopenCreateProductDialog}
-              setcurrentEditedId={setcurrentEditedId}
+              //setopenCreateProductDialog={setopenCreateProductDialog}
               handleDelete={handleDelete}
+              setcurrentEditedId={setcurrentEditedId}
               contact={contactItem}
+              onShowDetails={(id) => {
+                setSelectedId(id);
+                setIsDetailOpen(true);
+              }}
             />
           ))
         ) : (
@@ -193,7 +197,10 @@ export default function LeadsAd() {
               Add new contacts to this list and continue enriching your contact
               database.
             </p>
-            <Button className="border border-gray-300 rounded-lg bg-white text-black text-lg font-semibold px-5 py-2 shadow-sm hover:bg-gray-100 transition" onClick={() => setopenCreateProductDialog(true)}>
+            <Button
+              className="border border-gray-300 rounded-lg bg-white text-black text-lg font-semibold px-5 py-2 shadow-sm hover:bg-gray-100 transition"
+              onClick={() => setopenCreateProductDialog(true)}
+            >
               Create a new contact
             </Button>
           </div>
@@ -231,6 +238,13 @@ export default function LeadsAd() {
           </div>
         </SheetContent>
       </Sheet>
+
+
+      <DetailDialog
+        isOpen={isDetailOpen}
+        setIsOpen={setIsDetailOpen}
+        id={selectedId}
+      />
     </Fragment>
   );
 }
