@@ -43,5 +43,5 @@ async def make_outbound_call(phone_number_to_call):
 
 if __name__ == "__main__":
     # Replace with the number you want to call (E.164 format)
-    target_number = "+917735220216"
+    target_number = "+918895140540"
     asyncio.run(make_outbound_call(target_number))

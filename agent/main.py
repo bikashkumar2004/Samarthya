@@ -21,9 +21,22 @@ def sts_connect():
     return sts_ws
 
 
-def load_config():
+# def load_config():
+#     with open("config.json", "r") as f:
+#         return json.load(f)
+
+def load_config(prompt=None, greeting=None):
     with open("config.json", "r") as f:
-        return json.load(f)
+        config = json.load(f)
+
+    # Dynamically update prompt and greeting
+    if prompt:
+        config["agent"]["think"]["prompt"] = prompt
+
+    if greeting:
+        config["agent"]["greeting"] = greeting
+
+    return config
 
 
 async def handle_barge_in(decoded, twilio_ws, streamsid):
@@ -153,7 +166,13 @@ async def twilio_handler(twilio_ws):
     streamsid_queue = asyncio.Queue()
 
     async with sts_connect() as sts_ws:
-        config_message = load_config()
+        # config_message = load_config()
+        # Example dynamic values (could come from API, DB, or request data)
+        dynamic_prompt = "You are a helpful Customer service agent specializing in solve queries information."
+        dynamic_greeting = "Hello! Welcome to Customer service. How can I help you ?"
+
+        config_message = load_config(prompt=dynamic_prompt, greeting=dynamic_greeting)
+
         await sts_ws.send(json.dumps(config_message))
 
         await asyncio.wait(
