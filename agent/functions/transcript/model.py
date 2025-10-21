@@ -5,6 +5,10 @@ import datetime
 from typing import List, Dict, Optional, Tuple
 from pathlib import Path
 
+# MongoDB imports
+from pymongo import MongoClient
+from pymongo.errors import PyMongoError
+
 # The transcript entries are expected to be dicts with:
 # { "role": "user"|"assistant", "timestamp_iso": "YYYY-MM-DDTHH:MM:SS", "content": "..." }
 
@@ -34,6 +38,20 @@ def _atomic_write_json(path: str, data) -> None:
         f.flush()
         os.fsync(f.fileno())
     os.replace(tmp, p)
+
+def _get_mongo_client():
+    """Get MongoDB client using environment variables"""
+    mongo_uri = os.getenv("MONGODB_URI")
+    if not mongo_uri:
+        raise Exception("MONGO_URI not found in environment variables")
+    return MongoClient(mongo_uri)
+
+def _get_collection():
+    """Get MongoDB collection using environment variables"""
+    client = _get_mongo_client()
+    db_name = os.getenv("MONGODB_DB", "call_center")  # default db name
+    collection_name = os.getenv("MONGODB_COLLECTION", "calls")  # default collection name
+    return client[db_name][collection_name]
 
 def _turn_counts(transcript: List[Dict]) -> Dict[str, int]:
     counts = {"user": 0, "assistant": 0}
@@ -129,6 +147,40 @@ def build_call_record(
     }
     return record
 
+def store_call_to_mongo(record: Dict, collection_name: Optional[str] = None) -> bool:
+    """
+    Store call record to MongoDB collection with upsert by call_id
+    Returns True if successful, False otherwise
+    """
+    try:
+        collection = _get_collection()
+        if collection_name:
+            # Override collection name if provided
+            client = _get_mongo_client()
+            db_name = os.getenv("MONGO_DB_NAME", "call_center")
+            collection = client[db_name][collection_name]
+        
+        # Upsert by call_id
+        result = collection.replace_one(
+            {"call_id": record["call_id"]},
+            record,
+            upsert=True
+        )
+        
+        if result.upserted_id:
+            print(f"[model] Inserted new call {record['call_id']} to MongoDB")
+        else:
+            print(f"[model] Updated existing call {record['call_id']} in MongoDB")
+        
+        return True
+        
+    except PyMongoError as e:
+        print(f"[model] MongoDB error: {e}")
+        return False
+    except Exception as e:
+        print(f"[model] Unexpected error storing to MongoDB: {e}")
+        return False
+
 def store_call_to_db(
     call_id: str,
     customer_id: Optional[str],
@@ -138,10 +190,11 @@ def store_call_to_db(
     last_partial_updated_iso: Optional[str] = None,
     db_file: str = "local_db/db.json",
     write_per_call_file: bool = False,
+    store_to_mongo: bool = True,
 ) -> Dict:
     """
-    Replace db.json with the latest call record.
-    Optionally still write a per-call artifact under local_db/calls/{call_id}.json.
+    Replace db.json with the latest call record and optionally store to MongoDB.
+    Also optionally write a per-call artifact under local_db/calls/{call_id}.json.
     """
     record = build_call_record(
         call_id=call_id,
@@ -150,14 +203,21 @@ def store_call_to_db(
         call_start_iso_override=call_start_iso,
         last_partial_sentiment=last_partial_sentiment,
         last_partial_updated_iso=last_partial_updated_iso,
-    )  # [attached_file:5]
+    )
 
-    # Always replace the file with the latest record
-    _atomic_write_json(db_file, record)  # [attached_file:5]
+    # Always save to local JSON file
+    _atomic_write_json(db_file, record)
+    print(f"[model] Saved call {call_id} to {db_file}")
 
+    # Store to MongoDB if enabled
+    if store_to_mongo:
+        mongo_success = store_call_to_mongo(record)
+        if not mongo_success:
+            print(f"[model] Warning: Failed to store call {call_id} to MongoDB, but local storage succeeded")
+
+    # Optional per-call artifact
     if write_per_call_file:
         per_call_path = f"local_db/calls/{call_id}.json"
-        _atomic_write_json(per_call_path, record)  # [attached_file:5]
+        _atomic_write_json(per_call_path, record)
 
-    print(f"[model] Saved call {call_id} to {db_file}")
     return record
