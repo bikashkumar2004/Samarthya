@@ -10,7 +10,7 @@ export default function AdminLayouts() {
       <Sidebar open={openSidebar} setOpen={setopenSidebar}/>
       <div className='className="flex flex-1 flex-col'>
         <Headers setOpen={setopenSidebar}/>
-        <main className='flex-1 flex-col flex bg-muted/40 overflow-y-auto'>
+        <main className='flex-1 flex-col flex bg-muted/40 overflow-visible'>
           <Outlet/>
         </main>
       </div>

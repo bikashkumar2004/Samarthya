@@ -10,6 +10,7 @@ import {
 } from "../../controller/admin/addList.js";
 import { initiateCall } from "../../controller/admin/calliniciate.js";
 
+
 const router = express.Router();
 
 router.post("/upload-xlsx", upload.single("file"), handleContactUpload);
@@ -18,6 +19,8 @@ router.put("/edit/:id", editList);
 router.delete("/delete/:id", deleteList);
 router.get("/get", fetchAllContactList);
 router.get("/get/:id",showcontactDetails);
-router.post("/call/:id",initiateCall)
+router.post("/call/:id",initiateCall);
+
+
 
 export default router;
