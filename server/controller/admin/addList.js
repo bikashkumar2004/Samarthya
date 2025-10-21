@@ -24,26 +24,23 @@ export const handleContactUpload = async (req, res) => {
   }
 };
 
-const formatPhone = (number) => {
-  if (!number) return number;
-  const cleaned = number.replace(/\D/g, ""); // remove non-digits
-  if (cleaned.length !== 10) throw new Error("Phone number must be 10 digits");
-  return "+91" + cleaned;
-};
 
 export const addContactDetails = async (req, res) => {
   try {
     const { name, email, phone, whatsappNo, status } = req.body;
 
     if (!name || !email || !phone || !whatsappNo || !status) {
-      return res.status(400).json({ success: false, message: "All fields are required" });
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required",
+      });
     }
 
     const newContact = new ContactDetails({
       name,
       email,
-      phone: formatPhone(phone),
-      whatsappNo: formatPhone(whatsappNo),
+      phone,
+      whatsappNo,
       status,
     });
 
@@ -56,26 +53,42 @@ export const addContactDetails = async (req, res) => {
     });
   } catch (error) {
     console.error("Add contact error:", error);
-    res.status(500).json({ success: false, message: error.message || "Some error occurred" });
+    res.status(500).json({ success: false, message: "Some error occurred" });
   }
 };
 
 export const editList = async (req, res) => {
   try {
-    const id = req.params.id.trim();
-    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ success: false, message: "Invalid contact ID" });
+    const id = req.params.id.trim(); // Correct: trim the string directly
+    if (!id) {
+      return res.status(201).json({
+        success: false,
+        message: "Id not found",
+      });
+    }
+
+     const { name, email, phone, whatsappNo, status } = req.body
+console.log(req.body);
+
+    // Optional: validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid contact ID" });
     }
 
     const contact = await ContactDetails.findById(id);
-    if (!contact) return res.status(404).json({ success: false, message: "Contact not found" });
+    if (!contact) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Contact not found" });
+    }
 
-    const { name, email, phone, whatsappNo, status } = req.body;
-
+    // Update only provided fields
     if (name) contact.name = name;
     if (email) contact.email = email;
-    if (phone) contact.phone = formatPhone(phone);
-    if (whatsappNo) contact.whatsappNo = formatPhone(whatsappNo);
+    if (phone) contact.phone = phone;
+    if (whatsappNo) contact.whatsappNo = whatsappNo;
     if (status) contact.status = status;
 
     await contact.save();
@@ -87,10 +100,9 @@ export const editList = async (req, res) => {
     });
   } catch (error) {
     console.error("Edit contact error:", error);
-    res.status(500).json({ success: false, message: error.message || "Error occurred" });
+    res.status(500).json({ success: false, message: "Error occurred" });
   }
 };
-
 
 export const deleteList = async (req, res) => {
   try {
