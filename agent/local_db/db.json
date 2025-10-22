@@ -1,63 +1,103 @@
 {
-  "call_id": "CA9fbc8bddf5bb7bb829d117a084b25325",
-  "customer_id": "68f7ab37b25ca02ed22919ac",
-  "call_start_iso": "2025-10-21T23:19:37",
-  "call_end_iso": "2025-10-21T23:20:05",
-  "call_duration_seconds": 28.0,
-  "summary": "Caller asked: Was looking for some pharmacy related things. Can I get it to you here?. Agent responded: If you have any questions or need assistance in the future, feel free to ask..",
+  "call_id": "CAc8c3c2a71bfbbd20574cab416f0b46e9",
+  "customer_id": "68f7cf0e5486d91cb36e8848",
+  "call_start_iso": "2025-10-22T20:44:50",
+  "call_end_iso": "2025-10-22T20:48:05",
+  "call_duration_seconds": 195.0,
+  "summary": "The user had a simple inquiry regarding the medication aspirin and the assistant provided helpful information about its uses and price. The interaction ended on a positive note.",
   "sentiment_overall": "Neutral",
   "turn_counts": {
-    "user": 3,
-    "assistant": 5
+    "user": 5,
+    "assistant": 11
   },
-  "first_agent_utterance": "How can I assist you?",
-  "last_user_utterance": "Thanks. No problem.",
+  "first_agent_utterance": "How can I assist you? This call is about: pharmacy related quarry.",
+  "last_user_utterance": "Thank you.",
   "transcript": [
     {
       "role": "assistant",
-      "timestamp_iso": "2025-10-21T23:19:37",
-      "content": "How can I assist you?"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-21T23:19:47",
-      "content": "Was looking for some pharmacy related things. Can I get it to you here?"
+      "timestamp_iso": "2025-10-22T20:44:50",
+      "content": "How can I assist you? This call is about: pharmacy related quarry."
     },
     {
       "role": "assistant",
-      "timestamp_iso": "2025-10-21T23:19:49",
-      "content": "Absolutely!"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-21T23:19:50",
-      "content": "Please let me know what specific pharmacy-related information or services you need, and I'll be happy to assist you."
+      "timestamp_iso": "2025-10-22T20:46:52",
+      "content": "How can I assist you? This call is about: pharmacy related querry."
     },
     {
       "role": "user",
-      "timestamp_iso": "2025-10-21T23:20:00",
-      "content": "Put"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-21T23:20:01",
-      "content": "Thanks. No problem."
+      "timestamp_iso": "2025-10-22T20:47:02",
+      "content": "I was looking for a medication named aspirin. Is it there?"
     },
     {
       "role": "assistant",
-      "timestamp_iso": "2025-10-21T23:20:03",
+      "timestamp_iso": "2025-10-22T20:47:04",
+      "content": "Aspirin, also known as Acetylsalicylic Acid, is a non-steroidal anti-inflammatory drug (NSAID) used for pain relief and fever reduction."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2025-10-22T20:47:14",
+      "content": "- **Price:** $5.99\n- **Available Quantity:** 30 tablets\n\nWould you like to place an order for aspirin?"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2025-10-22T20:47:28",
+      "content": "If so, please provide your full name clearly."
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2025-10-22T20:47:37",
+      "content": "No. I don't want to order a gate. I was just asking why is it used?"
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2025-10-22T20:47:39",
+      "content": "Can you explain brief briefly?"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2025-10-22T20:47:40",
+      "content": "Aspirin is primarily used for the following purposes:\n\n1."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2025-10-22T20:47:44",
+      "content": "**Pain Relief:** It can help alleviate mild to moderate pain, including headaches, muscle aches, and arthritis."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2025-10-22T20:47:54",
+      "content": "2."
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2025-10-22T20:47:56",
+      "content": "Okay. I'm just gonna do something to change it. Thanks a lot."
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2025-10-22T20:47:57",
+      "content": "Thank you."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2025-10-22T20:48:00",
       "content": "You're welcome!"
     },
     {
       "role": "assistant",
-      "timestamp_iso": "2025-10-21T23:20:05",
-      "content": "If you have any questions or need assistance in the future, feel free to ask."
+      "timestamp_iso": "2025-10-22T20:48:01",
+      "content": "If you have any more questions or need assistance in the future, feel free to reach out."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2025-10-22T20:48:05",
+      "content": "Have a great day!"
     }
   ],
   "realtime": {
     "last_partial_sentiment": null,
     "last_partial_updated_iso": null
   },
-  "created_at_iso": "2025-10-21T23:19:37",
-  "updated_at_iso": "2025-10-21T23:20:05"
+  "created_at_iso": "2025-10-22T20:44:50",
+  "updated_at_iso": "2025-10-22T20:48:05"
 }

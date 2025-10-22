@@ -4,6 +4,8 @@ import json
 import datetime
 from typing import List, Dict, Optional, Tuple
 from pathlib import Path
+# from sentiment import analyze_transcript_data
+from .sentiment import analyze_transcript_data
 
 # MongoDB imports
 from pymongo import MongoClient
@@ -49,7 +51,7 @@ def _get_mongo_client():
 def _get_collection():
     """Get MongoDB collection using environment variables"""
     client = _get_mongo_client()
-    db_name = os.getenv("MONGODB_DB", "call_center")  # default db name
+    db_name = os.getenv("MONGODB_DB", "whitespace-crm")  # default db name
     collection_name = os.getenv("MONGODB_COLLECTION", "calls")  # default collection name
     return client[db_name][collection_name]
 
@@ -84,22 +86,22 @@ def _compute_times(transcript: List[Dict]) -> Tuple[str, str, float]:
     duration = max((end_dt - start_dt).total_seconds(), 0.0)
     return start_iso, end_iso, duration
 
-def _summarize_and_sentiment(transcript: List[Dict]) -> Tuple[str, str]:
-    # Lightweight, dependency-free fallback:
-    # Build a brief summary from the first user and last assistant turns,
-    # and set sentiment to Neutral unless clear cues exist.
-    first_user = next((t["content"] for t in transcript if t.get("role") == "user" and t.get("content")), None)
-    last_agent = next((t["content"] for t in reversed(transcript) if t.get("role") == "assistant" and t.get("content")), None)
-    if first_user and last_agent:
-        summary = f"Caller asked: {first_user[:120]}. Agent responded: {last_agent[:120]}."
-    elif first_user:
-        summary = f"Caller asked: {first_user[:160]}."
-    elif last_agent:
-        summary = f"Agent responded: {last_agent[:160]}."
-    else:
-        summary = "No content."
-    sentiment = "Neutral"
-    return summary, sentiment
+# def _summarize_and_sentiment(transcript: List[Dict]) -> Tuple[str, str]:
+#     # Lightweight, dependency-free fallback:
+#     # Build a brief summary from the first user and last assistant turns,
+#     # and set sentiment to Neutral unless clear cues exist.
+#     first_user = next((t["content"] for t in transcript if t.get("role") == "user" and t.get("content")), None)
+#     last_agent = next((t["content"] for t in reversed(transcript) if t.get("role") == "assistant" and t.get("content")), None)
+#     if first_user and last_agent:
+#         summary = f"Caller asked: {first_user[:120]}. Agent responded: {last_agent[:120]}."
+#     elif first_user:
+#         summary = f"Caller asked: {first_user[:160]}."
+#     elif last_agent:
+#         summary = f"Agent responded: {last_agent[:160]}."
+#     else:
+#         summary = "No content."
+#     sentiment = "Neutral"
+#     return summary, sentiment
 
 def build_call_record(
     call_id: str,
@@ -121,7 +123,8 @@ def build_call_record(
     turn_counts = _turn_counts(transcript)
     first_agent = _first_agent_utterance(transcript)
     last_user = _last_user_utterance(transcript)
-    summary, sentiment_overall = _summarize_and_sentiment(transcript)
+    # summary, sentiment_overall = _summarize_and_sentiment(transcript)
+    sentiment_overall, summary  = analyze_transcript_data(transcript)
 
     created_at_iso = call_start_iso
     updated_at_iso = call_end_iso
