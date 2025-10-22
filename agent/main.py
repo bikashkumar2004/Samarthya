@@ -54,6 +54,7 @@ def build_config(ctx):
             f"Call purpose: {purpose}.\n"
             f"Always steer the conversation to accomplish this goal while following verification and safety steps."
         )
+        print(f"hereeee=={purpose}")
         # optional: make the greeting reflect the purpose
         base_greeting = cfg["agent"].get("greeting", "How can I assist you?")
         cfg["agent"]["greeting"] = f"{base_greeting} This call is about: {purpose}."
