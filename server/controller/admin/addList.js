@@ -27,9 +27,9 @@ export const handleContactUpload = async (req, res) => {
 
 export const addContactDetails = async (req, res) => {
   try {
-    const { name, email, phone, whatsappNo, status } = req.body;
+    const { name, email, phone, whatsappNo, status,purpose } = req.body;
 
-    if (!name || !email || !phone || !whatsappNo || !status) {
+    if (!name || !email || !phone || !whatsappNo || !status || !purpose) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
@@ -42,6 +42,7 @@ export const addContactDetails = async (req, res) => {
       phone,
       whatsappNo,
       status,
+      purpose
     });
 
     await newContact.save();
@@ -67,8 +68,7 @@ export const editList = async (req, res) => {
       });
     }
 
-     const { name, email, phone, whatsappNo, status } = req.body
-console.log(req.body);
+     const { name, email, phone, whatsappNo, status,purpose } = req.body
 
     // Optional: validate ObjectId
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -90,6 +90,7 @@ console.log(req.body);
     if (phone) contact.phone = phone;
     if (whatsappNo) contact.whatsappNo = whatsappNo;
     if (status) contact.status = status;
+    if(purpose) contact.purpose =purpose;
 
     await contact.save();
 

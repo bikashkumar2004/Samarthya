@@ -10,10 +10,21 @@ const client = twilio(
 );
 
 export const initiateCall = async (req, res) => {
+  console.log(ContactDetails);
+  
   try {
     const { customerId } = req.params;
-    console.log(customerId);
+    console.log("id",customerId);
     
+    const {purpose}=req.body    
+    console.log("purpose",purpose);
+    
+    if(!purpose){
+      return res.status(400).json({
+        success:false,
+        message:"Purpose is not define."
+      })
+    }
 
     if (!customerId || !mongoose.Types.ObjectId.isValid(customerId)) {
       return res
@@ -29,13 +40,14 @@ export const initiateCall = async (req, res) => {
       });
     }
 
-    const wsUrl = process.env.MEDIA_WS_URL;
+    const wsUrl = process.env.MEDIA_WS_URL_BIKASH;
 
     const twiml = `<?xml version="1.0" encoding="UTF-8"?>
         <Response>
           <Connect>
             <Stream url="${wsUrl}">
               <Parameter name="customer_id" value="${customerId}" />
+              <Parameter name="purpose" value="${purpose}" />
             </Stream>
           </Connect>
         </Response>`;

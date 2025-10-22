@@ -10,6 +10,7 @@ const initialState = {
   successMessage: null,
 };
 
+
 export const uploadContactList = createAsyncThunk(
   "admin/contactList/uploadContactList",
   async (file, { rejectWithValue }) => {
@@ -18,9 +19,7 @@ export const uploadContactList = createAsyncThunk(
       formData.append("file", file);
 
       const response = await axios.post(`${API_URL}/upload-xlsx`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });
 
@@ -30,15 +29,22 @@ export const uploadContactList = createAsyncThunk(
     }
   }
 );
+
 
 export const addNewContact = createAsyncThunk(
   "admin/contactList/addContact",
   async (contactData, { rejectWithValue }) => {
     try {
+      // Ensure purpose field exists
+      if (!contactData.purpose) {
+        throw new Error("Purpose field is required");
+      }
+
       const response = await axios.post(`${API_URL}/add`, contactData, {
         withCredentials: true,
         headers: { "Content-Type": "application/json" },
       });
+
       return response.data;
     } catch (error) {
       return rejectWithValue(error?.response?.data || error.message);
@@ -46,10 +52,15 @@ export const addNewContact = createAsyncThunk(
   }
 );
 
+
 export const editContactList = createAsyncThunk(
   "admin/contactList/editContact",
   async ({ id, formData }, { rejectWithValue }) => {
     try {
+      if (!formData.purpose) {
+        throw new Error("Purpose field is required");
+      }
+
       const response = await axios.put(`${API_URL}/edit/${id}`, formData, {
         withCredentials: true,
         headers: { "Content-Type": "application/json" },
@@ -60,6 +71,7 @@ export const editContactList = createAsyncThunk(
     }
   }
 );
+
 
 export const deleteContactList = createAsyncThunk(
   "admin/contactList/deleteContact",
@@ -74,8 +86,6 @@ export const deleteContactList = createAsyncThunk(
     }
   }
 );
-
-
 
 
 export const fetchAllContactList = createAsyncThunk(
@@ -128,6 +138,7 @@ const contactListSlice = createSlice({
         state.error = action.payload;
       })
 
+
       .addCase(editContactList.pending, (state) => {
         state.isLoading = true;
       })
@@ -146,6 +157,7 @@ const contactListSlice = createSlice({
         state.error = action.payload;
       })
 
+
       .addCase(deleteContactList.pending, (state) => {
         state.isLoading = true;
       })
@@ -160,17 +172,19 @@ const contactListSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
       })
-      // .addCase(showContactList.rejected, (state, action) => {
-      //   state.isLoading = false;
-      //   state.productDetails = null;
-      // })
-      // .addCase(showContactList.pending, (state, action) => {
-      //   state.isLoading = false;
-      // })
-      // .addCase(showContactList.fulfilled, (state, action) => {
-      //   state.isLoading = true;
-      //   state.productDetails = action.payload.data;
-      // });
+
+      .addCase(uploadContactList.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(uploadContactList.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.successMessage =
+          action.payload?.message || "Excel uploaded successfully!";
+      })
+      .addCase(uploadContactList.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      });
   },
 });
 

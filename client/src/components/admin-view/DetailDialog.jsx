@@ -35,7 +35,7 @@ export default function DetailDialog({ isOpen, setIsOpen, id }) {
 
   const handleAction = async (action) => {
     if (action === "Call") {
-      dispatch(callInitiate(customer._id));
+      dispatch(callInitiate({id:customer._id,purpose:customer.purpose}));
       return;
     }
 
@@ -122,10 +122,26 @@ export default function DetailDialog({ isOpen, setIsOpen, id }) {
           </h3>
           <div className="grid grid-cols-2 gap-3 sm:gap-4">
             {[
-              { action: "Call", icon: Phone, colors: "from-blue-500 to-blue-600" },
-              { action: "Email", icon: Mail, colors: "from-purple-500 to-purple-600" },
-              { action: "WhatsApp", icon: MessageCircle, colors: "from-green-500 to-green-600" },
-              { action: "SMS", icon: MessageSquare, colors: "from-orange-500 to-orange-600" },
+              {
+                action: "Call",
+                icon: Phone,
+                colors: "from-blue-500 to-blue-600",
+              },
+              {
+                action: "Email",
+                icon: Mail,
+                colors: "from-purple-500 to-purple-600",
+              },
+              {
+                action: "WhatsApp",
+                icon: MessageCircle,
+                colors: "from-green-500 to-green-600",
+              },
+              {
+                action: "SMS",
+                icon: MessageSquare,
+                colors: "from-orange-500 to-orange-600",
+              },
             ].map(({ action, icon: Icon, colors }) => (
               <button
                 key={action}
@@ -138,11 +154,21 @@ export default function DetailDialog({ isOpen, setIsOpen, id }) {
                 ) : (
                   <>
                     <Icon className="w-5 h-5 sm:w-6 sm:h-6 mb-1 group-hover:scale-110 transition-transform" />
-                    <span className="text-xs sm:text-sm font-semibold">{action}</span>
+                    <span className="text-xs sm:text-sm font-semibold">
+                      {action}
+                    </span>
                   </>
                 )}
               </button>
             ))}
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border mt-4">
+            <h4 className="text-sm font-semibold text-gray-800 mb-2">
+              Purpose
+            </h4>
+            <p className="text-gray-800 text-sm whitespace-pre-wrap">
+              {customer.purpose || "No purpose added"}
+            </p>
           </div>
         </div>
       </div>

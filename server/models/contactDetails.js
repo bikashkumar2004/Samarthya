@@ -11,6 +11,10 @@ const contactSchema = new mongoose.Schema(
       enum: ["New", "Pending", "Rejected", "Assigned","Imported","Contacted","Interested","No Replay","Engaging"],
       required: true,
     },
+    purpose:{
+      type:String,
+      required:true
+    }
   },
   
 );

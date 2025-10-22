@@ -69,7 +69,6 @@ export const addContactFormElements = [
     placeholder: "Enter WhatsApp number",
   },
   {
-    // label: "Status",
     name: "status",
     componentType: "select",
     options: [
@@ -85,5 +84,13 @@ export const addContactFormElements = [
     ],
     required: true,
     placeholder: "Select status",
+  },
+  {
+    label: "Purpose", 
+    name: "purpose",
+    componentType: "textarea",
+    placeholder: "Enter the purpose or notes about this contact",
+    required: true,
+    rows: 4,
   },
 ];

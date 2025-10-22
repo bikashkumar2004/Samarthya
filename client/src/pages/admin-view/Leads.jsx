@@ -28,6 +28,7 @@ const initialState = {
   phone: "",
   whatsappNo: "",
   status: "",
+  purpose:""
 };
 
 export default function LeadsAd() {

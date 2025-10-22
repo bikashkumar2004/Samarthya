@@ -13,11 +13,11 @@ const initialState = {
 
 export const callInitiate = createAsyncThunk(
   "admin/contactList/call",
-  async (id, { rejectWithValue }) => {
+  async ({id,purpose },{ rejectWithValue }) => {
     try {
       const response = await axios.post(
         `${API_URL}/call/${id}`,
-        {},
+        {id,purpose},
         { withCredentials: true }
       );
       return response?.data;
