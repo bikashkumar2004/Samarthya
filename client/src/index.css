@@ -10,3 +10,36 @@
 * {
   font-family: "Nunito Sans", sans-serif;
 }
+
+@layer base {
+  :root {
+    --color-primary: #043927;
+    --color-secondary: #d8fdd2;
+  }
+}
+
+@layer components {
+  .bg-primary {
+    background-color: var(--color-primary);
+  }
+  
+  .bg-secondary {
+    background-color: var(--color-secondary);
+  }
+  
+  .text-primary {
+    color: var(--color-primary);
+  }
+  
+  .text-secondary {
+    color: var(--color-secondary);
+  }
+  
+  .border-primary {
+    border-color: var(--color-primary);
+  }
+  
+  .border-secondary {
+    border-color: var(--color-secondary);
+  }
+}

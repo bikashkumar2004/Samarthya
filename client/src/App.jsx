@@ -16,13 +16,11 @@ import { useEffect } from "react";
 import { checkAuth } from "./store/auth-slice";
 
 import AdminLayouts from "./components/admin-view/AdminLayouts";
-import Dashbords from "./pages/admin-view/Dashbords";
+import Dashboard from "./pages/admin-view/Dashboard";
 import Leads from "./pages/admin-view/Leads";
-import Contacts from "./pages/admin-view/Contacts";
-import Marketings from "./pages/admin-view/Marketings";
-import Conversations from "./pages/admin-view/Conversations";
 import Workflows from "./pages/admin-view/Workflows";
-import DetailDialog from "./components/admin-view/DetailDialog";
+import CreateTask from "./pages/admin-view/CreateTask";
+import AiCallMannager from "./pages/admin-view/AiCallManager";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -51,11 +49,11 @@ export default function App() {
         </Route>
 
         <Route path="/admin" element={<AdminLayouts />}>
-          <Route path="Dashboard" element={<Dashbords />} />
+          <Route path="Dashboard" element={<Dashboard />} />
+          <Route path="createtask" element={<CreateTask />} />
           <Route path="Leads" element={<Leads />} />
-          <Route path="Contacts" element={<Contacts />} />
-          <Route path="Marketing" element={<Marketings />} />
-          <Route path="Conversations" element={<Conversations />} />
+          <Route path="aicallmanager" element={<AiCallMannager />} />
+
           <Route path="Workflow" element={<Workflows />} />
         </Route>
       </Routes>

@@ -39,7 +39,7 @@ export default function Headers({ setOpen }) {
         <DropdownMenu>
           <DropdownMenuTrigger className="cursor-pointer">
             <Avatar className="h-12 w-12">
-              <AvatarFallback className="bg-black text-white flex items-center justify-center text-lg font-semibold">
+              <AvatarFallback className="bg-[#043927] text-white flex items-center justify-center text-lg font-semibold">
                 <span className="text-xl">{userData?.name?.[0]?.toUpperCase()}</span>
               </AvatarFallback>
             </Avatar>
