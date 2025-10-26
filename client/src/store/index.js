@@ -4,6 +4,7 @@ import contactListReducer from "./admin-slice";
 import contactDetailsReducer from "./admin-slice/showDetails";
 import adminDetails from "./auth-slice/accountVerified"
 import callInitiate from "./call-slice/index"
+import showDetails from "./call-slice/showcallDetails.js"
 
 const store = configureStore({
   reducer: {
@@ -11,7 +12,8 @@ const store = configureStore({
     contactList: contactListReducer,
     contactDetails: contactDetailsReducer,
     getdata:adminDetails,
-    call:callInitiate
+    call:callInitiate,
+    callHistory:showDetails
   },
 });
 

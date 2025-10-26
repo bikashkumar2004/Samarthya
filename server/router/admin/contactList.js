@@ -9,6 +9,9 @@ import {
   showcontactDetails,
 } from "../../controller/admin/addList.js";
 import { initiateCall } from "../../controller/admin/calliniciate.js";
+import { callTranscript } from "../../controller/calls/callhistory.js";
+
+
 
 
 const router = express.Router();
@@ -20,7 +23,6 @@ router.delete("/delete/:id", deleteList);
 router.get("/get", fetchAllContactList);
 router.get("/get/:id",showcontactDetails);
 router.post("/call/:customerId",initiateCall);
-
-
+router.get("/callTranscript/:customerId",callTranscript)
 
 export default router;
