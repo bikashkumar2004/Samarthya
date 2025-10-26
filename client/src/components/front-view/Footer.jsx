@@ -1,16 +1,17 @@
-import React from 'react'
-import { assets } from '../../assets/assets';
+import React from "react";
+import { assets } from "../../assets/assets";
 
 export default function Footer() {
-
   return (
     <footer className="bg-[#043927] text-white flex flex-col items-center gap-8 px-[8vw] py-20 mt-8">
       <div className="w-full grid md:grid-cols-4 gap-20">
         {/* Left Section */}
         <div className="flex flex-col items-start gap-5 md:col-span-2">
-          <h2 className="text-2xl font-semibold mb-2">CANTAR</h2>
+          <h2 className="text-2xl font-semibold mb-2">Samarthya</h2>
           <p>
-            CRM Solutions is dedicated to helping businesses manage their customer relationships and grow efficiently with our comprehensive CRM software.
+            CRM Solutions is dedicated to helping businesses manage their
+            customer relationships and grow efficiently with our comprehensive
+            CRM software.
           </p>
           <div className="flex gap-4 mt-5">
             <img src={assets.facebook} alt="Facebook" className="w-10" />
@@ -42,9 +43,9 @@ export default function Footer() {
       </div>
 
       <hr className="w-full h-[2px] bg-gray-500 border-none my-5" />
-      <p className="text-center">Copyright 2024 @Company. All rights Reserved</p>
+      <p className="text-center">
+        Copyright 2024 @Company. All rights Reserved
+      </p>
     </footer>
   );
-
-
 }
