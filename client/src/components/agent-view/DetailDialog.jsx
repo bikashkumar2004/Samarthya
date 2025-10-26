@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Phone, Mail, MessageCircle, MessageSquare, X } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { showContactList } from "@/store/admin-slice/showDetails";
+import { showContactList } from "@/store/agent-slice/showDetails";
 import { callInitiate, resetCallState } from "@/store/call-slice";
 import { toast } from "sonner";
 

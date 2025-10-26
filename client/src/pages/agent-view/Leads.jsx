@@ -9,9 +9,9 @@ import {
   editContactList,
   fetchAllContactList,
   uploadContactList,
-} from "@/store/admin-slice";
+} from "@/store/agent-slice";
 import { toast } from "sonner";
-import Admincard from "./Admincard";
+import Admincard from "./Agentcard";
 import {
   Sheet,
   SheetContent,
@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/sheet";
 import CommonForm from "@/components/common/commonForm";
 import { addContactFormElements } from "@/config";
-import DetailDialog from "../../components/admin-view/DetailDialog"; 
+import DetailDialog from "../../components/agent-view/DetailDialog"; 
 
 const initialState = {
   name: "",
@@ -121,7 +121,7 @@ export default function LeadsAd() {
             {contactList?.length || 0} Contacts
           </h1>
           <div className="flex gap-2 sm:gap-3 items-center">
-            <div>
+            {/* <div>
               <input
                 type="file"
                 accept=".xlsx, .xls"
@@ -135,14 +135,14 @@ export default function LeadsAd() {
               >
                 Import Contact
               </label>
-            </div>
+            </div> */}
 
-            <Button
+            {/* <Button
               className="border border-gray-700 rounded-lg bg-black text-white text-sm sm:text-lg font-semibold px-4 sm:px-5 py-2 shadow-sm hover:bg-gray-800 transition"
               onClick={() => setopenCreateProductDialog(true)}
             >
               Create a Contact
-            </Button>
+            </Button> */}
           </div>
         </div>
 

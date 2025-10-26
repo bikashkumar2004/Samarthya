@@ -7,11 +7,8 @@ import {
   deleteList,
   fetchAllContactList,
   showcontactDetails,
-} from "../../controller/admin/addList.js";
-import { initiateCall } from "../../controller/admin/calliniciate.js";
-import { callTranscript } from "../../controller/calls/callhistory.js";
-
-
+} from "../../controller/agent/addList.js";
+import { initiateCall } from "../../controller/agent/calliniciate.js";
 
 
 const router = express.Router();

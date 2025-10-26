@@ -3,7 +3,7 @@ import Sidebar from "./Sidebars";
 import { Outlet } from "react-router-dom";
 import Headers from "./Headers";
 
-export default function AdminLayouts() {
+export default function AgentLayouts() {
   const [openSidebar, setopenSidebar] = useState(false);
 
   return (

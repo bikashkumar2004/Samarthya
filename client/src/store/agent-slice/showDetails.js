@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_URL = "http://localhost:4000/api/admin/contactList";
+const API_URL = "http://localhost:4000/api/agent/contactList";
 
 const initialState = {
   isLoading: false,

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_URL = "http://localhost:4000/api/admin/contactList";
+const API_URL = "http://localhost:4000/api/agent/contactList";
 
 const initialState = {
   isLoading: false,
@@ -12,7 +12,7 @@ const initialState = {
 
 
 export const uploadContactList = createAsyncThunk(
-  "admin/contactList/uploadContactList",
+  "agent/contactList/uploadContactList",
   async (file, { rejectWithValue }) => {
     try {
       const formData = new FormData();
@@ -32,7 +32,7 @@ export const uploadContactList = createAsyncThunk(
 
 
 export const addNewContact = createAsyncThunk(
-  "admin/contactList/addContact",
+  "agent/contactList/addContact",
   async (contactData, { rejectWithValue }) => {
     try {
       // Ensure purpose field exists
@@ -54,7 +54,7 @@ export const addNewContact = createAsyncThunk(
 
 
 export const editContactList = createAsyncThunk(
-  "admin/contactList/editContact",
+  "agent/contactList/editContact",
   async ({ id, formData }, { rejectWithValue }) => {
     try {
       if (!formData.purpose) {
@@ -74,7 +74,7 @@ export const editContactList = createAsyncThunk(
 
 
 export const deleteContactList = createAsyncThunk(
-  "admin/contactList/deleteContact",
+  "agent/contactList/deleteContact",
   async (id, { rejectWithValue }) => {
     try {
       const response = await axios.delete(`${API_URL}/delete/${id}`, {
@@ -89,7 +89,7 @@ export const deleteContactList = createAsyncThunk(
 
 
 export const fetchAllContactList = createAsyncThunk(
-  "admin/contactList/fetchAll",
+  "agent/contactList/fetchAll",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${API_URL}/get`, {

@@ -1,103 +1,28 @@
 {
-  "call_id": "CAc8c3c2a71bfbbd20574cab416f0b46e9",
+  "call_id": "CA9ffa8ecbd745e7b8b6cd38f1d4afbfad",
   "customer_id": "68f7cf0e5486d91cb36e8848",
-  "call_start_iso": "2025-10-22T20:44:50",
-  "call_end_iso": "2025-10-22T20:48:05",
-  "call_duration_seconds": 195.0,
-  "summary": "The user had a simple inquiry regarding the medication aspirin and the assistant provided helpful information about its uses and price. The interaction ended on a positive note.",
+  "call_start_iso": "2025-10-26T20:10:01",
+  "call_end_iso": "2025-10-26T20:10:01",
+  "call_duration_seconds": 0.0,
+  "summary": "Customer: Hi, I'm calling about my prescription. I've been having some trouble getting it filled and would like some help. Pharmacy: Of course, what is the name of the medication you're having trouble with? Customer: It's Xanax. I've been trying to refill it for a few days now and it keeps saying it's not covered by my insurance. Pharmacy: I see, let me check that for you. (pauses) I'm sorry to hear that. It looks like your insurance changed their policy and they're not covering it anymore. Is there another medication you could take instead? Customer: No, I need Xanax....",
   "sentiment_overall": "Neutral",
   "turn_counts": {
-    "user": 5,
-    "assistant": 11
+    "user": 0,
+    "assistant": 1
   },
-  "first_agent_utterance": "How can I assist you? This call is about: pharmacy related quarry.",
-  "last_user_utterance": "Thank you.",
+  "first_agent_utterance": "How can I assist you? This call is about: pharmacy related querry.",
+  "last_user_utterance": null,
   "transcript": [
     {
       "role": "assistant",
-      "timestamp_iso": "2025-10-22T20:44:50",
-      "content": "How can I assist you? This call is about: pharmacy related quarry."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-22T20:46:52",
+      "timestamp_iso": "2025-10-26T20:10:01",
       "content": "How can I assist you? This call is about: pharmacy related querry."
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-22T20:47:02",
-      "content": "I was looking for a medication named aspirin. Is it there?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-22T20:47:04",
-      "content": "Aspirin, also known as Acetylsalicylic Acid, is a non-steroidal anti-inflammatory drug (NSAID) used for pain relief and fever reduction."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-22T20:47:14",
-      "content": "- **Price:** $5.99\n- **Available Quantity:** 30 tablets\n\nWould you like to place an order for aspirin?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-22T20:47:28",
-      "content": "If so, please provide your full name clearly."
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-22T20:47:37",
-      "content": "No. I don't want to order a gate. I was just asking why is it used?"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-22T20:47:39",
-      "content": "Can you explain brief briefly?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-22T20:47:40",
-      "content": "Aspirin is primarily used for the following purposes:\n\n1."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-22T20:47:44",
-      "content": "**Pain Relief:** It can help alleviate mild to moderate pain, including headaches, muscle aches, and arthritis."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-22T20:47:54",
-      "content": "2."
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-22T20:47:56",
-      "content": "Okay. I'm just gonna do something to change it. Thanks a lot."
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-22T20:47:57",
-      "content": "Thank you."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-22T20:48:00",
-      "content": "You're welcome!"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-22T20:48:01",
-      "content": "If you have any more questions or need assistance in the future, feel free to reach out."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-22T20:48:05",
-      "content": "Have a great day!"
     }
   ],
   "realtime": {
     "last_partial_sentiment": null,
     "last_partial_updated_iso": null
   },
-  "created_at_iso": "2025-10-22T20:44:50",
-  "updated_at_iso": "2025-10-22T20:48:05"
+  "created_at_iso": "2025-10-26T20:10:01",
+  "updated_at_iso": "2025-10-26T20:10:01"
 }
