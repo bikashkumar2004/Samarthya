@@ -4,11 +4,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
 
 const adminSidebarMenuItems = [
-  { id: "dashboard", label: "Dashboard", path: "/admin/Dashboard", icon: <House className="w-5 h-5" /> },
-  { id: "createtask", label: "Create Task", path: "/admin/createtask", icon: <Hash className="w-5 h-5" /> },
-  { id: "lead", label: "Leads", path: "/admin/Leads", icon: <SquarePen className="w-5 h-5" /> },
-  { id: "aicallmanager", label: "Ai Call Manager", path: "/admin/aicallmanager", icon: <Image className="w-5 h-5" /> },
-  { id: "workflow", label: "Workflow", path: "/admin/workflow", icon: <Scissors className="w-5 h-5" /> },
+  { id: "dashboard", label: "Dashboard", path: "/agent/Dashboard", icon: <House className="w-5 h-5" /> },
+  { id: "createtask", label: "Create Task", path: "/agent/createtask", icon: <Hash className="w-5 h-5" /> },
+  { id: "lead", label: "Leads", path: "/agent/Leads", icon: <SquarePen className="w-5 h-5" /> },
+  { id: "aicallmanager", label: "Ai Call Manager", path: "/agent/aicallmanager", icon: <Image className="w-5 h-5" /> },
+  { id: "workflow", label: "Workflow", path: "/agent/workflow", icon: <Scissors className="w-5 h-5" /> },
 ];
 
 function MenuItems({ setOpen }) {
@@ -61,7 +61,7 @@ export default function Sidebars({ open, setOpen }) {
 
       {/* Desktop Sidebar */}
       <aside className="hidden lg:flex w-60 flex-col border-r bg-white text-[#043927] py-5 pl-5">
-        <div onClick={() => navigate("/admin/dashboard")} className="flex items-center gap-2 cursor-pointer">
+        <div onClick={() => navigate("/agent/dashboard")} className="flex items-center gap-2 cursor-pointer">
           <ChartNoAxesCombined size={28} className="text-[#043927]" />
           <h1 className="text-xl font-extrabold">Samarthya</h1>
         </div>

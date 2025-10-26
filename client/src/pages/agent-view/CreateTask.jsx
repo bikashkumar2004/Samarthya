@@ -1,4 +1,4 @@
-import { fetchAllContactList, uploadContactList } from '@/store/admin-slice';
+import { fetchAllContactList, uploadContactList } from '@/store/agent-slice';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'sonner';

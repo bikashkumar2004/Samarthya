@@ -15,12 +15,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { checkAuth } from "./store/auth-slice";
 
-import AdminLayouts from "./components/admin-view/AdminLayouts";
-import Dashboard from "./pages/admin-view/Dashboard";
-import Leads from "./pages/admin-view/Leads";
-import Workflows from "./pages/admin-view/Workflows";
-import CreateTask from "./pages/admin-view/CreateTask";
-import AiCallMannager from "./pages/admin-view/AiCallManager";
+import AgentLayouts from "./components/agent-view/AgentLayouts";
+import Dashboard from "./pages/agent-view/Dashboard";
+import Leads from "./pages/agent-view/Leads";
+import Workflows from "./pages/agent-view/Workflows";
+import CreateTask from "./pages/agent-view/CreateTask";
+import AiCallMannager from "./pages/agent-view/AiCallManager";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -48,7 +48,7 @@ export default function App() {
           <Route path="send-verify-otp" element={<EmailVerify />} />
         </Route>
 
-        <Route path="/admin" element={<AdminLayouts />}>
+        <Route path="/agent" element={<AgentLayouts />}>
           <Route path="Dashboard" element={<Dashboard />} />
           <Route path="createtask" element={<CreateTask />} />
           <Route path="Leads" element={<Leads />} />

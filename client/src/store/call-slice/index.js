@@ -2,7 +2,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_URL = "http://localhost:4000/api/admin/contactList";
+const API_URL = "http://localhost:4000/api/agent/contactList";
 
 const initialState = {
   isLoading: false,
@@ -12,7 +12,7 @@ const initialState = {
 };
 
 export const callInitiate = createAsyncThunk(
-  "admin/contactList/call",
+  "agent/contactList/call",
   async ({id,purpose },{ rejectWithValue }) => {
     try {
       const response = await axios.post(

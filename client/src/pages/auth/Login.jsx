@@ -25,8 +25,8 @@ export default function Login() {
       if (data.payload?.success) {
         toast(data.payload?.message);
 
-        if (data.payload?.user?.role === "admin") {
-          navigate("/admin/dashboard");
+        if (data.payload?.user?.role === "agent") {
+          navigate("/agent/dashboard");
         } else {
           navigate("/"); // normal user route
         }

@@ -1,10 +1,10 @@
 import { EllipsisVertical } from "lucide-react";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { showContactList } from "@/store/admin-slice/showDetails";
-import DetailDialog from "@/components/admin-view/DetailDialog";
+import { showContactList } from "@/store/agent-slice/showDetails";
+import DetailDialog from "@/components/agent-view/DetailDialog";
 
-export default function AdminCard({
+export default function AgentCard({
   contact,
   setfromdata,
   setopenCreateProductDialog,

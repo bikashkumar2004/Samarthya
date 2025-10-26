@@ -1,218 +1,28 @@
 {
-  "call_id": "CA147b2a33df81b89845e31448e231ea81",
+  "call_id": "CA9ffa8ecbd745e7b8b6cd38f1d4afbfad",
   "customer_id": "68f7cf0e5486d91cb36e8848",
-  "call_start_iso": "2025-10-26T16:05:17",
-  "call_end_iso": "2025-10-26T16:19:49",
-  "call_duration_seconds": 872.0,
-  "summary": "The customer had some minor misunderstandings and clarification requests, but the assistant provided helpful information and resolved the inquiries.",
+  "call_start_iso": "2025-10-26T20:10:01",
+  "call_end_iso": "2025-10-26T20:10:01",
+  "call_duration_seconds": 0.0,
+  "summary": "Customer: Hi, I'm calling about my prescription. I've been having some trouble getting it filled and would like some help. Pharmacy: Of course, what is the name of the medication you're having trouble with? Customer: It's Xanax. I've been trying to refill it for a few days now and it keeps saying it's not covered by my insurance. Pharmacy: I see, let me check that for you. (pauses) I'm sorry to hear that. It looks like your insurance changed their policy and they're not covering it anymore. Is there another medication you could take instead? Customer: No, I need Xanax....",
   "sentiment_overall": "Neutral",
   "turn_counts": {
-    "user": 13,
-    "assistant": 26
+    "user": 0,
+    "assistant": 1
   },
   "first_agent_utterance": "How can I assist you? This call is about: pharmacy related querry.",
-  "last_user_utterance": "Paracetamol.",
+  "last_user_utterance": null,
   "transcript": [
     {
       "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:05:17",
+      "timestamp_iso": "2025-10-26T20:10:01",
       "content": "How can I assist you? This call is about: pharmacy related querry."
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-26T16:05:27",
-      "content": "When I was looking for something about headache, do you have"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-26T16:05:27",
-      "content": "something for that?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:05:29",
-      "content": "Yes, there are several medications commonly used to treat headaches, including over-the-counter options like ibuprofen, acetaminophen, and aspirin."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:05:38",
-      "content": "There are also prescription medications available for more severe headaches, such as triptans for migraines."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:05:44",
-      "content": "Would you like more information on a specific type of medication, or are you looking to place an order for any of these?"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-26T16:05:51",
-      "content": "Yeah. I think I have mic and may need to ten."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:05:52",
-      "content": "It sounds like you might be referring to \"Migraine\" and possibly \"Ten\" could mean you want to order ten units of a specific medication."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:06:00",
-      "content": "To clarify, could you please spell out your full name clearly for the order?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:06:04",
-      "content": "Additionally, could you specify the exact medication you are interested in?"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-26T16:06:13",
-      "content": "I just spoke about the"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-26T16:06:18",
-      "content": "okay. I'll leave it. I was just inquiring about the price. Do you know what is the price?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:06:19",
-      "content": "I can help you with that!"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:06:21",
-      "content": "However, I need to know the specific medication you’re interested in for headache relief so I can provide accurate pricing information."
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-26T16:06:26",
-      "content": "Okay."
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-26T16:06:28",
-      "content": "No worries."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:06:29",
-      "content": "If you have any other questions or if there's anything else I can assist you with regarding medications or pharmacy services, feel free to let me know!"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:18:38",
-      "content": "How can I assist you? This call is about: pharmacy related querry."
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-26T16:18:48",
-      "content": "My"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-26T16:18:49",
-      "content": "foot"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-26T16:18:49",
-      "content": "pen."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:18:50",
-      "content": "It seems like there might have been a misunderstanding."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:18:53",
-      "content": "Could you please clarify what you mean by \"foot pen\"?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:18:56",
-      "content": "Are you referring to a specific medication or product related to your foot?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:19:00",
-      "content": "If you could provide a bit more detail, I'd be happy to help you with your inquiry."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:19:08",
-      "content": "It seems there might have been a pause or an issue with your response."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:19:12",
-      "content": "If you have a specific question or need assistance with a medication or order, please let me know!"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-26T16:19:14",
-      "content": "Hello?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:19:15",
-      "content": "Hello!"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:19:15",
-      "content": "I’m here to help you."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:19:17",
-      "content": "How can I assist you with your pharmacy-related inquiry today?"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-26T16:19:22",
-      "content": "What what is the lifespan of Parasitavol?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:19:23",
-      "content": "I can look up drug information for you, but first, could you please confirm the spelling of the drug name?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:19:29",
-      "content": "It appears there might be a slight error in the name you've provided."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:19:33",
-      "content": "Could you spell it out for me?"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-26T16:19:40",
-      "content": "Paracetamol."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:19:41",
-      "content": "Thank you for clarifying."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:19:42",
-      "content": "Paracetamol, also known as acetaminophen, is a commonly used medication for pain relief and fever reduction."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-26T16:19:49",
-      "content": "Regarding its lifespan, Paracetamol typically has a shelf life of about 2 to 3 years when stored properly in a cool, dry place."
     }
   ],
   "realtime": {
     "last_partial_sentiment": null,
     "last_partial_updated_iso": null
   },
-  "created_at_iso": "2025-10-26T16:05:17",
-  "updated_at_iso": "2025-10-26T16:19:49"
+  "created_at_iso": "2025-10-26T20:10:01",
+  "updated_at_iso": "2025-10-26T20:10:01"
 }

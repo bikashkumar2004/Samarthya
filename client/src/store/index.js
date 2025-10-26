@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./auth-slice";
-import contactListReducer from "./admin-slice";
-import contactDetailsReducer from "./admin-slice/showDetails";
-import adminDetails from "./auth-slice/accountVerified"
+import contactListReducer from "./agent-slice";
+import contactDetailsReducer from "./agent-slice/showDetails";
+import agentDetails from "./auth-slice/accountVerified"
 import callInitiate from "./call-slice/index"
 
 const store = configureStore({
@@ -10,7 +10,7 @@ const store = configureStore({
     auth: authReducer,
     contactList: contactListReducer,
     contactDetails: contactDetailsReducer,
-    getdata:adminDetails,
+    getdata:agentDetails,
     call:callInitiate
   },
 });

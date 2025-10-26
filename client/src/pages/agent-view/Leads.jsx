@@ -9,9 +9,9 @@ import {
   editContactList,
   fetchAllContactList,
   uploadContactList,
-} from "@/store/admin-slice";
+} from "@/store/agent-slice";
 import { toast } from "sonner";
-import Admincard from "./Admincard";
+import Admincard from "./Agentcard";
 import {
   Sheet,
   SheetContent,
@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/sheet";
 import CommonForm from "@/components/common/commonForm";
 import { addContactFormElements } from "@/config";
-import DetailDialog from "../../components/admin-view/DetailDialog"; 
+import DetailDialog from "../../components/agent-view/DetailDialog"; 
 
 const initialState = {
   name: "",

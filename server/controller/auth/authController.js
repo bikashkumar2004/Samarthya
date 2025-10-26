@@ -140,7 +140,7 @@ export const login = async (req, res) => {
         id: user._id,
         userName: user.userName,
         email: user.email,
-        role: user.role, // include role if you use admin/user roles
+        role: user.role, // include role if you use agent/user roles
         isAccountVerified: user.isAccountVerified, // include if verification system is used
       },
     });
