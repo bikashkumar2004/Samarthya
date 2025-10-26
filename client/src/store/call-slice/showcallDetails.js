@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_URL = "http://localhost:4000/api/admin/contactList";
+const API_URL = "http://localhost:4000/api/agent/contactList";
 
 const initialState = {
   isLoading: false,
@@ -12,7 +12,7 @@ const initialState = {
 
 // Fetch by customerId or callId
 export const fetchCallHistory = createAsyncThunk(
-  "admin/contactList/fetchCallHistory",
+  "agent/contactList/fetchCallHistory",
   async ({ customerId, callId }, { rejectWithValue }) => {
     try {
       const params = new URLSearchParams();

@@ -12,7 +12,7 @@ const initialState = {
 };
 
 export const showContactList = createAsyncThunk(
-  "admin/contactList/show",
+  "agent/contactList/show",
   async (id, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${API_URL}/get/${id}`, {
