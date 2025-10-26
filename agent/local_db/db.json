@@ -19,11 +19,6 @@
       "content": "How can I assist you? This call is about: pharmacy related quarry."
     },
     {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-22T20:46:52",
-      "content": "How can I assist you? This call is about: pharmacy related querry."
-    },
-    {
       "role": "user",
       "timestamp_iso": "2025-10-22T20:47:02",
       "content": "I was looking for a medication named aspirin. Is it there?"
