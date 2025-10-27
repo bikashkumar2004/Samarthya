@@ -21,6 +21,8 @@ import Leads from "./pages/agent-view/Leads";
 import Workflows from "./pages/agent-view/Workflows";
 import CreateTask from "./pages/agent-view/CreateTask";
 import AiCallMannager from "./pages/agent-view/AiCallManager";
+import Lead from "./pages/agent-view/Lead";
+import Landing from "./pages/landing/Landing";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -35,11 +37,7 @@ export default function App() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="about" element={<About />} />
-          <Route path="pricing" element={<Pricing />} />
-          <Route path="contactUs" element={<ContactUs />} />
+        <Route path="/" element={<Landing/>}>
         </Route>
 
         <Route path="/auth" element={<AuthLayout />}>
@@ -58,6 +56,7 @@ export default function App() {
         </Route>
       </Routes>
       {/* <DetailDialog/> */}
+      
     </div>
   );
 }

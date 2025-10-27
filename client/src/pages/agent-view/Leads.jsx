@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/sheet";
 import CommonForm from "@/components/common/commonForm";
 import { addContactFormElements } from "@/config";
-import DetailDialog from "../../components/agent-view/DetailDialog"; 
+import DetailDialog from "../../components/agent-view/DetailDialog";
 
 const initialState = {
   name: "",
@@ -28,7 +28,7 @@ const initialState = {
   phone: "",
   whatsappNo: "",
   status: "",
-  purpose:""
+  purpose: ""
 };
 
 export default function LeadsAd() {
@@ -109,13 +109,35 @@ export default function LeadsAd() {
     );
   });
 
+  // const downloadExcel = () => {
+  //   const ws = XLSX.utils.json_to_sheet(filteredLeads);
+  //   const wb = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(wb, ws, 'Leads');
+  //   XLSX.writeFile(wb, 'leads_data.xlsx');
+  // };
+
   useEffect(() => {
     dispatch(fetchAllContactList());
   }, [dispatch]);
 
   return (
     <Fragment>
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Lead Management</h1>
+          <p className="text-sm text-gray-600 mt-1">Manage and track all queries</p>
+        </div>
+        <button
+          // onClick={downloadExcel}
+          className="w-full sm:w-auto px-4 py-2 bg-primary text-white rounded-lg cursor-pointer transition-colors flex items-center justify-center gap-2"
+        >
+          <span>📥</span>
+          Download Excel
+        </button>
+      </div>
       <div className="my-5 flex flex-col w-full px-4 sm:px-8 lg:px-10 bg-white border border-gray-200 rounded-md shadow-sm py-5">
+
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
           <h1 className="font-bold text-2xl sm:text-3xl">
             {contactList?.length || 0} Contacts

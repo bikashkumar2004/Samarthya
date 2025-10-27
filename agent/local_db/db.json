@@ -1,28 +1,28 @@
 {
-  "call_id": "CA9ffa8ecbd745e7b8b6cd38f1d4afbfad",
-  "customer_id": "68f7cf0e5486d91cb36e8848",
-  "call_start_iso": "2025-10-26T20:10:01",
-  "call_end_iso": "2025-10-26T20:10:01",
+  "call_id": "CAbebe2396ab422e52935b7e58b77dc112",
+  "customer_id": "68fe41b9959fe0032ce43eb9",
+  "call_start_iso": "2025-10-27T19:29:43",
+  "call_end_iso": "2025-10-27T19:29:43",
   "call_duration_seconds": 0.0,
-  "summary": "Customer: Hi, I'm calling about my prescription. I've been having some trouble getting it filled and would like some help. Pharmacy: Of course, what is the name of the medication you're having trouble with? Customer: It's Xanax. I've been trying to refill it for a few days now and it keeps saying it's not covered by my insurance. Pharmacy: I see, let me check that for you. (pauses) I'm sorry to hear that. It looks like your insurance changed their policy and they're not covering it anymore. Is there another medication you could take instead? Customer: No, I need Xanax....",
+  "summary": "Customer: Hi, I'm interested in your product and I would like to know the price. Assistant: Good afternoon, thank you for choosing [Company Name]. Our product is priced at [Price]. Is there a specific model you're interested in? Customer: Yes, I'm looking at the [Model Name]. Assistant: The [Model Name] is priced at [Price]. Would you like me to provide a quotation for you? Customer: Yes, please. Assistant: Sure, I'll need your location and contact details to complete the quotation. What's your location? Customer: [Location] Assistant: Great, and what's your contact details? Customer: [Contact Details] Assistant: I'll send the quotation...",
   "sentiment_overall": "Neutral",
   "turn_counts": {
     "user": 0,
     "assistant": 1
   },
-  "first_agent_utterance": "How can I assist you? This call is about: pharmacy related querry.",
+  "first_agent_utterance": "How can I assist you? This call is about: Requested price quotation.",
   "last_user_utterance": null,
   "transcript": [
     {
       "role": "assistant",
-      "timestamp_iso": "2025-10-26T20:10:01",
-      "content": "How can I assist you? This call is about: pharmacy related querry."
+      "timestamp_iso": "2025-10-27T19:29:43",
+      "content": "How can I assist you? This call is about: Requested price quotation."
     }
   ],
   "realtime": {
     "last_partial_sentiment": null,
     "last_partial_updated_iso": null
   },
-  "created_at_iso": "2025-10-26T20:10:01",
-  "updated_at_iso": "2025-10-26T20:10:01"
+  "created_at_iso": "2025-10-27T19:29:43",
+  "updated_at_iso": "2025-10-27T19:29:43"
 }

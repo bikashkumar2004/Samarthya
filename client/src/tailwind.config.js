@@ -4,7 +4,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Nunito"', 'sans-serif'],
+        sans: ["Sora", "sans-serif"],
+        code: ["Source Code Pro", "monospace"],
+        grotesk: ["Space Grotesk", "sans-serif"],
       },
     },
   },
