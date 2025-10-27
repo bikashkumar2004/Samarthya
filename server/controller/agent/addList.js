@@ -1,6 +1,7 @@
 import { processExcelFile } from "../../helper/processxl.js";
 import mongoose from "mongoose";
 import ContactDetails from "../../models/contactDetails.js";
+import Calls from "../../models/callHistory.js";
 
 export const handleContactUpload = async (req, res) => {
   try {
@@ -107,32 +108,45 @@ export const editList = async (req, res) => {
 
 export const deleteList = async (req, res) => {
   try {
-    const id = req.params.id.trim();
-    console.log(id);
+    const id = req.params.id?.trim();
 
     if (!id) {
-      return res.status(201).json({
+      return res.status(400).json({
         success: false,
-        message: "Id not found",
+        message: "Contact ID not provided",
       });
     }
     const contact = await ContactDetails.findByIdAndDelete(id);
 
     if (!contact) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Contact not found" });
+      return res.status(404).json({
+        success: false,
+        message: "Contact not found",
+      });
     }
 
+    // Delete all related call history
+    const deletedCalls = await Calls.deleteMany({ customer_id: id });
+
+    console.log(
+      ` Deleted ${deletedCalls.deletedCount} call history records for contact: ${id}`
+    );
+
+    // 3️ Respond success
     res.status(200).json({
       success: true,
-      message: "Contact deleted successfully",
+      message: `Contact and ${deletedCalls.deletedCount} related call history records deleted successfully.`,
     });
   } catch (error) {
     console.error("Delete contact error:", error);
-    res.status(500).json({ success: false, message: "Error occurred" });
+    res.status(500).json({
+      success: false,
+      message: "Error occurred while deleting contact and related call history",
+      error: error.message,
+    });
   }
 };
+
 
 export const fetchAllContactList = async (req, res) => {
   try {
