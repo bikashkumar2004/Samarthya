@@ -15,6 +15,17 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
 
 const adminSidebarMenuItems = [
   { id: "dashboard", label: "Dashboard", path: "/agent/dashboard", icon: <House className="w-5 h-5" /> },
+  {
+    id: "inbox",
+    label: "Inbox",
+    icon: <Image className="w-5 h-5" />,
+    children: [
+      { id: "composemessage", label: "Compose Message", path: "/agent/composemessage" },
+      { id: "sms", label: "SMS", path: "/agent/inbox/sms" },
+      { id: "email", label: "Email", path: "/agent/inbox/email" },
+      { id: "whatsapp", label: "Whatsapp", path: "/agent/inbox/whatsapp" },
+    ],
+  },
   { id: "createtask", label: "Create Task", path: "/agent/createtask", icon: <Hash className="w-5 h-5" /> },
   { id: "lead", label: "Leads", path: "/agent/leads", icon: <SquarePen className="w-5 h-5" /> },
   {

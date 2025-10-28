@@ -45,7 +45,6 @@ export default function App() {
         <Route path="/" element={<Landing/>}>
         </Route>
 
-      {/* Auth Pages */}
       <Route
         path="/auth"
         element={<AuthLayout theme={theme} setTheme={setTheme} />}
@@ -64,7 +63,6 @@ export default function App() {
           <Route path="Workflow" element={<Workflows />} />
         </Route>
       </Routes>
-      {/* <DetailDialog/> */}
       
     </div>
   );

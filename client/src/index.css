@@ -5,12 +5,11 @@
 @config "../tailwind.config.js";
 @import "tailwindcss";
 
-/* 👇 Remove forced dark mode */
 :root {
   --font-sora: "Sora", sans-serif;
   --font-code: "Source Code Pro", monospace;
   --font-grotesk: "Space Grotesk", sans-serif;
-
+  
   /* Default: light theme colors */
   --color-primary: #043927;
   --color-secondary: #d8fdd2;
@@ -18,10 +17,9 @@
   --text-color: #000000;
 }
 
-/* 👇 Dark mode variables */
+/* Dark mode variables */
 .dark {
   color-scheme: dark;
-
   --color-primary: #d8fdd2;
   --color-secondary: #043927;
   --bg-color: #0a0a0a;
@@ -35,105 +33,104 @@
     color: var(--text-color);
     transition: background-color 0.3s ease, color 0.3s ease;
   }
+  
+  * {
+    scroll-behavior: smooth;
+  }
 }
 
 @layer components {
   .bg-primary {
     background-color: var(--color-primary);
   }
-
+  
   .bg-secondary {
     background-color: var(--color-secondary);
   }
-
+  
   .text-primary {
     color: var(--color-primary);
   }
-
+  
   .text-secondary {
     color: var(--color-secondary);
   }
-
+  
   .border-primary {
     border-color: var(--color-primary);
   }
-
+  
   .border-secondary {
     border-color: var(--color-secondary);
   }
 }
 
-* {
-  scroll-behavior: smooth;
-}
-
-
 @layer base {
   body {
-    @apply font-sans bg-n-8 text-n-1 ;
+    @apply font-sans ;
   }
-}
-
-.rotate-45 {
-  @apply rotate-[45deg]
-}
-
-.rotate-90 {
-  @apply rotate-[90deg]
-}
-
-.rotate-135 {
-  @apply rotate-[135deg]
-}
-
-.rotate-180 {
-  @apply rotate-[180deg]
-}
-
-.rotate-225 {
-  @apply rotate-[225deg]
-}
-
-.rotate-270 {
-  @apply rotate-[270deg]
-}
-
-.rotate-315 {
-  @apply rotate-[315deg]
-}
-
-.rotate-360 {
-  @apply rotate-[360deg]
-}
-
-.-rotate-45 {
-  @apply rotate-[-45deg]
-}
-
-.-rotate-90 {
-  @apply rotate-[-90deg]
-}
-
-.-rotate-135 {
-  @apply rotate-[-135deg]
-}
-
-.-rotate-180 {
-  @apply rotate-[-180deg]
-}
-
-.-rotate-225 {
-  @apply rotate-[-225deg]
-}
-
-.-rotate-270 {
-  @apply rotate-[-270deg]
-}
-
-.-rotate-315 {
-  @apply rotate-[-315deg]
-}
-
-.-rotate-360 {
-  @apply rotate-[-360deg]
+  
+  .rotate-45 {
+    @apply rotate-[45deg];
+  }
+  
+  .rotate-90 {
+    @apply rotate-[90deg];
+  }
+  
+  .rotate-135 {
+    @apply rotate-[135deg];
+  }
+  
+  .rotate-180 {
+    @apply rotate-[180deg];
+  }
+  
+  .rotate-225 {
+    @apply rotate-[225deg];
+  }
+  
+  .rotate-270 {
+    @apply rotate-[270deg];
+  }
+  
+  .rotate-315 {
+    @apply rotate-[315deg];
+  }
+  
+  .rotate-360 {
+    @apply rotate-[360deg];
+  }
+  
+  .-rotate-45 {
+    @apply rotate-[-45deg];
+  }
+  
+  .-rotate-90 {
+    @apply rotate-[-90deg];
+  }
+  
+  .-rotate-135 {
+    @apply rotate-[-135deg];
+  }
+  
+  .-rotate-180 {
+    @apply rotate-[-180deg];
+  }
+  
+  .-rotate-225 {
+    @apply rotate-[-225deg];
+  }
+  
+  .-rotate-270 {
+    @apply rotate-[-270deg];
+  }
+  
+  .-rotate-315 {
+    @apply rotate-[-315deg];
+  }
+  
+  .-rotate-360 {
+    @apply rotate-[-360deg];
+  }
 }
