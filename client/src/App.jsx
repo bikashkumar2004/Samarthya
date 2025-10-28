@@ -19,10 +19,20 @@ import CreateTask from "./pages/agent-view/CreateTask";
 import AiCallMannager from "./pages/agent-view/AiCallManager";
 import Dashboard from "./pages/agent-view/Dashboardlayout";
 import Landing from "./pages/landing/Landing";
+import CallMannager from "./components/agent-view/CallMannager";
+import PendingFollowups from "./pages/agent-view/PendingFollowups";
+import Inbox from "./components/agent-view/Inbox";
+import ComposeMessage from "./pages/agent-view/ComposeMessage";
+import Sms from "./pages/agent-view/Sms";
+import Email from "./pages/agent-view/Email";
+import Whatshap from "./pages/agent-view/Whatshap";
+
 
 export default function App() {
   const dispatch = useDispatch();
-  const { user, isAuthenticated, isLoading } = useSelector((state) => state.auth);
+  const { user, isAuthenticated, isLoading } = useSelector(
+    (state) => state.auth
+  );
 
   // Global Theme State
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
@@ -42,28 +52,35 @@ export default function App() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Landing/>}>
-        </Route>
+        <Route path="/" element={<Landing />}></Route>
 
-      <Route
-        path="/auth"
-        element={<AuthLayout theme={theme} setTheme={setTheme} />}
-      >
-        <Route path="register" element={<Register />} />
-        <Route path="login" element={<Login />} />
-        <Route path="send-verify-otp" element={<EmailVerify />} />
-      </Route>
+        <Route
+          path="/auth"
+          element={<AuthLayout theme={theme} setTheme={setTheme} />}
+        >
+          <Route path="register" element={<Register />} />
+          <Route path="login" element={<Login />} />
+          <Route path="send-verify-otp" element={<EmailVerify />} />
+        </Route>
 
         <Route path="/agent" element={<AgentLayouts />}>
           <Route path="Dashboard" element={<Dashboard />} />
+          <Route path="inbox" element={<Inbox/>}>
+            <Route path="composemessage" element={<ComposeMessage/>}/>
+            <Route path="sms" element={<Sms/>}/>
+            <Route path="email" element={<Email/>}/>
+            <Route path="whatsapp" element={<Whatshap/>}/>
+          </Route>
           <Route path="createtask" element={<CreateTask />} />
           <Route path="Leads" element={<Leads />} />
-          <Route path="aicallmanager" element={<AiCallMannager />} />
+          <Route path="callmanager" element={<CallMannager />}>
+            <Route path="aicallmanager" element={<AiCallMannager />} />
+            <Route path="pendingfollowups" element={<PendingFollowups />} />
+          </Route>
 
           <Route path="Workflow" element={<Workflows />} />
         </Route>
       </Routes>
-      
     </div>
   );
 }

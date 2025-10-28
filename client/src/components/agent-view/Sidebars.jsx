@@ -13,33 +13,65 @@ import React, { Fragment, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
 
+// 🧭 Sidebar Menu Configuration
 const adminSidebarMenuItems = [
-  { id: "dashboard", label: "Dashboard", path: "/agent/dashboard", icon: <House className="w-5 h-5" /> },
+  {
+    id: "dashboard",
+    label: "Dashboard",
+    path: "/agent/dashboard",
+    icon: <House className="w-5 h-5" />,
+  },
   {
     id: "inbox",
     label: "Inbox",
     icon: <Image className="w-5 h-5" />,
     children: [
-      { id: "composemessage", label: "Compose Message", path: "/agent/composemessage" },
+      { id: "composemessage", label: "Compose Message", path: "/agent/inbox/composemessage" },
       { id: "sms", label: "SMS", path: "/agent/inbox/sms" },
       { id: "email", label: "Email", path: "/agent/inbox/email" },
       { id: "whatsapp", label: "Whatsapp", path: "/agent/inbox/whatsapp" },
     ],
   },
-  { id: "createtask", label: "Create Task", path: "/agent/createtask", icon: <Hash className="w-5 h-5" /> },
-  { id: "lead", label: "Leads", path: "/agent/leads", icon: <SquarePen className="w-5 h-5" /> },
   {
-    id: "aicallmanager",
-    label: "AI Call Manager",
-    icon: <Image className="w-5 h-5" />,
+    id: "createtask",
+    label: "Create Task",
+    path: "/agent/createtask",
+    icon: <Hash className="w-5 h-5" />,
+  },
+  {
+    id: "lead",
+    label: "Leads",
+    path: "/agent/leads",
+    icon: <SquarePen className="w-5 h-5" />,
+  },
+  {
+    id: "callManager",
+    label: "Call Manager",
+    icon: <PhoneCall className="w-5 h-5" />,
     children: [
-      { id: "callmanager", label: "Call Manager", path: "/agent/aicallmanager" },
-      { id: "pendingfollowups", label: "Pending Followups", path: "/agent/aicallmanager/followups" },
+      {
+        id: "aicallmanager",
+        label: "AI Call Manager",
+        path: "/agent/callmanager/aicallmanager",
+        icon: <PhoneCall className="w-4 h-4" />,
+      },
+      {
+        id: "pendingfollowups",
+        label: "Pending Followups",
+        path: "/agent/callmanager/pendingfollowups",
+        icon: <Clock className="w-4 h-4" />,
+      },
     ],
   },
-  { id: "workflow", label: "Workflow", path: "/agent/workflow", icon: <Scissors className="w-5 h-5" /> },
+  {
+    id: "workflow",
+    label: "Workflow",
+    path: "/agent/workflow",
+    icon: <Scissors className="w-5 h-5" />,
+  },
 ];
 
+// 🔸 Menu Items Component
 function MenuItems({ setOpen, isExpanded }) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -53,6 +85,7 @@ function MenuItems({ setOpen, isExpanded }) {
 
         return (
           <div key={menuItem.id}>
+            {/* Parent Menu */}
             <div
               onClick={() => {
                 if (isDropdown) {
@@ -82,7 +115,7 @@ function MenuItems({ setOpen, isExpanded }) {
               )}
             </div>
 
-            {/* Dropdown children */}
+            {/* Dropdown Children */}
             {isDropdown && openDropdown === menuItem.id && (
               <div className="ml-9 mt-1 flex flex-col gap-1 transition-all">
                 {menuItem.children.map((child) => {
@@ -100,11 +133,7 @@ function MenuItems({ setOpen, isExpanded }) {
                           : "text-[#043927] hover:bg-[#EAF7E6]"
                       }`}
                     >
-                      {child.id === "callmanager" ? (
-                        <PhoneCall className="w-4 h-4" />
-                      ) : (
-                        <Clock className="w-4 h-4" />
-                      )}
+                      {child.icon}
                       {isExpanded && <span className="text-[14px]">{child.label}</span>}
                     </div>
                   );
@@ -118,6 +147,7 @@ function MenuItems({ setOpen, isExpanded }) {
   );
 }
 
+// 🔸 Sidebar Component
 export default function Sidebars({ open, setOpen }) {
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -152,6 +182,7 @@ export default function Sidebars({ open, setOpen }) {
           <ChartNoAxesCombined size={28} className="text-[#043927]" />
           {isExpanded && <h1 className="text-xl font-extrabold">Samarthya</h1>}
         </div>
+
         <MenuItems isExpanded={isExpanded} />
       </aside>
     </Fragment>
