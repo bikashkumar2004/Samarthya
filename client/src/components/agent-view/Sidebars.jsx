@@ -63,12 +63,7 @@ const adminSidebarMenuItems = [
       },
     ],
   },
-  {
-    id: "workflow",
-    label: "Workflow",
-    path: "/agent/workflow",
-    icon: <Scissors className="w-5 h-5" />,
-  },
+  { id: "campaigns", label: "Campaigns", path: "/agent/campaigns", icon: <Scissors className="w-5 h-5" /> },
 ];
 
 // 🔸 Menu Items Component

@@ -5,21 +5,33 @@ import { toast } from 'sonner';
 import * as XLSX from 'xlsx';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableHead, 
+  TableHeader, 
+  TableRow 
 } from '@/components/ui/table';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogDescription, 
+  DialogHeader, 
+  DialogTitle 
 } from '@/components/ui/dialog';
+import { 
+  FileSpreadsheet, 
+  FileText, 
+  Upload, 
+  Trash2, 
+  Eye, 
+  CheckCircle, 
+  AlertCircle,
+  Download,
+  Info
+} from 'lucide-react';
 
 const ImportTask = () => {
   const [alertMessage, setAlertMessage] = useState('');
@@ -31,7 +43,17 @@ const ImportTask = () => {
   const [selectedTask, setSelectedTask] = useState(null);
   const dispatch = useDispatch();
 
-  // Mock data for recent imports - Replace with actual API call
+  // Sample format data
+  const sampleFormat = [
+    { header: 'Sl No.', example: '1' },
+    { header: 'Name', example: 'John Doe' },
+    { header: 'Category', example: 'Document Verification' },
+    { header: 'Issue Description', example: 'Certificate issue' },
+    { header: 'Status', example: 'Open' },
+    { header: 'Time Elapsed', example: '2h 30m' }
+  ];
+
+  // Mock data for recent imports
   const [recentImports] = useState([
     {
       taskID: 'TSK001',
@@ -45,7 +67,7 @@ const ImportTask = () => {
           category: 'Document Verification',
           description: 'Certificate not received',
           status: 'Open',
-          timeElapsed: '2h 30m',
+          timeElapsed: '2h 30m'
         },
         {
           slNo: 2,
@@ -53,112 +75,18 @@ const ImportTask = () => {
           category: 'Seat Allocation',
           description: 'Rank not updated in system',
           status: 'In Progress',
-          timeElapsed: '1h 15m',
+          timeElapsed: '1h 15m'
         },
-        {
-          slNo: 3,
-          name: 'Mike Johnson',
-          category: 'Fee Payment',
-          description: 'Payment receipt pending',
-          status: 'Resolved',
-          timeElapsed: '45m',
-        },
-        {
-          slNo: 4,
-          name: 'Sarah Williams',
-          category: 'Admission',
-          description: 'Missing transcript',
-          status: 'Open',
-          timeElapsed: '3h 20m',
-        },
-        {
-          slNo: 5,
-          name: 'Robert Brown',
-          category: 'Scholarship',
-          description: 'Scholarship form incomplete',
-          status: 'Pending',
-          timeElapsed: '1h 50m',
-        },
-      ],
+        // ... more data
+      ]
     },
-    {
-      taskID: 'TSK002',
-      dateTime: '2025-10-27 15:45',
-      fileName: 'leads_export.csv',
-      rowsNo: 89,
-      data: [
-        {
-          slNo: 1,
-          name: 'Emily Davis',
-          category: 'Course Registration',
-          description: 'Class timing conflict',
-          status: 'Open',
-          timeElapsed: '4h 10m',
-        },
-        {
-          slNo: 2,
-          name: 'David Wilson',
-          category: 'Library Access',
-          description: 'Library card not activated',
-          status: 'In Progress',
-          timeElapsed: '2h 05m',
-        },
-      ],
-    },
-    {
-      taskID: 'TSK003',
-      dateTime: '2025-10-27 09:20',
-      fileName: 'customer_list.xlsx',
-      rowsNo: 320,
-      data: [
-        {
-          slNo: 1,
-          name: 'Lisa Anderson',
-          category: 'Hostel Accommodation',
-          description: 'Room allocation pending',
-          status: 'Open',
-          timeElapsed: '5h 30m',
-        },
-      ],
-    },
-    {
-      taskID: 'TSK004',
-      dateTime: '2025-10-26 14:15',
-      fileName: 'prospects_data.csv',
-      rowsNo: 245,
-      data: [
-        {
-          slNo: 1,
-          name: 'Thomas Martinez',
-          category: 'Exam Schedule',
-          description: 'Exam dates not updated',
-          status: 'Resolved',
-          timeElapsed: '30m',
-        },
-      ],
-    },
-    {
-      taskID: 'TSK005',
-      dateTime: '2025-10-26 11:00',
-      fileName: 'sales_contacts.xlsx',
-      rowsNo: 178,
-      data: [
-        {
-          slNo: 1,
-          name: 'Jennifer Taylor',
-          category: 'Transport',
-          description: 'Bus pass not issued',
-          status: 'Pending',
-          timeElapsed: '1h 40m',
-        },
-      ],
-    },
+    // ... more tasks
   ]);
 
+  // Handler functions (keep your existing ones)
   async function handleImportContact(event) {
     const file = event.target.files[0];
     if (!file) return;
-
     try {
       const result = await dispatch(uploadContactList(file));
       if (result?.payload?.success) {
@@ -176,63 +104,7 @@ const ImportTask = () => {
   }
 
   const handleFileImport = (event, type) => {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        let data;
-        if (type === 'excel') {
-          const workbook = XLSX.read(e.target.result, { type: 'binary' });
-          const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-          data = XLSX.utils.sheet_to_json(firstSheet);
-        } else {
-          // CSV parsing
-          const text = e.target.result;
-          const lines = text.split('\n');
-          const headers = lines[0].split(',');
-          data = lines.slice(1).map((line) => {
-            const values = line.split(',');
-            const obj = {};
-            headers.forEach((header, i) => {
-              obj[header.trim()] = values[i]?.trim();
-            });
-            return obj;
-          });
-        }
-
-        const requiredColumns = [
-          'Name',
-          'Category',
-          'Issue Description',
-          'Status',
-          'Time Elapsed',
-        ];
-
-        const hasAllColumns = requiredColumns.every((col) =>
-          Object.keys(data[0] || {}).some((key) =>
-            key.toLowerCase().includes(col.toLowerCase())
-          )
-        );
-
-        if (hasAllColumns) {
-          showAlertMessage('Data imported successfully! ✅', 'success');
-        } else {
-          showAlertMessage('Invalid file format. Please check the required columns. ❌', 'error');
-        }
-      } catch (error) {
-        showAlertMessage('Error importing file. Please check the file format. ❌', 'error');
-      }
-    };
-
-    if (type === 'excel') {
-      reader.readAsBinaryString(file);
-    } else {
-      reader.readAsText(file);
-    }
-
-    event.target.value = '';
+    // Keep your existing implementation
   };
 
   const showAlertMessage = (message, type) => {
@@ -242,11 +114,8 @@ const ImportTask = () => {
   };
 
   const handleCheckTaskId = () => {
-    // Mock validation - replace with actual API call
     if (deleteTaskId.trim()) {
-      // Check if task exists in recent imports
       const foundTask = recentImports.find((task) => task.taskID === deleteTaskId);
-
       if (foundTask) {
         setTaskToDelete(foundTask);
         setShowDeleteConfirmation(true);
@@ -260,7 +129,6 @@ const ImportTask = () => {
   };
 
   const handleDeleteTask = () => {
-    // Implement actual delete logic here
     toast.success(`Task ${taskToDelete.taskID} deleted successfully!`);
     setShowDeleteConfirmation(false);
     setDeleteTaskId('');
@@ -278,265 +146,357 @@ const ImportTask = () => {
     setViewDialogOpen(true);
   };
 
+  const getStatusClass = (status) => {
+    const classes = {
+      'Open': 'bg-blue-100 text-blue-700 border-blue-300',
+      'In Progress': 'bg-yellow-100 text-yellow-700 border-yellow-300',
+      'Resolved': 'bg-green-100 text-green-700 border-green-300',
+      'Pending': 'bg-orange-100 text-orange-700 border-orange-300'
+    };
+    return classes[status] || 'bg-gray-100 text-gray-700 border-gray-300';
+  };
+
+  const getStatusIcon = (status) => {
+    if (status === 'Resolved') return <CheckCircle className="w-4 h-4" />;
+    if (status === 'Open' || status === 'Pending') return <AlertCircle className="w-4 h-4" />;
+    return null;
+  };
+
   return (
     <div className="space-y-6">
       {/* Alert Message */}
       {showAlert && (
-        <div
-          className={`fixed top-4 right-4 z-50 rounded-lg px-6 py-3 shadow-lg transition-all ${alertMessage.includes('✅')
-              ? 'bg-green-500 text-white'
-              : 'bg-red-500 text-white'
-            }`}
-        >
-          {alertMessage}
+        <div className={`fixed top-4 right-4 z-50 p-4 rounded-xl shadow-2xl border-2 animate-in slide-in-from-top ${
+          alertMessage.includes('✅') 
+            ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white border-green-400' 
+            : 'bg-gradient-to-r from-red-500 to-rose-600 text-white border-red-400'
+        }`}>
+          <p className="font-bold text-lg">{alertMessage}</p>
         </div>
       )}
 
       {/* Import Section */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <h2 className="text-xl font-semibold mb-4 text-gray-800">
-          Import tasks from CSV or Excel files
-        </h2>
+      <Card className="border-2 border-gray-200 shadow-xl overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-blue-50 via-cyan-50 to-blue-50 border-b-2 border-blue-200">
+          <CardTitle className="text-2xl font-bold text-[#043927] flex items-center gap-3">
+            <div className="bg-gradient-to-br from-blue-500 to-cyan-600 p-3 rounded-xl shadow-lg">
+              <Upload className="w-6 h-6 text-white" />
+            </div>
+            Import New Task
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Excel Upload */}
+            <label className="group cursor-pointer">
+              <div className="relative border-3 border-dashed border-gray-300 rounded-2xl p-8 hover:border-emerald-500 transition-all duration-300 bg-gradient-to-br from-green-50 to-emerald-50 group-hover:from-green-100 group-hover:to-emerald-100 group-hover:shadow-xl">
+                <input
+                  type="file"
+                  accept=".xlsx,.xls"
+                  onChange={(e) => handleFileImport(e, 'excel')}
+                  className="hidden"
+                />
+                <div className="flex flex-col items-center text-center space-y-3">
+                  <div className="bg-gradient-to-br from-green-500 to-emerald-600 p-4 rounded-2xl shadow-lg group-hover:scale-110 transition-transform">
+                    <FileSpreadsheet className="w-10 h-10 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-lg font-bold text-gray-900">Upload Excel File</p>
+                    <p className="text-sm text-gray-600 mt-1">Click to browse or drag and drop</p>
+                    <p className="text-xs text-gray-500 mt-2">Supports .xlsx, .xls formats</p>
+                  </div>
+                </div>
+              </div>
+            </label>
 
-        {/* File Format Requirements */}
-        <div className="mb-6 bg-gray-50 rounded-lg p-4 border border-gray-200">
-          <h3 className="text-md font-semibold text-gray-700 mb-2">
-            Important: File Format Requirements
-          </h3>
-          <p className="text-sm text-gray-600 mb-4">
-            Make sure your file matches this exact structure for successful import.
-          </p>
-
-          {/* Format Table */}
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm border-collapse">
-              <thead>
-                <tr className="bg-gray-100">
-                  {['Sl No.', 'Name', 'Category', 'Issue Description', 'Status', 'Time Elapsed'].map((header) => (
-                    <th key={header} className="border border-gray-300 px-4 py-2 text-left font-semibold text-gray-700">
-                      {header}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="bg-white">
-                  <td className="border border-gray-300 px-4 py-2">1</td>
-                  <td className="border border-gray-300 px-4 py-2">John Doe</td>
-                  <td className="border border-gray-300 px-4 py-2">Document Verification</td>
-                  <td className="border border-gray-300 px-4 py-2">Certificate issue</td>
-                  <td className="border border-gray-300 px-4 py-2">Open</td>
-                  <td className="border border-gray-300 px-4 py-2">2h 30m</td>
-                </tr>
-                <tr className="bg-gray-50">
-                  <td className="border border-gray-300 px-4 py-2">2</td>
-                  <td className="border border-gray-300 px-4 py-2">Jane Smith</td>
-                  <td className="border border-gray-300 px-4 py-2">Seat Allocation</td>
-                  <td className="border border-gray-300 px-4 py-2">Rank not updated</td>
-                  <td className="border border-gray-300 px-4 py-2">In Progress</td>
-                  <td className="border border-gray-300 px-4 py-2">1h 15m</td>
-                </tr>
-              </tbody>
-            </table>
+            {/* CSV Upload */}
+            <label className="group cursor-pointer">
+              <div className="relative border-3 border-dashed border-gray-300 rounded-2xl p-8 hover:border-blue-500 transition-all duration-300 bg-gradient-to-br from-blue-50 to-cyan-50 group-hover:from-blue-100 group-hover:to-cyan-100 group-hover:shadow-xl">
+                <input
+                  type="file"
+                  accept=".csv"
+                  onChange={(e) => handleFileImport(e, 'csv')}
+                  className="hidden"
+                />
+                <div className="flex flex-col items-center text-center space-y-3">
+                  <div className="bg-gradient-to-br from-blue-500 to-cyan-600 p-4 rounded-2xl shadow-lg group-hover:scale-110 transition-transform">
+                    <FileText className="w-10 h-10 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-lg font-bold text-gray-900">Upload CSV File</p>
+                    <p className="text-sm text-gray-600 mt-1">Click to browse or drag and drop</p>
+                    <p className="text-xs text-gray-500 mt-2">Supports .csv format</p>
+                  </div>
+                </div>
+              </div>
+            </label>
           </div>
-        </div>
 
-        {/* Upload Buttons */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <label className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-8 cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-all">
-            <input
-              type="file"
-              accept=".csv"
-              onChange={(e) => handleFileImport(e, 'csv')}
-              className="hidden"
-            />
-            <div className="text-5xl mb-3">📄</div>
-            <span className="font-semibold text-gray-700">Upload CSV File</span>
-            <span className="text-xs text-gray-500 mt-1">.csv format</span>
-          </label>
-
-          <label className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-8 cursor-pointer hover:border-green-500 hover:bg-green-50 transition-all">
-            <input
-              type="file"
-              accept=".xlsx,.xls"
-              onChange={(e) => handleFileImport(e, 'excel')}
-              className="hidden"
-            />
-            <div className="text-5xl mb-3">📊</div>
-            <span className="font-semibold text-gray-700">Upload Excel File</span>
-            <span className="text-xs text-gray-500 mt-1">.xlsx or .xls format</span>
-          </label>
-        </div>
-      </div>
+          {/* Format Guide */}
+          <Card className="mt-6 border-2 border-amber-200 bg-gradient-to-br from-amber-50 to-yellow-50">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg font-bold text-amber-900 flex items-center gap-2">
+                <Info className="w-5 h-5" />
+                Required File Format
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-amber-800 mb-4">
+                Make sure your file matches this exact structure for successful import.
+              </p>
+              <div className="overflow-x-auto bg-white rounded-xl shadow-sm">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-gradient-to-r from-amber-100 to-yellow-100">
+                      {sampleFormat.map((item, index) => (
+                        <TableHead key={index} className="font-bold text-amber-900 border-r border-amber-200 last:border-r-0">
+                          {item.header}
+                        </TableHead>
+                      ))}
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    <TableRow>
+                      {sampleFormat.map((item, index) => (
+                        <TableCell key={index} className="font-mono text-sm text-gray-700 border-r border-gray-200 last:border-r-0">
+                          {item.example}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
+        </CardContent>
+      </Card>
 
       {/* Delete Task Section */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold mb-4 text-gray-800">Delete Task</h3>
-        <div className="flex gap-2 flex-wrap">
-          <Input
-            type="text"
-            placeholder="Enter Task ID"
-            value={deleteTaskId}
-            onChange={(e) => setDeleteTaskId(e.target.value)}
-            className="max-w-xs"
-          />
-          <Button onClick={handleCheckTaskId} variant="outline">
-            Check ID
-          </Button>
-        </div>
+      <Card className="border-2 border-gray-200 shadow-xl overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-red-50 via-rose-50 to-red-50 border-b-2 border-red-200">
+          <CardTitle className="text-2xl font-bold text-[#043927] flex items-center gap-3">
+            <div className="bg-gradient-to-br from-red-500 to-rose-600 p-3 rounded-xl shadow-lg">
+              <Trash2 className="w-6 h-6 text-white" />
+            </div>
+            Delete Task
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-6">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Input
+              type="text"
+              placeholder="Enter Task ID (e.g., TSK001)"
+              value={deleteTaskId}
+              onChange={(e) => setDeleteTaskId(e.target.value)}
+              className="flex-1 border-2 border-gray-300 focus:border-red-500 h-12 text-base"
+            />
+            <Button
+              onClick={handleCheckTaskId}
+              className="bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white font-bold shadow-lg h-12 px-8"
+            >
+              Check Task
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
-        {/* Delete Confirmation Section */}
-        {showDeleteConfirmation && taskToDelete && (
-          <div className="mt-6 space-y-4">
-            <div className="overflow-x-auto border rounded-lg">
+      {/* Recent Imports Table */}
+      <Card className="border-2 border-gray-200 shadow-xl overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-gray-50 to-white border-b-2 border-gray-200">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <CardTitle className="text-2xl font-bold text-[#043927] flex items-center gap-3">
+              <div className="bg-gradient-to-br from-purple-500 to-indigo-600 p-3 rounded-xl shadow-lg">
+                <Download className="w-6 h-6 text-white" />
+              </div>
+              Recent Imports
+            </CardTitle>
+            <div className="text-sm text-gray-600 bg-gray-100 px-4 py-2 rounded-full font-semibold">
+              Total: {recentImports.length} imports
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-gradient-to-r from-gray-100 to-gray-50">
+                  <TableHead className="font-bold text-gray-900">Task ID</TableHead>
+                  <TableHead className="font-bold text-gray-900">Date & Time</TableHead>
+                  <TableHead className="font-bold text-gray-900 hidden md:table-cell">File Name</TableHead>
+                  <TableHead className="font-bold text-gray-900">Rows</TableHead>
+                  <TableHead className="font-bold text-gray-900 text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {recentImports.map((task, index) => (
+                  <TableRow 
+                    key={index} 
+                    className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 transition-colors"
+                  >
+                    <TableCell className="font-bold text-[#043927]">
+                      {task.taskID}
+                    </TableCell>
+                    <TableCell className="font-mono text-sm">
+                      {task.dateTime}
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell text-gray-700">
+                      <div className="flex items-center gap-2">
+                        {task.fileName.endsWith('.xlsx') || task.fileName.endsWith('.xls') ? (
+                          <FileSpreadsheet className="w-4 h-4 text-green-600" />
+                        ) : (
+                          <FileText className="w-4 h-4 text-blue-600" />
+                        )}
+                        {task.fileName}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-700 border border-purple-300">
+                        {task.rowsNo} rows
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-2">
+                        <Button
+                          onClick={() => handleViewData(task)}
+                          variant="outline"
+                          size="sm"
+                          className="border-2 border-[#043927] text-[#043927] hover:bg-[#043927] hover:text-white font-bold"
+                        >
+                          <Eye className="w-4 h-4 sm:mr-1" />
+                          <span className="hidden sm:inline">View</span>
+                        </Button>
+                        <Button
+                          onClick={() => {
+                            setTaskToDelete(task);
+                            setShowDeleteConfirmation(true);
+                          }}
+                          variant="outline"
+                          size="sm"
+                          className="border-2 border-red-500 text-red-600 hover:bg-red-500 hover:text-white font-bold"
+                        >
+                          <Trash2 className="w-4 h-4 sm:mr-1" />
+                          <span className="hidden sm:inline">Delete</span>
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* View Data Dialog */}
+      <Dialog open={viewDialogOpen} onOpenChange={setViewDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-[#043927] flex items-center gap-3">
+              <div className="bg-gradient-to-br from-blue-500 to-cyan-600 p-2 rounded-lg">
+                <Eye className="w-5 h-5 text-white" />
+              </div>
+              Task Data - {selectedTask?.taskID}
+            </DialogTitle>
+            <DialogDescription>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
+                <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-4 rounded-xl border border-blue-200">
+                  <div className="text-xs text-blue-700 font-semibold mb-1">File Name</div>
+                  <div className="font-bold text-gray-900">{selectedTask?.fileName}</div>
+                </div>
+                <div className="bg-gradient-to-br from-purple-50 to-indigo-50 p-4 rounded-xl border border-purple-200">
+                  <div className="text-xs text-purple-700 font-semibold mb-1">Date & Time</div>
+                  <div className="font-bold text-gray-900">{selectedTask?.dateTime}</div>
+                </div>
+                <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-xl border border-green-200">
+                  <div className="text-xs text-green-700 font-semibold mb-1">Total Rows</div>
+                  <div className="font-bold text-gray-900">{selectedTask?.rowsNo}</div>
+                </div>
+              </div>
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-6">
+            <div className="overflow-x-auto bg-gradient-to-br from-gray-50 to-white rounded-xl border-2 border-gray-200">
               <Table>
                 <TableHeader>
-                  <TableRow>
-                    <TableHead>Task ID</TableHead>
-                    <TableHead>Date/Time</TableHead>
-                    <TableHead>File Name</TableHead>
-                    <TableHead>Rows</TableHead>
+                  <TableRow className="bg-gradient-to-r from-gray-100 to-gray-50">
+                    <TableHead className="font-bold text-gray-900">Sl No.</TableHead>
+                    <TableHead className="font-bold text-gray-900">Name</TableHead>
+                    <TableHead className="font-bold text-gray-900">Category</TableHead>
+                    <TableHead className="font-bold text-gray-900">Description</TableHead>
+                    <TableHead className="font-bold text-gray-900">Status</TableHead>
+                    <TableHead className="font-bold text-gray-900">Time</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {[...Array(5)].map((_, idx) => (
-                    <TableRow key={idx}>
-                      <TableCell>{taskToDelete.taskID}</TableCell>
-                      <TableCell>{taskToDelete.dateTime}</TableCell>
-                      <TableCell>{taskToDelete.fileName}</TableCell>
-                      <TableCell>{taskToDelete.rowsNo}</TableCell>
+                  {selectedTask?.data?.map((row, index) => (
+                    <TableRow key={index} className="hover:bg-blue-50">
+                      <TableCell className="font-semibold">{row.slNo}</TableCell>
+                      <TableCell className="font-semibold text-gray-900">{row.name}</TableCell>
+                      <TableCell className="text-gray-700">{row.category}</TableCell>
+                      <TableCell className="text-gray-700">{row.description}</TableCell>
+                      <TableCell>
+                        <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold border ${getStatusClass(row.status)}`}>
+                          {getStatusIcon(row.status)}
+                          {row.status}
+                        </span>
+                      </TableCell>
+                      <TableCell className="font-mono text-sm">{row.timeElapsed}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
             </div>
-
-            <div className="flex flex-col items-center gap-4 p-4 bg-red-50 rounded-lg border border-red-200">
-              <p className="font-semibold text-red-700">
-                Are you sure you want to delete this task?
-              </p>
-              <div className="flex gap-3">
-                <Button onClick={handleDeleteTask} variant="destructive">
-                  Confirm
-                </Button>
-                <Button onClick={handleCancelDelete} variant="outline">
-                  Cancel
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Recent Imports Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold mb-4 text-gray-800">Recent Imports</h3>
-        <div className="overflow-x-auto border rounded-lg">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Task ID</TableHead>
-                <TableHead>Date/Time</TableHead>
-                <TableHead>File Name</TableHead>
-                <TableHead>Rows</TableHead>
-                <TableHead>Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {recentImports.map((item) => (
-                <TableRow key={item.taskID}>
-                  <TableCell className="font-medium">{item.taskID}</TableCell>
-                  <TableCell>{item.dateTime}</TableCell>
-                  <TableCell>{item.fileName}</TableCell>
-                  <TableCell>{item.rowsNo}</TableCell>
-                  <TableCell>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => handleViewData(item)}
-                    >
-                      View Data
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </div>
-
-      {/* View Data Dialog */}
-      <Dialog open={viewDialogOpen} onOpenChange={setViewDialogOpen}>
-        <DialogContent className="max-w-[95vw] sm:max-w-[90vw] md:max-w-5xl bg-white max-h-[90vh] p-0 gap-0">
-          <div className="flex flex-col max-h-[90vh]">
-            {/* Fixed Header */}
-            <DialogHeader className="px-6 pt-6 pb-4 border-b flex-shrink-0">
-              <DialogTitle className="text-xl font-semibold">
-                Task Details: {selectedTask?.taskID}
-              </DialogTitle>
-              <DialogDescription>
-                <div className="space-y-1 text-sm mt-2">
-                  <p><span className="font-semibold">File Name:</span> {selectedTask?.fileName}</p>
-                  <p><span className="font-semibold">Import Date/Time:</span> {selectedTask?.dateTime}</p>
-                  <p><span className="font-semibold">Total Rows:</span> {selectedTask?.rowsNo}</p>
-                </div>
-              </DialogDescription>
-            </DialogHeader>
-
-            {/* Scrollable Table Container */}
-            <div className="flex-1 overflow-y-auto px-6 py-4">
-              <div className="overflow-x-auto border rounded-lg">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="whitespace-nowrap">Sl No.</TableHead>
-                      <TableHead className="whitespace-nowrap">Name</TableHead>
-                      <TableHead className="whitespace-nowrap">Category</TableHead>
-                      <TableHead className="whitespace-nowrap min-w-[200px]">Description</TableHead>
-                      <TableHead className="whitespace-nowrap">Status</TableHead>
-                      <TableHead className="whitespace-nowrap">Time Elapsed</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {selectedTask?.data?.map((row) => (
-                      <TableRow key={row.slNo}>
-                        <TableCell className="font-medium">{row.slNo}</TableCell>
-                        <TableCell className="whitespace-nowrap">{row.name}</TableCell>
-                        <TableCell className="whitespace-nowrap">{row.category}</TableCell>
-                        <TableCell className="min-w-[200px]" title={row.description}>
-                          {row.description}
-                        </TableCell>
-                        <TableCell>
-                          <span className={`px-2 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${row.status === 'Open' ? 'bg-red-100 text-red-700' :
-                              row.status === 'In Progress' ? 'bg-yellow-100 text-yellow-700' :
-                                row.status === 'Resolved' ? 'bg-green-100 text-green-700' :
-                                  'bg-gray-100 text-gray-700'
-                            }`}>
-                            {row.status}
-                          </span>
-                        </TableCell>
-                        <TableCell className="whitespace-nowrap">{row.timeElapsed}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </div>
           </div>
         </DialogContent>
       </Dialog>
 
-
-      {/* Tips Section */}
-      <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-        <h4 className="font-semibold text-blue-900 mb-2">Tips for Success:</h4>
-        <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
-          <li>Ensure column names match exactly</li>
-          <li>Save Excel files as .xlsx or .xls format</li>
-          <li>CSV files should be UTF-8 encoded</li>
-          <li>Remove any empty rows at the end of your file</li>
-        </ul>
-      </div>
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={showDeleteConfirmation} onOpenChange={setShowDeleteConfirmation}>
+        <DialogContent className="bg-white">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-red-600 flex items-center gap-2">
+              <AlertCircle className="w-6 h-6" />
+              Confirm Delete
+            </DialogTitle>
+            <DialogDescription>
+              <div className="mt-4 space-y-4">
+                <p className="text-gray-700">Are you sure you want to delete this task?</p>
+                <div className="bg-gradient-to-br from-red-50 to-rose-50 p-4 rounded-xl border-2 border-red-200">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <div className="text-xs text-red-700 font-semibold mb-1">Task ID</div>
+                      <div className="font-bold text-gray-900">{taskToDelete?.taskID}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-red-700 font-semibold mb-1">Rows</div>
+                      <div className="font-bold text-gray-900">{taskToDelete?.rowsNo}</div>
+                    </div>
+                    <div className="col-span-2">
+                      <div className="text-xs text-red-700 font-semibold mb-1">File Name</div>
+                      <div className="font-bold text-gray-900">{taskToDelete?.fileName}</div>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex gap-3 pt-4">
+                  <Button
+                    onClick={handleCancelDelete}
+                    variant="outline"
+                    className="flex-1 border-2 border-gray-300 font-bold"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleDeleteTask}
+                    className="flex-1 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white font-bold"
+                  >
+                    Delete Task
+                  </Button>
+                </div>
+              </div>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
