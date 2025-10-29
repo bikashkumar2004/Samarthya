@@ -24,7 +24,9 @@ import Pending from "./pages/agent-view/Pending";
 
 export default function App() {
   const dispatch = useDispatch();
-  const { user, isAuthenticated, isLoading } = useSelector((state) => state.auth);
+  const { user, isAuthenticated, isLoading } = useSelector(
+    (state) => state.auth
+  );
 
   // Global Theme State
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
@@ -44,20 +46,25 @@ export default function App() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Landing/>}>
-        </Route>
+        <Route path="/" element={<Landing />}></Route>
 
-      <Route
-        path="/auth"
-        element={<AuthLayout theme={theme} setTheme={setTheme} />}
-      >
-        <Route path="register" element={<Register />} />
-        <Route path="login" element={<Login />} />
-        <Route path="send-verify-otp" element={<EmailVerify />} />
-      </Route>
+        <Route
+          path="/auth"
+          element={<AuthLayout theme={theme} setTheme={setTheme} />}
+        >
+          <Route path="register" element={<Register />} />
+          <Route path="login" element={<Login />} />
+          <Route path="send-verify-otp" element={<EmailVerify />} />
+        </Route>
 
         <Route path="/agent" element={<AgentLayouts />}>
           <Route path="Dashboard" element={<Dashboard />} />
+          <Route path="inbox" element={<Inbox/>}>
+            <Route path="composemessage" element={<ComposeMessage/>}/>
+            <Route path="sms" element={<Sms/>}/>
+            <Route path="email" element={<Email/>}/>
+            <Route path="whatsapp" element={<Whatshap/>}/>
+          </Route>
           <Route path="createtask" element={<CreateTask />} />
           {/* <Route path="Leads" element={<Leads />} /> */}
           <Route path="Leads" element={<LeadManagement />} />
@@ -67,7 +74,6 @@ export default function App() {
           <Route path="campaigns" element={<Campaigns />} />
         </Route>
       </Routes>
-      
     </div>
   );
 }
