@@ -71,7 +71,9 @@ export default function App() {
             <Route path="email" element={<Email/>}/>
             <Route path="whatsapp" element={<Whatshap/>}/>
           </Route>
+          
           <Route path="createtask" element={<CreateTask />} />
+
           <Route path="Leads" element={<Leads />} />
           <Route path="callmanager" element={<CallMannager />}>
             <Route path="aicallmanager" element={<AiCallMannager />} />

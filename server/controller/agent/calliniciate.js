@@ -40,7 +40,7 @@ export const initiateCall = async (req, res) => {
       });
     }
 
-    const wsUrl = process.env.MEDIA_WS_URL_BIKASH;
+    const wsUrl = process.env.MEDIA_WS_URL;
 
     const twiml = `<?xml version="1.0" encoding="UTF-8"?>
         <Response>
