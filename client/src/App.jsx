@@ -21,6 +21,11 @@ import Landing from "./pages/landing/Landing";
 import Campaigns from "./pages/agent-view/Campaigns";
 import LeadManagement from "./pages/agent-view/LeadManagement";
 import Pending from "./pages/agent-view/Pending";
+import Inbox from "./components/agent-view/Inbox";
+import ComposeMessage from "./pages/agent-view/ComposeMessage";
+import Sms from "./pages/agent-view/Sms";
+import Email from "./pages/agent-view/Email";
+import Whatsapp from "./pages/agent-view/Whatsapp";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -63,14 +68,14 @@ export default function App() {
             <Route path="composemessage" element={<ComposeMessage/>}/>
             <Route path="sms" element={<Sms/>}/>
             <Route path="email" element={<Email/>}/>
-            <Route path="whatsapp" element={<Whatshap/>}/>
+            <Route path="whatsapp" element={<Whatsapp/>}/>
           </Route>
           
           <Route path="createtask" element={<CreateTask />} />
           {/* <Route path="Leads" element={<Leads />} /> */}
           <Route path="Leads" element={<LeadManagement />} />
           <Route path="aicallmanager" element={<AiCallMannager />} />
-          <Route path="aicallmanager/followups" element={<Pending />} />
+          <Route path="pending-followups" element={<Pending />} />
 
           <Route path="campaigns" element={<Campaigns />} />
         </Route>

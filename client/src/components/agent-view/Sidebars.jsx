@@ -52,13 +52,13 @@ const adminSidebarMenuItems = [
       {
         id: "aicallmanager",
         label: "AI Call Manager",
-        path: "/agent/callmanager/aicallmanager",
+        path: "/agent/aicallmanager",
         icon: <PhoneCall className="w-4 h-4" />,
       },
       {
         id: "pendingfollowups",
         label: "Pending Followups",
-        path: "/agent/callmanager/pendingfollowups",
+        path: "/agent/pending-followups",
         icon: <Clock className="w-4 h-4" />,
       },
     ],
