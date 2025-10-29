@@ -1,25 +1,41 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from '@/components/ui/table';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 } from '@/components/ui/dialog';
 import { toast } from 'sonner';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
+import {
+  CheckCircle,
+  XCircle,
+  Eye,
+  UserCheck,
+  Clock,
+  AlertCircle,
+  ListChecks,
+  UserX,
+  TrendingUp,
+  User,
+  Calendar,
+  FileText,
+  MessageSquare
+} from 'lucide-react';
 
 const AssignedTask = () => {
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
@@ -29,7 +45,7 @@ const AssignedTask = () => {
   const [otherReason, setOtherReason] = useState('');
   const [additionalNotes, setAdditionalNotes] = useState('');
 
-  // Mock data for assigned tasks - Replace with actual API call
+  // Mock data for assigned tasks
   const [assignedTasks, setAssignedTasks] = useState([
     {
       taskID: 'TSK101',
@@ -47,7 +63,7 @@ const AssignedTask = () => {
           issue: 'Billing',
           description: 'Customer query about invoice discrepancy',
           status: 'Open',
-          timeElapsed: '1h 30m',
+          timeElapsed: '1h 30m'
         },
         {
           slNo: 2,
@@ -56,7 +72,7 @@ const AssignedTask = () => {
           issue: 'Login',
           description: 'Unable to access account',
           status: 'In Progress',
-          timeElapsed: '45m',
+          timeElapsed: '45m'
         },
         {
           slNo: 3,
@@ -65,9 +81,9 @@ const AssignedTask = () => {
           issue: 'Product Info',
           description: 'Requesting product specifications',
           status: 'Open',
-          timeElapsed: '2h 15m',
-        },
-      ],
+          timeElapsed: '2h 15m'
+        }
+      ]
     },
     {
       taskID: 'TSK102',
@@ -85,7 +101,7 @@ const AssignedTask = () => {
           issue: 'Verification',
           description: 'Verify contact details and interest level',
           status: 'Resolved',
-          timeElapsed: '30m',
+          timeElapsed: '30m'
         },
         {
           slNo: 2,
@@ -94,9 +110,9 @@ const AssignedTask = () => {
           issue: 'Follow-up',
           description: 'Schedule product demo call',
           status: 'Resolved',
-          timeElapsed: '1h 10m',
-        },
-      ],
+          timeElapsed: '1h 10m'
+        }
+      ]
     },
     {
       taskID: 'TSK103',
@@ -114,9 +130,9 @@ const AssignedTask = () => {
           issue: 'Missing Info',
           description: 'Complete company address and phone',
           status: 'In Progress',
-          timeElapsed: '3h 00m',
-        },
-      ],
+          timeElapsed: '3h 00m'
+        }
+      ]
     },
     {
       taskID: 'TSK104',
@@ -134,30 +150,10 @@ const AssignedTask = () => {
           issue: 'Validation',
           description: 'Review data accuracy and completeness',
           status: 'Open',
-          timeElapsed: '2h 30m',
-        },
-      ],
-    },
-    {
-      taskID: 'TSK105',
-      dateTime: '2025-10-26 10:15',
-      taskType: 'Outreach Campaign',
-      rows: 95,
-      completed: true,
-      accepted: true,
-      assignedBy: 'Manager D',
-      data: [
-        {
-          slNo: 1,
-          name: 'Henry Davis',
-          category: 'Email Campaign',
-          issue: 'Response',
-          description: 'Process email responses and update status',
-          status: 'Resolved',
-          timeElapsed: '1h 20m',
-        },
-      ],
-    },
+          timeElapsed: '2h 30m'
+        }
+      ]
+    }
   ]);
 
   const handleAcceptTaskFromDialog = (taskID) => {
@@ -172,17 +168,12 @@ const AssignedTask = () => {
 
   const handleSubmitRejection = () => {
     const reason = rejectReason === 'other' ? otherReason : rejectReason;
-
-    // Add API call here to submit rejection with reason and additional notes
     console.log({
       taskID: selectedTask?.taskID,
       reason: reason,
-      additionalNotes: additionalNotes,
+      additionalNotes: additionalNotes
     });
-
     toast.success(`Task ${selectedTask?.taskID} rejected successfully`);
-
-    // Reset form
     setShowRejectForm(false);
     setRejectReason('');
     setOtherReason('');
@@ -212,350 +203,419 @@ const AssignedTask = () => {
     );
   };
 
+  const getStatusClass = (status) => {
+    const classes = {
+      Open: 'bg-blue-100 text-blue-700 border-blue-300',
+      'In Progress': 'bg-yellow-100 text-yellow-700 border-yellow-300',
+      Resolved: 'bg-green-100 text-green-700 border-green-300',
+      Pending: 'bg-orange-100 text-orange-700 border-orange-300'
+    };
+    return classes[status] || 'bg-gray-100 text-gray-700 border-gray-300';
+  };
+
+  const getStatusIcon = (status) => {
+    if (status === 'Resolved') return <CheckCircle className="w-4 h-4" />;
+    if (status === 'Open' || status === 'Pending') return <AlertCircle className="w-4 h-4" />;
+    return null;
+  };
+
   return (
     <div className="space-y-6">
-      {/* Assigned Tasks Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <h2 className="text-xl font-semibold mb-4 text-gray-800">
-          Tasks Assigned by Manager
-        </h2>
-        <div className="overflow-x-auto border rounded-lg">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="whitespace-nowrap">Task ID</TableHead>
-                <TableHead className="whitespace-nowrap">Date/Time</TableHead>
-                <TableHead className="whitespace-nowrap">Task Type</TableHead>
-                <TableHead className="whitespace-nowrap">Rows</TableHead>
-                <TableHead className="whitespace-nowrap">Completed</TableHead>
-                <TableHead className="whitespace-nowrap">Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {assignedTasks.length > 0 ? (
-                assignedTasks.map((task) => (
-                  <TableRow key={task.taskID}>
-                    <TableCell className="font-medium">{task.taskID}</TableCell>
-                    <TableCell className="whitespace-nowrap">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card className="border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-cyan-50 hover:shadow-xl transition-shadow">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-semibold text-blue-700 flex items-center gap-2">
+              <ListChecks className="w-4 h-4" />
+              Total Tasks
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-4xl font-black bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+              {assignedTasks.length}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-2 border-green-200 bg-gradient-to-br from-green-50 to-emerald-50 hover:shadow-xl transition-shadow">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-semibold text-green-700 flex items-center gap-2">
+              <UserCheck className="w-4 h-4" />
+              Accepted
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-4xl font-black bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+              {assignedTasks.filter((t) => t.accepted).length}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-indigo-50 hover:shadow-xl transition-shadow">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-semibold text-purple-700 flex items-center gap-2">
+              <CheckCircle className="w-4 h-4" />
+              Completed
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-4xl font-black bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+              {assignedTasks.filter((t) => t.completed).length}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-2 border-amber-200 bg-gradient-to-br from-amber-50 to-yellow-50 hover:shadow-xl transition-shadow">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-semibold text-amber-700 flex items-center gap-2">
+              <Clock className="w-4 h-4" />
+              Pending
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-4xl font-black bg-gradient-to-r from-amber-600 to-yellow-600 bg-clip-text text-transparent">
+              {assignedTasks.filter((t) => !t.accepted).length}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Tasks Table */}
+      <Card className="border-2 border-gray-200 shadow-xl overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-gray-50 to-white border-b-2 border-gray-200">
+          <CardTitle className="text-2xl font-bold text-[#043927] flex items-center gap-3">
+            <div className="bg-gradient-to-br from-blue-500 to-cyan-600 p-3 rounded-xl shadow-lg">
+              <UserCheck className="w-6 h-6 text-white" />
+            </div>
+            Assigned Tasks
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-gradient-to-r from-gray-100 to-gray-50">
+                  <TableHead className="font-bold text-gray-900">Done</TableHead>
+                  <TableHead className="font-bold text-gray-900">Task ID</TableHead>
+                  <TableHead className="font-bold text-gray-900 hidden md:table-cell">Date & Time</TableHead>
+                  <TableHead className="font-bold text-gray-900">Task Type</TableHead>
+                  <TableHead className="font-bold text-gray-900 hidden lg:table-cell">Rows</TableHead>
+                  <TableHead className="font-bold text-gray-900 hidden sm:table-cell">Status</TableHead>
+                  <TableHead className="font-bold text-gray-900 text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {assignedTasks.map((task, index) => (
+                  <TableRow
+                    key={index}
+                    className={`hover:bg-gradient-to-r transition-colors ${
+                      task.completed
+                        ? 'bg-green-50 hover:from-green-100 hover:to-emerald-100'
+                        : task.accepted
+                        ? 'hover:from-blue-50 hover:to-cyan-50'
+                        : 'hover:from-amber-50 hover:to-yellow-50'
+                    }`}
+                  >
+                    <TableCell>
+                      <Checkbox
+                        checked={task.completed}
+                        onCheckedChange={() => handleToggleComplete(task.taskID)}
+                        disabled={!task.accepted}
+                        className="w-5 h-5"
+                      />
+                    </TableCell>
+                    <TableCell className="font-bold text-[#043927]">
+                      {task.taskID}
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell font-mono text-sm">
                       {task.dateTime}
                     </TableCell>
-                    <TableCell className="whitespace-nowrap">
-                      {task.taskType}
-                    </TableCell>
-                    <TableCell>{task.rows}</TableCell>
                     <TableCell>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id={`complete-${task.taskID}`}
-                          checked={task.completed}
-                          onCheckedChange={() => handleToggleComplete(task.taskID)}
-                        />
-                        <label
-                          htmlFor={`complete-${task.taskID}`}
-                          className="text-sm cursor-pointer"
-                        >
-                          {task.completed ? 'Yes' : 'No'}
-                        </label>
+                      <div>
+                        <div className="font-semibold text-gray-900">{task.taskType}</div>
+                        <div className="text-xs text-gray-500 md:hidden">{task.dateTime}</div>
                       </div>
                     </TableCell>
-                    <TableCell>
-                      <div className="flex gap-2 flex-wrap">
-                        {!task.accepted ? (
-                          <Button
-                            size="sm"
-                            variant="default"
-                            onClick={() => handleAcceptTask(task.taskID)}
-                            className="whitespace-nowrap"
-                          >
-                            Accept
-                          </Button>
-                        ) : (
-                          <span className="px-3 py-1.5 bg-green-100 text-green-700 text-xs font-semibold rounded-md whitespace-nowrap">
-                            Accepted
+                    <TableCell className="hidden lg:table-cell">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-700 border border-purple-300">
+                        {task.rows} rows
+                      </span>
+                    </TableCell>
+                    <TableCell className="hidden sm:table-cell">
+                      {task.accepted ? (
+                        task.completed ? (
+                          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 border border-green-300">
+                            <CheckCircle className="w-3 h-3" />
+                            Completed
                           </span>
-                        )}
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-100 to-cyan-100 text-blue-700 border border-blue-300">
+                            <TrendingUp className="w-3 h-3" />
+                            In Progress
+                          </span>
+                        )
+                      ) : (
+                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-700 border border-amber-300">
+                          <Clock className="w-3 h-3" />
+                          Pending
+                        </span>
+                      )}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-2">
                         <Button
-                          size="sm"
-                          variant="outline"
                           onClick={() => handleViewData(task)}
-                          className="whitespace-nowrap"
+                          variant="outline"
+                          size="sm"
+                          className="border-2 border-[#043927] text-[#043927] hover:bg-[#043927] hover:text-white font-bold"
                         >
-                          View Data
+                          <Eye className="w-4 h-4 sm:mr-1" />
+                          <span className="hidden sm:inline">View</span>
                         </Button>
+                        {!task.accepted && (
+                          <Button
+                            onClick={() => handleAcceptTask(task.taskID)}
+                            size="sm"
+                            className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold"
+                          >
+                            <UserCheck className="w-4 h-4 sm:mr-1" />
+                            <span className="hidden sm:inline">Accept</span>
+                          </Button>
+                        )}
                       </div>
                     </TableCell>
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={6} className="text-center text-gray-500 py-8">
-                    No tasks assigned yet
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-      </div>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
 
-      {/* Statistics Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-          <h3 className="text-sm font-medium text-gray-600">Total Tasks</h3>
-          <p className="text-2xl font-bold text-gray-800 mt-2">
-            {assignedTasks.length}
-          </p>
-        </div>
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-          <h3 className="text-sm font-medium text-gray-600">Accepted</h3>
-          <p className="text-2xl font-bold text-green-600 mt-2">
-            {assignedTasks.filter((t) => t.accepted).length}
-          </p>
-        </div>
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-          <h3 className="text-sm font-medium text-gray-600">Completed</h3>
-          <p className="text-2xl font-bold text-blue-600 mt-2">
-            {assignedTasks.filter((t) => t.completed).length}
-          </p>
-        </div>
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-          <h3 className="text-sm font-medium text-gray-600">Pending</h3>
-          <p className="text-2xl font-bold text-orange-600 mt-2">
-            {assignedTasks.filter((t) => !t.accepted).length}
-          </p>
-        </div>
-      </div>
-
-      {/* View Data Dialog */}
+      {/* View Task Dialog */}
       <Dialog open={viewDialogOpen} onOpenChange={setViewDialogOpen}>
-        <DialogContent className="max-w-[95vw] sm:max-w-[90vw] md:max-w-5xl bg-white max-h-[90vh] p-0 gap-0">
-          <div className="flex flex-col max-h-[90vh]">
-            {/* Fixed Header */}
-            <DialogHeader className="px-6 pt-6 pb-4 border-b flex-shrink-0">
-              <DialogTitle className="text-xl font-semibold">
-                Task Details: {selectedTask?.taskID}
-              </DialogTitle>
-              <DialogDescription>
-                <div className="space-y-1 text-sm mt-2">
-                  <p>
-                    <span className="font-semibold">Task Type:</span>{' '}
-                    {selectedTask?.taskType}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Assigned By:</span>{' '}
-                    {selectedTask?.assignedBy}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Date/Time:</span>{' '}
-                    {selectedTask?.dateTime}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Total Rows:</span>{' '}
-                    {selectedTask?.rows}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Status:</span>{' '}
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs font-semibold ${selectedTask?.completed
-                        ? 'bg-green-100 text-green-700'
-                        : 'bg-yellow-100 text-yellow-700'
-                        }`}
-                    >
-                      {selectedTask?.completed ? 'Completed' : 'In Progress'}
-                    </span>
-                  </p>
-                </div>
-              </DialogDescription>
-            </DialogHeader>
-
-            {/* Scrollable Table Container */}
-            <div className="flex-1 overflow-y-auto px-6 py-4">
-              <div className="overflow-x-auto border rounded-lg">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="whitespace-nowrap">Sl No.</TableHead>
-                      <TableHead className="whitespace-nowrap">Name</TableHead>
-                      <TableHead className="whitespace-nowrap">Category</TableHead>
-                      <TableHead className="whitespace-nowrap">Issue</TableHead>
-                      <TableHead className="whitespace-nowrap min-w-[200px]">
-                        Description
-                      </TableHead>
-                      <TableHead className="whitespace-nowrap">Status</TableHead>
-                      <TableHead className="whitespace-nowrap">
-                        Time Elapsed
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {selectedTask?.data?.map((row) => (
-                      <TableRow key={row.slNo}>
-                        <TableCell className="font-medium">{row.slNo}</TableCell>
-                        <TableCell className="whitespace-nowrap">
-                          {row.name}
-                        </TableCell>
-                        <TableCell className="whitespace-nowrap">
-                          {row.category}
-                        </TableCell>
-                        <TableCell className="whitespace-nowrap">
-                          {row.issue}
-                        </TableCell>
-                        <TableCell className="min-w-[200px]" title={row.description}>
-                          {row.description}
-                        </TableCell>
-                        <TableCell>
-                          <span
-                            className={`px-2 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${row.status === 'Open'
-                              ? 'bg-red-100 text-red-700'
-                              : row.status === 'In Progress'
-                                ? 'bg-yellow-100 text-yellow-700'
-                                : row.status === 'Resolved'
-                                  ? 'bg-green-100 text-green-700'
-                                  : 'bg-gray-100 text-gray-700'
-                              }`}
-                          >
-                            {row.status}
-                          </span>
-                        </TableCell>
-                        <TableCell className="whitespace-nowrap">
-                          {row.timeElapsed}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+        <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto bg-white">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-[#043927] flex items-center gap-3">
+              <div className="bg-gradient-to-br from-blue-500 to-cyan-600 p-2 rounded-lg">
+                <Eye className="w-5 h-5 text-white" />
               </div>
-
-              {/* Accept/Reject Buttons */}
-              {!selectedTask?.accepted && (
-                <div className="mt-6 flex gap-3 flex-wrap">
-                  <Button
-                    onClick={() => handleAcceptTaskFromDialog(selectedTask?.taskID)}
-                    className="flex-1 sm:flex-none"
-                  >
-                    Accept Task
-                  </Button>
-                  <Button
-                    onClick={() => setShowRejectForm(!showRejectForm)}
-                    variant="destructive"
-                    className="flex-1 sm:flex-none"
-                  >
-                    Reject with Reason
-                  </Button>
-                </div>
-              )}
-
-              {/* Reject Form */}
-              {showRejectForm && (
-                <div className="mt-6 p-6 border rounded-lg bg-gray-50 space-y-4">
-                  <h3 className="text-lg font-semibold text-gray-800">
-                    Reject Task Reason
-                  </h3>
-
-                  <RadioGroup
-                    value={rejectReason}
-                    onValueChange={setRejectReason}
-                    className="space-y-3"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="workload" id="workload" />
-                      <Label htmlFor="workload" className="cursor-pointer">
-                        Workload too high
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="context" id="context" />
-                      <Label htmlFor="context" className="cursor-pointer">
-                        Need more context from manager
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="invalid" id="invalid" />
-                      <Label htmlFor="invalid" className="cursor-pointer">
-                        Data invalid
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="expertise" id="expertise" />
-                      <Label htmlFor="expertise" className="cursor-pointer">
-                        Outside my expertise
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="other" id="other" />
-                      <Label htmlFor="other" className="cursor-pointer">
-                        Other
-                      </Label>
-                    </div>
-                  </RadioGroup>
-
-                  {/* Conditional Textarea for Other */}
-                  {rejectReason === 'other' && (
-                    <div className="space-y-2">
-                      <Label htmlFor="other-reason">Please specify</Label>
-                      <Textarea
-                        id="other-reason"
-                        placeholder="Please specify your reason..."
-                        value={otherReason}
-                        onChange={(e) => setOtherReason(e.target.value)}
-                        rows={3}
-                        className="resize-none"
-                      />
-                    </div>
-                  )}
-
-                  {/* Additional Notes */}
-                  <div className="space-y-2">
-                    <Label htmlFor="additional-notes">Additional Notes</Label>
-                    <Textarea
-                      id="additional-notes"
-                      placeholder="Add any additional notes or context..."
-                      value={additionalNotes}
-                      onChange={(e) => setAdditionalNotes(e.target.value)}
-                      rows={4}
-                      className="resize-none"
-                    />
+              Task Details - {selectedTask?.taskID}
+            </DialogTitle>
+            <DialogDescription>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
+                <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-4 rounded-xl border-2 border-blue-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <FileText className="w-4 h-4 text-blue-600" />
+                    <div className="text-xs text-blue-700 font-bold uppercase">Task Type</div>
                   </div>
-
-                  {/* Submit Buttons */}
-                  <div className="flex gap-3 pt-2">
-                    <Button
-                      onClick={handleSubmitRejection}
-                      variant="destructive"
-                      disabled={!rejectReason || (rejectReason === 'other' && !otherReason)}
-                    >
-                      Submit Rejection
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        setShowRejectForm(false);
-                        setRejectReason('');
-                        setOtherReason('');
-                        setAdditionalNotes('');
-                      }}
-                      variant="outline"
-                    >
-                      Cancel
-                    </Button>
-                  </div>
+                  <div className="font-bold text-gray-900">{selectedTask?.taskType}</div>
                 </div>
-              )}
+                <div className="bg-gradient-to-br from-purple-50 to-indigo-50 p-4 rounded-xl border-2 border-purple-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Calendar className="w-4 h-4 text-purple-600" />
+                    <div className="text-xs text-purple-700 font-bold uppercase">Date & Time</div>
+                  </div>
+                  <div className="font-bold text-gray-900">{selectedTask?.dateTime}</div>
+                </div>
+                <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-xl border-2 border-green-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <ListChecks className="w-4 h-4 text-green-600" />
+                    <div className="text-xs text-green-700 font-bold uppercase">Total Rows</div>
+                  </div>
+                  <div className="font-bold text-gray-900">{selectedTask?.rows}</div>
+                </div>
+                <div className="bg-gradient-to-br from-amber-50 to-yellow-50 p-4 rounded-xl border-2 border-amber-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <User className="w-4 h-4 text-amber-600" />
+                    <div className="text-xs text-amber-700 font-bold uppercase">Assigned By</div>
+                  </div>
+                  <div className="font-bold text-gray-900">{selectedTask?.assignedBy}</div>
+                </div>
+              </div>
+            </DialogDescription>
+          </DialogHeader>
+
+          {/* Task Data Table */}
+          <div className="mt-6">
+            <div className="overflow-x-auto bg-gradient-to-br from-gray-50 to-white rounded-xl border-2 border-gray-200 shadow-inner">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-gradient-to-r from-gray-100 to-gray-50">
+                    <TableHead className="font-bold text-gray-900">Sl No.</TableHead>
+                    <TableHead className="font-bold text-gray-900">Name</TableHead>
+                    <TableHead className="font-bold text-gray-900">Category</TableHead>
+                    <TableHead className="font-bold text-gray-900">Issue</TableHead>
+                    <TableHead className="font-bold text-gray-900">Description</TableHead>
+                    <TableHead className="font-bold text-gray-900">Status</TableHead>
+                    <TableHead className="font-bold text-gray-900">Time</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {selectedTask?.data?.map((row, index) => (
+                    <TableRow key={index} className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50">
+                      <TableCell className="font-semibold">{row.slNo}</TableCell>
+                      <TableCell className="font-semibold text-gray-900">{row.name}</TableCell>
+                      <TableCell className="text-gray-700">{row.category}</TableCell>
+                      <TableCell className="text-gray-700">{row.issue}</TableCell>
+                      <TableCell className="text-gray-700 max-w-xs truncate">{row.description}</TableCell>
+                      <TableCell>
+                        <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold border ${getStatusClass(row.status)}`}>
+                          {getStatusIcon(row.status)}
+                          {row.status}
+                        </span>
+                      </TableCell>
+                      <TableCell className="font-mono text-sm">{row.timeElapsed}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
           </div>
+
+          {/* Action Buttons */}
+          {!selectedTask?.accepted && (
+            <div className="flex flex-col sm:flex-row gap-3 mt-6 pt-6 border-t-2 border-gray-200">
+              <Button
+                onClick={() => handleAcceptTaskFromDialog(selectedTask?.taskID)}
+                className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold shadow-lg h-12 text-base"
+              >
+                <UserCheck className="w-5 h-5 mr-2" />
+                Accept This Task
+              </Button>
+              <Button
+                onClick={() => setShowRejectForm(true)}
+                variant="outline"
+                className="flex-1 border-2 border-red-500 text-red-600 hover:bg-red-50 hover:text-red-700 font-bold h-12 text-base"
+              >
+                <UserX className="w-5 h-5 mr-2" />
+                Reject This Task
+              </Button>
+            </div>
+          )}
+
+          {/* Reject Form */}
+          {showRejectForm && (
+            <div className="mt-6 p-6 bg-gradient-to-br from-red-50 to-rose-50 rounded-2xl border-2 border-red-200">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="bg-gradient-to-br from-red-500 to-rose-600 p-2 rounded-lg">
+                  <AlertCircle className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-red-900">Rejection Reason</h3>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <Label className="text-sm font-bold text-gray-900 mb-3 block">
+                    Please select a reason for rejecting this task:
+                  </Label>
+                  <RadioGroup value={rejectReason} onValueChange={setRejectReason}>
+                    <div className="space-y-3">
+                      <div className="flex items-center space-x-3 bg-white p-3 rounded-xl border border-gray-200 hover:border-red-300 transition-colors">
+                        <RadioGroupItem value="insufficient_information" id="r1" />
+                        <label
+                          htmlFor="r1"
+                          className="text-sm font-medium cursor-pointer flex-1"
+                        >
+                          Insufficient information provided
+                        </label>
+                      </div>
+                      <div className="flex items-center space-x-3 bg-white p-3 rounded-xl border border-gray-200 hover:border-red-300 transition-colors">
+                        <RadioGroupItem value="workload" id="r2" />
+                        <label
+                          htmlFor="r2"
+                          className="text-sm font-medium cursor-pointer flex-1"
+                        >
+                          Current workload too high
+                        </label>
+                      </div>
+                      <div className="flex items-center space-x-3 bg-white p-3 rounded-xl border border-gray-200 hover:border-red-300 transition-colors">
+                        <RadioGroupItem value="out_of_scope" id="r3" />
+                        <label
+                          htmlFor="r3"
+                          className="text-sm font-medium cursor-pointer flex-1"
+                        >
+                          Task out of my scope
+                        </label>
+                      </div>
+                      <div className="flex items-center space-x-3 bg-white p-3 rounded-xl border border-gray-200 hover:border-red-300 transition-colors">
+                        <RadioGroupItem value="timeline_issue" id="r4" />
+                        <label
+                          htmlFor="r4"
+                          className="text-sm font-medium cursor-pointer flex-1"
+                        >
+                          Timeline not feasible
+                        </label>
+                      </div>
+                      <div className="flex items-center space-x-3 bg-white p-3 rounded-xl border border-gray-200 hover:border-red-300 transition-colors">
+                        <RadioGroupItem value="other" id="r5" />
+                        <label
+                          htmlFor="r5"
+                          className="text-sm font-medium cursor-pointer flex-1"
+                        >
+                          Other (please specify)
+                        </label>
+                      </div>
+                    </div>
+                  </RadioGroup>
+                </div>
+
+                {rejectReason === 'other' && (
+                  <div className="space-y-2">
+                    <Label htmlFor="otherReason" className="text-sm font-bold text-gray-900">
+                      Specify Reason *
+                    </Label>
+                    <Input
+                      id="otherReason"
+                      value={otherReason}
+                      onChange={(e) => setOtherReason(e.target.value)}
+                      placeholder="Enter your reason..."
+                      className="border-2 border-gray-300 focus:border-red-500"
+                    />
+                  </div>
+                )}
+
+                <div className="space-y-2">
+                  <Label htmlFor="additionalNotes" className="text-sm font-bold text-gray-900 flex items-center gap-2">
+                    <MessageSquare className="w-4 h-4" />
+                    Additional Notes (Optional)
+                  </Label>
+                  <Textarea
+                    id="additionalNotes"
+                    value={additionalNotes}
+                    onChange={(e) => setAdditionalNotes(e.target.value)}
+                    placeholder="Add any additional context or comments..."
+                    className="min-h-[100px] border-2 border-gray-300 focus:border-red-500"
+                  />
+                </div>
+
+                <div className="flex gap-3 pt-4">
+                  <Button
+                    onClick={() => {
+                      setShowRejectForm(false);
+                      setRejectReason('');
+                      setOtherReason('');
+                      setAdditionalNotes('');
+                    }}
+                    variant="outline"
+                    className="flex-1 border-2 border-gray-300 font-bold"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleSubmitRejection}
+                    disabled={!rejectReason || (rejectReason === 'other' && !otherReason)}
+                    className="flex-1 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <XCircle className="w-4 h-4 mr-2" />
+                    Submit Rejection
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
-
-
-      {/* Info Section */}
-      <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-        <h4 className="font-semibold text-blue-900 mb-2">Task Guidelines:</h4>
-        <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
-          <li>Accept tasks before starting work on them</li>
-          <li>Mark tasks as completed when all work is finished</li>
-          <li>Click "View Data" to see detailed task information</li>
-          <li>Contact your manager if you have questions about any task</li>
-        </ul>
-      </div>
     </div>
   );
 };

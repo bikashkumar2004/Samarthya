@@ -37,7 +37,7 @@ const adminSidebarMenuItems = [
       { id: "pendingfollowups", label: "Pending Followups", path: "/agent/aicallmanager/followups" },
     ],
   },
-  { id: "workflow", label: "Workflow", path: "/agent/workflow", icon: <Scissors className="w-5 h-5" /> },
+  { id: "campaigns", label: "Campaigns", path: "/agent/campaigns", icon: <Scissors className="w-5 h-5" /> },
 ];
 
 function MenuItems({ setOpen, isExpanded }) {

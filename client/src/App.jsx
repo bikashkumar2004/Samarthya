@@ -14,11 +14,13 @@ import { useEffect, useState } from "react";
 import { checkAuth } from "./store/auth-slice";
 import AgentLayouts from "./components/agent-view/AgentLayouts";
 import Leads from "./pages/agent-view/Leads";
-import Workflows from "./pages/agent-view/Workflows";
 import CreateTask from "./pages/agent-view/CreateTask";
 import AiCallMannager from "./pages/agent-view/AiCallManager";
 import Dashboard from "./pages/agent-view/Dashboardlayout";
 import Landing from "./pages/landing/Landing";
+import Campaigns from "./pages/agent-view/Campaigns";
+import LeadManagement from "./pages/agent-view/LeadManagement";
+import Pending from "./pages/agent-view/Pending";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -57,10 +59,12 @@ export default function App() {
         <Route path="/agent" element={<AgentLayouts />}>
           <Route path="Dashboard" element={<Dashboard />} />
           <Route path="createtask" element={<CreateTask />} />
-          <Route path="Leads" element={<Leads />} />
+          {/* <Route path="Leads" element={<Leads />} /> */}
+          <Route path="Leads" element={<LeadManagement />} />
           <Route path="aicallmanager" element={<AiCallMannager />} />
+          <Route path="aicallmanager/followups" element={<Pending />} />
 
-          <Route path="Workflow" element={<Workflows />} />
+          <Route path="campaigns" element={<Campaigns />} />
         </Route>
       </Routes>
       
