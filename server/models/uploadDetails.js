@@ -2,11 +2,7 @@ import mongoose, { Schema } from "mongoose";
 
 const uploaduserDetails = new Schema(
   {
-    name: {
-      type: String,
-      required: true,
-      trim: true,
-    },
+    name: { type: String, required: true, trim: true },
     phoneNo: {
       type: String,
       required: true,
@@ -18,26 +14,11 @@ const uploaduserDetails = new Schema(
         return value;
       },
     },
-    email: {
-      type: String,
-      required: true,
-      lowercase: true,
-      trim: true,
-    },
-    category: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    description: {
-      type: String,
-      trim: true,
-    },
-    userId: {
-      type: Schema.Types.ObjectId,
-      ref: "User", 
-      required: true,
-    },
+    email: { type: String, required: true, lowercase: true, trim: true },
+    category: { type: String, required: true, trim: true },
+    description: { type: String, trim: true },
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    taskId: { type: Schema.Types.ObjectId, ref: "TaskDetails", required: true },
   },
   { timestamps: true }
 );
@@ -49,5 +30,5 @@ uploaduserDetails.pre("save", function (next) {
   next();
 });
 
-const uploadetails = mongoose.model("uploadetails", uploaduserDetails);
-export default uploadetails;
+const UploadDetails = mongoose.model("UploadDetails", uploaduserDetails);
+export default UploadDetails;

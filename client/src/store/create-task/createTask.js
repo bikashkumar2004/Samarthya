@@ -3,23 +3,20 @@ import axios from "axios";
 
 const API_URL = "http://localhost:4000/api/agent/create-task";
 
-
-//  Upload file
 export const uploadDetails = createAsyncThunk(
   "agent/uploadDetails",
-  async (file, { rejectWithValue }) => {
+  async (formData, { rejectWithValue }) => {
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const response = await axios.post(`${API_URL}/upload`, formData, {
+      const res = await axios.post(`${API_URL}/upload`, formData, {
+        withCredentials: true,
         headers: { "Content-Type": "multipart/form-data" },
-        withCredentials: true, 
       });
-
-      return response.data; 
-    } catch (error) {
-      return rejectWithValue(error?.response?.data || error.message);
+      return res.data;
+    } catch (err) {
+      console.error("UPLOAD ERROR:", err.response?.data || err.message);
+      return rejectWithValue(
+        err.response?.data || { message: "Upload failed" }
+      );
     }
   }
 );
@@ -28,64 +25,116 @@ export const fetchAllDetails = createAsyncThunk(
   "agent/fetchAllDetails",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_URL}/upload-details`, {
+      const res = await axios.get(`${API_URL}/upload-details`, {
         withCredentials: true,
       });
-      return response.data; 
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(
+        err?.response?.data || { message: "Fetch failed" }
+      );
+    }
+  }
+);
+export const fetchSingleTask = createAsyncThunk(
+  "upload/fetchSingleTask",
+  async (taskId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${API_URL}/single/${taskId}`,{withCredentials:true});
+      return response.data.data;
     } catch (error) {
-      return rejectWithValue(error?.response?.data || error.message);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch task"
+      );
     }
   }
 );
 
-const initialState = {
-  isLoading: false,
-  contactList: [],
-  error: null,
-  successMessage: null,
-};
+
+export const deleteTask = createAsyncThunk(
+  "agent/deleteTask",
+  async (taskId, { rejectWithValue }) => {
+    try {
+      const res = await axios.delete(`${API_URL}/delete-task/${taskId}`, {
+        withCredentials: true,
+      });
+      return { taskId, message: res.data.message };
+    } catch (err) {
+      return rejectWithValue(
+        err?.response?.data || { message: "Delete failed" }
+      );
+    }
+  }
+);
 
 const uploadSlice = createSlice({
   name: "upload",
-  initialState,
+  initialState: {
+    isLoading: false,
+    allTasks: [],
+    error: null,
+    taskDetails: null,
+    successMessage: null,
+  },
   reducers: {
     clearMessages: (state) => {
-      state.successMessage = null;
       state.error = null;
+      state.successMessage = null;
     },
   },
   extraReducers: (builder) => {
     builder
-
       .addCase(uploadDetails.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(uploadDetails.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.successMessage = action.payload.message || "Upload successful";
-        if (action.payload.taskId) {
-          state.contactList.unshift({
-            taskId: action.payload.taskId,
-            fileName: action.payload.fileName,
-            rows: action.payload.importedRecords,
-            createdAt: new Date().toISOString(),
-          });
-        }
+        state.successMessage = action.payload.message;
       })
       .addCase(uploadDetails.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload?.message || "Upload failed";
+        state.error = action.payload.message;
       })
+
+      // Fetch
       .addCase(fetchAllDetails.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(fetchAllDetails.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.contactList = action.payload.data || [];
+        state.allTasks = action.payload.data || []; // ✅ correct field
       })
       .addCase(fetchAllDetails.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload?.message || "Failed to fetch details";
+        state.error = action.payload.message;
+      })
+
+      // Delete
+      .addCase(deleteTask.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteTask.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.successMessage = action.payload.message;
+        state.allTasks = state.allTasks.filter(
+          (t) => t._id !== action.payload.taskId
+        );
+      })
+      .addCase(deleteTask.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload.message;
+      })
+      .addCase(fetchSingleTask.pending, (state) => {
+        state.isLoading = true;
+        state.taskDetails = null;
+      })
+      .addCase(fetchSingleTask.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.taskDetails = action.payload;
+      })
+      .addCase(fetchSingleTask.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload.message;
       });
   },
 });

@@ -51,7 +51,8 @@ export const register = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      path:"/"
     });
 
     // Send welcome email
@@ -161,6 +162,7 @@ export const logout = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+      pat:"/"
     });
 
     return res.status(200).json({
@@ -176,36 +178,38 @@ export const logout = async (req, res) => {
   }
 };
 
+
 export const authMiddleware = async (req, res, next) => {
-  const { token } = req.cookies;
-
-  if (!token) {
-    return res.status(401).json({
-      success: false,
-      message: "Unauthorized user!",
-    });
-  }
-
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    let token = req.cookies?.token;
 
-    if (!decoded?.id) {
-      return res.status(403).json({
+    if (!token && req.headers.authorization?.startsWith("Bearer ")) {
+      token = req.headers.authorization.split(" ")[1];
+    }
+
+    if (!token) {
+      return res.status(401).json({
         success: false,
-        message: "Not authorized. Login again.",
+        message: "Unauthorized: No token provided",
       });
     }
 
-    req.userId = decoded.id; 
-    next(); 
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // ✅ These two lines are crucial
+    req.user = { _id: decoded.id };
+    req.userId = decoded.id;
+
+    next();
   } catch (error) {
     console.error("Auth Middleware Error:", error.message);
-    return res.status(401).json({
+    res.status(401).json({
       success: false,
       message: "Invalid or expired token.",
     });
   }
 };
+
 
 
 export const sendVerifyOtp = async (req, res) => {
