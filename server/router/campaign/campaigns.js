@@ -3,7 +3,11 @@ import {
   getAllCampaigns, 
   createCampaign, 
   updateCampaign, 
-  deleteCampaign 
+  deleteCampaign,
+  enableAutoCaller,
+  disableAutoCaller,
+  getCampaignStatus,
+  handleCallStatusCallback
 } from '../../controller/agent/campaignController.js';
 
 const router = express.Router();
@@ -19,5 +23,10 @@ router.put('/:id', updateCampaign);
 
 // Delete campaign
 router.delete('/:id', deleteCampaign);
+
+router.post('/:campaignId/enable', enableAutoCaller);
+router.post('/:campaignId/disable', disableAutoCaller);
+router.get('/:campaignId/status', getCampaignStatus);
+router.post('/status-callback', handleCallStatusCallback);
 
 export default router;

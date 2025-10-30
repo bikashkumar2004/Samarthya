@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 
 // Stats subdocument schema for active and completed campaigns
 const StatsSchema = new mongoose.Schema({
@@ -58,6 +58,7 @@ const CampaignSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  taskId: { type: Schema.Types.ObjectId, ref: "TaskDetails", required: true },
   status: {
     type: String,
     enum: ['active', 'scheduled', 'completed', 'draft', 'running', 'paused'],
