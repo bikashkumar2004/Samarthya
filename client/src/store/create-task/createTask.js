@@ -102,7 +102,7 @@ const uploadSlice = createSlice({
       })
       .addCase(fetchAllDetails.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.allTasks = action.payload.data || []; // ✅ correct field
+        state.allTasks = action.payload.data || []; 
       })
       .addCase(fetchAllDetails.rejected, (state, action) => {
         state.isLoading = false;

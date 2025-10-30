@@ -10,7 +10,6 @@ const initialState = {
   error: null,
 };
 
-// Fetch by customerId or callId
 export const fetchCallHistory = createAsyncThunk(
   "agent/contactList/fetchCallHistory",
   async ({ customerId, callId }, { rejectWithValue }) => {

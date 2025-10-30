@@ -25,7 +25,7 @@ const DeleteTaskDialog = ({ open, onOpenChange, selectedTask, onDeleted }) => {
       onOpenChange(false);
       onDeleted?.();
     } catch (error) {
-      toast.error(error?.message || "❌ Failed to delete task");
+      toast.error(error?.message || " Failed to delete task");
     }
   };
 
