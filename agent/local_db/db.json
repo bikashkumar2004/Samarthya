@@ -1,28 +1,28 @@
 {
-  "call_id": "CAbebe2396ab422e52935b7e58b77dc112",
-  "customer_id": "68fe41b9959fe0032ce43eb9",
-  "call_start_iso": "2025-10-27T19:29:43",
-  "call_end_iso": "2025-10-27T19:29:43",
+  "call_id": "CA47d559ce6c7eb3347df72275d1c8d85b",
+  "customer_id": "6900d90baa7caaff17b42ca3",
+  "call_start_iso": "2025-10-30T00:21:45",
+  "call_end_iso": "2025-10-30T00:21:45",
   "call_duration_seconds": 0.0,
-  "summary": "Customer: Hi, I'm interested in your product and I would like to know the price. Assistant: Good afternoon, thank you for choosing [Company Name]. Our product is priced at [Price]. Is there a specific model you're interested in? Customer: Yes, I'm looking at the [Model Name]. Assistant: The [Model Name] is priced at [Price]. Would you like me to provide a quotation for you? Customer: Yes, please. Assistant: Sure, I'll need your location and contact details to complete the quotation. What's your location? Customer: [Location] Assistant: Great, and what's your contact details? Customer: [Contact Details] Assistant: I'll send the quotation...",
+  "summary": "Customer: Hi, I'm calling regarding the construction project we discussed last week. I wanted to check on the timeline and if there are any updates. Assistant: Good afternoon, thank you for calling back. The project is still on schedule, and we're currently in the final stages of the permitting process. We're expecting the permits to be approved by the end of this week, and we'll be able to start construction the following week. The timeline remains the same, and we're estimating a completion date of three weeks from the start of construction. Customer: That's great news. I'm glad to hear...",
   "sentiment_overall": "Neutral",
   "turn_counts": {
     "user": 0,
     "assistant": 1
   },
-  "first_agent_utterance": "How can I assist you? This call is about: Requested price quotation.",
+  "first_agent_utterance": "How can I assist you? This call is about: Follow-up on construction project inquiry.",
   "last_user_utterance": null,
   "transcript": [
     {
       "role": "assistant",
-      "timestamp_iso": "2025-10-27T19:29:43",
-      "content": "How can I assist you? This call is about: Requested price quotation."
+      "timestamp_iso": "2025-10-30T00:21:45",
+      "content": "How can I assist you? This call is about: Follow-up on construction project inquiry."
     }
   ],
   "realtime": {
     "last_partial_sentiment": null,
     "last_partial_updated_iso": null
   },
-  "created_at_iso": "2025-10-27T19:29:43",
-  "updated_at_iso": "2025-10-27T19:29:43"
+  "created_at_iso": "2025-10-30T00:21:45",
+  "updated_at_iso": "2025-10-30T00:21:45"
 }

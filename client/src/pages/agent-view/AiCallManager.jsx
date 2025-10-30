@@ -792,58 +792,6 @@ const AICallManager = () => {
                   </TableRow>
                 )}
               </TableBody>
-
-              {/* <TableBody>
-                {filteredCalls.length > 0 ? (
-                  filteredCalls.map((call) => (
-                    <TableRow key={call.sl} className="hover:bg-gray-50 transition-colors">
-                      <TableCell className="font-semibold">{call.sl}</TableCell>
-                      <TableCell>
-                        <div>
-                          <div className="font-semibold text-gray-900">{call.name}</div>
-                          <div className="text-xs text-gray-500 md:hidden">{call.phoneNo}</div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell font-mono text-sm">
-                        {call.phoneNo}
-                      </TableCell>
-                      <TableCell className="hidden lg:table-cell">
-                        <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold border ${getStatusClass(call.status)}`}>
-                          {getStatusIcon(call.status)}
-                          {call.status}
-                        </span>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${getSentimentClass(call.sentiment)}`}>
-                          {getSentimentIcon(call.sentiment)}
-                          {call.sentiment}
-                        </span>
-                      </TableCell>
-                      <TableCell className="font-mono text-sm font-semibold">
-                        {call.duration}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button
-                          onClick={() => viewDetails(call)}
-                          variant="outline"
-                          size="sm"
-                          className="border-2 border-[#043927] text-[#043927] hover:bg-[#043927] hover:text-white font-bold"
-                        >
-                          <Eye className="w-4 h-4 sm:mr-1" />
-                          <span className="hidden sm:inline">View</span>
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8 text-gray-500">
-                      <PhoneOff className="w-12 h-12 mx-auto mb-2 text-gray-400" />
-                      <p className="font-medium">No calls found matching your filters</p>
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody> */}
             </Table>
           </div>
           {/* Pagination Controls */}
