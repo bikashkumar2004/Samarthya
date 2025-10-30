@@ -12,6 +12,7 @@ import router from "./router/auth/authRoute.js";
 import userrouter from "./router/auth/userRoute.js";
 import contactLists from "./router/agent/contactList.js";
 import uploadData from "./router/createTask/index.js";
+import campaignRoutes  from './router/campaign/campaigns.js'
 
 
 mongoose
@@ -55,6 +56,7 @@ app.use("/api/auth", router);
 app.use("/api/user", userrouter);
 app.use("/api/agent/contactList", contactLists);
 app.use("/api/agent/create-task", uploadData);
+app.use('/api/campaigns', campaignRoutes);
 app.use((err, req, res, next) => {
   console.error("Server Error:", err);
   res.status(err.status || 500).json({
