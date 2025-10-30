@@ -22,6 +22,7 @@ router.delete("/delete/:id", deleteList);
 router.get("/get", fetchAllContactList);
 router.get("/get/:id",showcontactDetails);
 router.post("/call/:customerId",initiateCall);
-router.get("/callTranscript/:customerId",callTranscript)
+router.get("/callTranscript/:customerId",callTranscript);
+
 
 export default router;

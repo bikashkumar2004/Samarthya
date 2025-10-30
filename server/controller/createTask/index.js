@@ -43,6 +43,7 @@ export const fetchUploadDetails = async (req, res) => {
         data: [],
       });
     }
+
     const formattedTasks = taskList.map((t) => ({
       _id: t._id,
       taskID: t.taskId,
@@ -119,7 +120,6 @@ export const getSingleTask = async (req, res) => {
         rowsNo: task.rows || 0,
         createdAt: task.createdAt,
         uploads: uploadedUsers, 
-        
       },
     });
   } catch (error) {

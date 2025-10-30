@@ -5,6 +5,7 @@ import contactDetailsReducer from "./agent-slice/showDetails";
 import agentDetails from "./auth-slice/accountVerified"
 import callInitiate from "./call-slice/index"
 import uploadDetails from "./create-task/createTask"
+import Campaigns from "./campaign/index.js";
 
 
 const store = configureStore({
@@ -15,6 +16,7 @@ const store = configureStore({
     getdata:agentDetails,
     call:callInitiate,
     upload:uploadDetails,
+    campaigns:Campaigns,
   },
 });
 
