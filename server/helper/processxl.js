@@ -4,14 +4,12 @@ import Contact from "../models/contactDetails.js";
 
 export async function processExcelFile(filePath, batchSize = 100) {
   try {
-    // Read the Excel file
-    const workbook = xlsx.readFile(filePath);
+    const workbook = xlsx.readFile(filePath, { raw: true });
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
     const jsonData = xlsx.utils.sheet_to_json(sheet);
 
-    if (!jsonData.length) throw new Error("Excel sheet is empty");
+    if (!jsonData.length) throw new Error("Uploaded file is empty");
 
-    // Define valid status values
     const allowedStatus = [
       "New",
       "Pending",
@@ -24,7 +22,6 @@ export async function processExcelFile(filePath, batchSize = 100) {
       "Engaging",
     ];
 
-    // Normalize keys (make them lowercase and trim)
     const normalized = jsonData.map((row) => {
       const newRow = {};
       for (const key in row) {
@@ -35,14 +32,13 @@ export async function processExcelFile(filePath, batchSize = 100) {
       return newRow;
     });
 
-    // Validate and map fields for each contact
     const validContacts = normalized
       .filter(
         (row) =>
           row.name &&
           row.status &&
           allowedStatus.includes(row.status) &&
-          row.purpose // make sure purpose exists
+          row.purpose
       )
       .map((row) => ({
         name: row.name,
@@ -50,20 +46,17 @@ export async function processExcelFile(filePath, batchSize = 100) {
         phone: row.phone || "",
         whatsappNo: row.whatsappno || row["whatsapp no"] || "",
         status: row.status,
-        purpose: row.purpose || "General", // Default fallback
+        purpose: row.purpose || "General",
       }));
 
-    if (validContacts.length === 0) {
-      throw new Error("No valid contact records found in Excel");
-    }
+    if (validContacts.length === 0)
+      throw new Error("No valid contact records found in uploaded file");
 
-    // Batch insert to avoid Mongo memory overload
     for (let i = 0; i < validContacts.length; i += batchSize) {
       const batch = validContacts.slice(i, i + batchSize);
       await Contact.insertMany(batch);
     }
 
-    // Delete uploaded Excel file after processing
     fs.unlinkSync(filePath);
 
     return {
@@ -73,9 +66,8 @@ export async function processExcelFile(filePath, batchSize = 100) {
       message: "Contacts uploaded successfully",
     };
   } catch (error) {
-    // Ensure uploaded file is deleted if error occurs
     if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-    console.error("Error while processing Excel:", error);
-    throw new Error(error.message || "Failed to process Excel file");
+    console.error("Error while processing file:", error);
+    throw new Error(error.message || "Failed to process uploaded file");
   }
 }

@@ -4,6 +4,7 @@ import contactListReducer from "./agent-slice";
 import contactDetailsReducer from "./agent-slice/showDetails";
 import agentDetails from "./auth-slice/accountVerified"
 import callInitiate from "./call-slice/index"
+import uploadDetails from "./create-task/createTask"
 
 
 const store = configureStore({
@@ -12,7 +13,8 @@ const store = configureStore({
     contactList: contactListReducer,
     contactDetails: contactDetailsReducer,
     getdata:agentDetails,
-    call:callInitiate
+    call:callInitiate,
+    upload:uploadDetails,
   },
 });
 

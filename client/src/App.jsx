@@ -70,6 +70,7 @@ export default function App() {
             <Route path="email" element={<Email/>}/>
             <Route path="whatsapp" element={<Whatsapp/>}/>
           </Route>
+          
           <Route path="createtask" element={<CreateTask />} />
           {/* <Route path="Leads" element={<Leads />} /> */}
           <Route path="Leads" element={<LeadManagement />} />
