@@ -1,37 +1,87 @@
 [
   {
     "role": "assistant",
-    "timestamp_iso": "2025-10-30T19:50:13",
-    "content": "How can I assist you? This call is about: Awareness Drive."
+    "timestamp_iso": "2025-10-30T22:14:04",
+    "content": "Hello sushil sahoo! I am calling about tell the customer is document will be delivered on 5th july"
   },
   {
     "role": "user",
-    "timestamp_iso": "2025-10-30T19:50:16",
-    "content": "Bring in. Well,"
+    "timestamp_iso": "2025-10-30T22:14:17",
+    "content": "Yes. So I am the customer or you are the customer?"
   },
   {
     "role": "assistant",
-    "timestamp_iso": "2025-10-30T19:50:17",
-    "content": "It seems like you might have a question or something specific in mind."
+    "timestamp_iso": "2025-10-30T22:14:18",
+    "content": "You are the customer, Sushil."
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2025-10-30T22:14:20",
+    "content": "I’m here to inform you about the delivery of your document."
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2025-10-30T22:14:23",
+    "content": "It will be delivered on the 5th of July."
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2025-10-30T22:14:25",
+    "content": "If you have any questions or need further assistance, feel free to ask!"
   },
   {
     "role": "user",
-    "timestamp_iso": "2025-10-30T19:50:19",
-    "content": "Hello?"
+    "timestamp_iso": "2025-10-30T22:14:35",
+    "content": "K. So"
+  },
+  {
+    "role": "user",
+    "timestamp_iso": "2025-10-30T22:14:36",
+    "content": "thanks."
   },
   {
     "role": "assistant",
-    "timestamp_iso": "2025-10-30T19:50:20",
-    "content": "Hello!"
+    "timestamp_iso": "2025-10-30T22:14:37",
+    "content": "You’re welcome, Sushil!"
   },
   {
     "role": "assistant",
-    "timestamp_iso": "2025-10-30T19:50:21",
-    "content": "How can I assist you today?"
+    "timestamp_iso": "2025-10-30T22:14:38",
+    "content": "If you need anything else or have more questions in the future, don’t hesitate to reach out."
   },
   {
     "role": "assistant",
-    "timestamp_iso": "2025-10-30T19:50:23",
-    "content": "If you have questions about medications or need assistance with orders, I’m here to help."
+    "timestamp_iso": "2025-10-30T22:14:43",
+    "content": "Have a great day!"
+  },
+  {
+    "role": "user",
+    "timestamp_iso": "2025-10-30T22:14:49",
+    "content": "Can you call me name again?"
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2025-10-30T22:14:50",
+    "content": "Of course, Sushil!"
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2025-10-30T22:14:52",
+    "content": "If there's anything else you need, just let me know."
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2025-10-30T22:15:03",
+    "content": "It seems like you might have sent a message accidentally."
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2025-10-30T22:15:06",
+    "content": "If you have any questions or need assistance, feel free to share!"
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2025-10-30T22:15:10",
+    "content": "I'm here to help."
   }
 ]
