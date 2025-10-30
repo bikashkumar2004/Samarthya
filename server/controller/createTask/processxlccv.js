@@ -55,25 +55,19 @@ export async function processExcelFile(filePath, userId, batchSize = 100) {
     const taskId = await generateTaskId();
     const fileName = path.basename(filePath);
     const rows = validData.length;
-
-    // 🔹 Create task entry
     const task = await TaskDetails.create({ taskId, fileName, rows, userId });
-
-    // 🔹 Attach taskId and batch insert
     const finalData = validData.map((r) => ({ ...r, taskId: task._id }));
 
     for (let i = 0; i < finalData.length; i += batchSize) {
       const batch = finalData.slice(i, i + batchSize);
       await UploadDetails.insertMany(batch);
     }
-
-    // Remove temp file
     fs.unlinkSync(filePath);
 
     return { success: true, taskId, fileName, rows };
   } catch (error) {
     if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-    console.error("❌ Error processing Excel:", error);
+    console.error(" Error processing Excel:", error);
     throw new Error(error.message || "Failed to process Excel file");
   }
 }
