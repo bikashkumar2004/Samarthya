@@ -4,7 +4,6 @@ import path from "path";
 import UploadDetails from "../../models/uploadDetails.js";
 import TaskDetails from "../../models/createTask.js";
 
-// 🔹 Generate unique Task ID (TSK0000000001 etc.)
 async function generateTaskId() {
   const lastTask = await TaskDetails.findOne().sort({ createdAt: -1 });
   if (!lastTask) return "TSK001";
@@ -13,7 +12,6 @@ async function generateTaskId() {
   return `TSK${nextNumber}`;
 }
 
-// 🔹 Main Excel Processor
 export async function processExcelFile(filePath, userId, batchSize = 100) {
   try {
     const workbook = xlsx.readFile(filePath);
@@ -21,8 +19,7 @@ export async function processExcelFile(filePath, userId, batchSize = 100) {
     const jsonData = xlsx.utils.sheet_to_json(sheet);
 
     if (!jsonData.length) throw new Error("Uploaded Excel file is empty");
-
-    // Normalize all keys to lowercase
+    
     const normalized = jsonData.map((row) => {
       const obj = {};
       for (const key in row) {
@@ -30,8 +27,6 @@ export async function processExcelFile(filePath, userId, batchSize = 100) {
       }
       return obj;
     });
-
-    // 🔹 Handle flexible header names (auto-detect common variations)
     const validData = normalized
       .map((r) => ({
         name: r.name || r["full name"] || r["contact name"],
@@ -71,11 +66,9 @@ export async function processExcelFile(filePath, userId, batchSize = 100) {
     throw new Error(error.message || "Failed to process Excel file");
   }
 }
-
-// Normalize phone numbers to +91 format
 function formatPhoneNumber(phone) {
   const str = String(phone).trim();
-  const digits = str.replace(/[^\d]/g, ""); // remove spaces or symbols
+  const digits = str.replace(/[^\d]/g, "");
   if (!digits) return "";
   return digits.startsWith("91") ? `+${digits}` : `+91${digits}`;
 }

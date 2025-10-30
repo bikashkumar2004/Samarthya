@@ -50,7 +50,6 @@ function StartCampaign({ onClose }) {
 
   function handleTabChange(value) {
     setActiveTab(value);
-    // Don't reset states - maintain data across tabs
   }
 
   function handleChannelChange(channel) {
