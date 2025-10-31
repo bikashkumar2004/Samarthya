@@ -140,7 +140,7 @@ async def handle_text_message(decoded, twilio_ws, sts_ws, streamsid):
 
 async def sts_sender(sts_ws, audio_queue):
     """
-    Continuously sends audio data from Twilio to Deepgram
+    Continuously sends audio data from Twilio Receiver to Deepgram
     This takes incoming voice from phone call and sends it to AI for processing
     """
     count = 0
@@ -157,6 +157,8 @@ async def sts_receiver(sts_ws, twilio_ws, streamsid_queue):
     """
     Receives messages from Deepgram and processes them
     This handles both AI responses and transcription data
+    Text messages: Transcripts, user interruptions, function calls
+    Binary audio: AI speech response
     """
     # Get the stream ID for this call
     streamsid = await streamsid_queue.get()
@@ -191,8 +193,12 @@ async def sts_receiver(sts_ws, twilio_ws, streamsid_queue):
             #print(f"Deepgram TTS audio: {audio_bytes} bytes -> Twilio")
 
 
-# Add an event so handler knows when 'purpose' is available
 async def twilio_receiver(twilio_ws, audio_queue, streamsid_queue, ctx, ready_evt):
+    """
+    Receives audio from phone call
+    Buffers into 3200-byte chunks (20×160)
+    Puts chunks in audio queue
+    """
     BUFFER_SIZE = 20 * 160
     inbuffer = bytearray()
     async for message in twilio_ws:
@@ -281,6 +287,7 @@ async def twilio_handler(twilio_ws):
         print("Handler: Audio pipeline tasks started") 
 
         try:
+            #The three tasks run continuously until Twilio sends a stop event, creating a real-time bidirectional voice conversation.
             await twilio_task  # Ends on Twilio 'stop'
         finally:
             print("Handler: Cancelling audio tasks...")
