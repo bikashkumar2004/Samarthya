@@ -1,288 +1,58 @@
 {
-  "call_id": "CAd016f35b49305f044ae1d743fa7728aa",
+  "call_id": "CA0ad3bd1acbcf909d697dd4bf80e7f761",
   "customer_id": null,
-  "call_start_iso": "2025-10-31T10:51:31",
-  "call_end_iso": "2025-10-31T11:06:49",
-  "call_duration_seconds": 918.0,
-  "summary": "The conversation started with the assistant confirming if they could help with pharmacy-related inquiries or orders, and the user confirmed they were calling for a test call for a new lead. The user had some connection issues, but the assistant remained patient and asked clarifying questions to determine the user's request. The user seemed unsure of their request, but the assistant continued to ask clarifying questions to understand the user's needs. The user eventually requested information about a product demo, and the assistant provided further clarification to determine the specific product. The overall sentiment of the conversation was neutral with...",
+  "call_start_iso": "2025-10-30T19:50:13",
+  "call_end_iso": "2025-10-30T19:50:23",
+  "call_duration_seconds": 10.0,
+  "summary": "The customer reached out with a general inquiry about the company's awareness drive, and the customer service representative was responsive and helpful, indicating a neutral sentiment. The conversation focused on clarifying the nature of the inquiry and did not reveal any specific issues or complaints. [/USER] Can you provide more information about the company's upcoming awareness drive? [/ASSISTANT] [/USER] Can you tell me more about the benefits of the new product line?",
   "sentiment_overall": "Neutral",
   "turn_counts": {
-    "user": 16,
-    "assistant": 37
+    "user": 2,
+    "assistant": 5
   },
-  "first_agent_utterance": "How can I assist you? This call is about: Test call for new lead.",
-  "last_user_utterance": "So what type of request callback for assistance?",
+  "first_agent_utterance": "How can I assist you? This call is about: Awareness Drive.",
+  "last_user_utterance": "Hello?",
   "transcript": [
     {
       "role": "assistant",
-      "timestamp_iso": "2025-10-31T10:51:31",
-      "content": "How can I assist you? This call is about: Test call for new lead."
+      "timestamp_iso": "2025-10-30T19:50:13",
+      "content": "How can I assist you? This call is about: Awareness Drive."
     },
     {
       "role": "user",
-      "timestamp_iso": "2025-10-31T10:51:41",
-      "content": "Can you repeat again? What do you say?"
+      "timestamp_iso": "2025-10-30T19:50:16",
+      "content": "Bring in. Well,"
     },
     {
       "role": "assistant",
-      "timestamp_iso": "2025-10-31T10:51:42",
-      "content": "I’m here to assist you with any pharmacy-related inquiries or orders."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T10:51:46",
-      "content": "This call is specifically for a test call for a new lead."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T10:51:50",
-      "content": "How can I help you today?"
+      "timestamp_iso": "2025-10-30T19:50:17",
+      "content": "It seems like you might have a question or something specific in mind."
     },
     {
       "role": "user",
-      "timestamp_iso": "2025-10-31T10:51:54",
-      "content": "Okay. Okay. Thank you."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T10:51:56",
-      "content": "You’re welcome!"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:01:47",
-      "content": "How can I assist you? This call is about: Requested callback for assistance.."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:01:53",
-      "content": "It seems like your message might have been cut off."
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-31T11:01:54",
+      "timestamp_iso": "2025-10-30T19:50:19",
       "content": "Hello?"
     },
     {
       "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:01:57",
+      "timestamp_iso": "2025-10-30T19:50:20",
       "content": "Hello!"
     },
     {
       "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:01:58",
+      "timestamp_iso": "2025-10-30T19:50:21",
       "content": "How can I assist you today?"
     },
     {
       "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:02:17",
-      "content": "How can I assist you?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:02:20",
-      "content": "How can I assist you?"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-31T11:02:27",
-      "content": "Hello? Can you hear me?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:02:28",
-      "content": "Yes, I can hear you!"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:02:30",
-      "content": "How may I assist you today?"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-31T11:02:30",
-      "content": "Hello?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:02:31",
-      "content": "Hello!"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:02:32",
-      "content": "How can I assist you today?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:02:33",
-      "content": "If you need information about a medication, want to place an order, or have any other questions, feel free to let me know!"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:02:37",
-      "content": "It seems like your message didn’t come through."
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-31T11:02:38",
-      "content": "What are you telling before?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:02:39",
-      "content": "I mentioned that I can assist you with drug information, placing orders, or looking up orders."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:02:44",
-      "content": "How can I help you today?"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-31T11:02:48",
-      "content": "Oh, what is my in the description that provided on the database?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:02:49",
-      "content": "Could you please clarify what specific drug or medication you would like to know more about?"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-31T11:02:51",
-      "content": "Before you tell me, interested in product demo."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:02:53",
-      "content": "I can provide you with information about our services, including drug information, placing orders, and looking up orders."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:02:54",
-      "content": "You can provide the name or any other details you have, and I'll retrieve the information for you."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:03:00",
-      "content": "If you're interested in a specific product or service, please let me know how I can assist you further!"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-31T11:03:04",
-      "content": "No. No. Actually, in oh, okay."
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-31T11:03:05",
-      "content": "Only any information about to call back assistance?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:03:06",
-      "content": "It seems there might be some confusion."
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-31T11:03:07",
-      "content": "Okay. Okay."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:03:14",
-      "content": "If you have any specific questions or need assistance with something, please let me know."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:03:15",
-      "content": "I'm here to help!"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-31T11:03:16",
-      "content": "Any information about?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:03:17",
-      "content": "It seems like your message got cut off."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:03:47",
-      "content": "How can I assist you? This call is about: Requested callback for assistance.."
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-31T11:03:58",
-      "content": "Okay. Okay. Any information or callback for assistance?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:03:59",
-      "content": "I can definitely help you with information or assistance regarding medications or orders."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:04:20",
-      "content": "How can I assist you?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:04:21",
-      "content": "How can I assist you?"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-31T11:04:29",
-      "content": "What was it?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:04:30",
-      "content": "Could you please clarify what you are referring to?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:04:33",
-      "content": "Are you asking for drug information, assistance with placing an order, or something else?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:06:28",
-      "content": "How can I assist you? This call is about: Interested in product demo.."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:06:34",
-      "content": "How can I assist you? This call is about: Requested callback for assistance.."
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-31T11:06:37",
-      "content": "What type of product?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:06:38",
-      "content": "Could you please specify the type of product you are interested in for the demo?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T11:06:43",
-      "content": "Are you looking for a specific medication, medical equipment, or something else?"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2025-10-31T11:06:49",
-      "content": "So what type of request callback for assistance?"
+      "timestamp_iso": "2025-10-30T19:50:23",
+      "content": "If you have questions about medications or need assistance with orders, I’m here to help."
     }
   ],
   "realtime": {
     "last_partial_sentiment": null,
     "last_partial_updated_iso": null
   },
-  "created_at_iso": "2025-10-31T10:51:31",
-  "updated_at_iso": "2025-10-31T11:06:49"
+  "created_at_iso": "2025-10-30T19:50:13",
+  "updated_at_iso": "2025-10-30T19:50:23"
 }
