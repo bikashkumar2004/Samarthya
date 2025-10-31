@@ -1,37 +1,22 @@
 [
   {
     "role": "assistant",
-    "timestamp_iso": "2025-10-30T19:50:13",
-    "content": "How can I assist you? This call is about: Awareness Drive."
+    "timestamp_iso": "2025-10-31T12:44:36",
+    "content": "Hello bikash! I am calling about ululululu"
   },
   {
     "role": "user",
-    "timestamp_iso": "2025-10-30T19:50:16",
-    "content": "Bring in. Well,"
+    "timestamp_iso": "2025-10-31T12:44:45",
+    "content": "You hear me?"
   },
   {
     "role": "assistant",
-    "timestamp_iso": "2025-10-30T19:50:17",
-    "content": "It seems like you might have a question or something specific in mind."
-  },
-  {
-    "role": "user",
-    "timestamp_iso": "2025-10-30T19:50:19",
-    "content": "Hello?"
+    "timestamp_iso": "2025-10-31T12:44:46",
+    "content": "Yes, I can hear you, Bikash!"
   },
   {
     "role": "assistant",
-    "timestamp_iso": "2025-10-30T19:50:20",
-    "content": "Hello!"
-  },
-  {
-    "role": "assistant",
-    "timestamp_iso": "2025-10-30T19:50:21",
+    "timestamp_iso": "2025-10-31T12:44:48",
     "content": "How can I assist you today?"
-  },
-  {
-    "role": "assistant",
-    "timestamp_iso": "2025-10-30T19:50:23",
-    "content": "If you have questions about medications or need assistance with orders, I’m here to help."
   }
 ]

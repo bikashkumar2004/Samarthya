@@ -9,7 +9,12 @@ import {
   showcontactDetails,
 } from "../../controller/agent/addList.js";
 
-import { initiateCall } from "../../controller/agent/calliniciate.js";
+import { 
+  initiateCall,
+  initiateBulkCalls,
+  initiateFilteredCalls,
+  getQueueStatus
+} from "../../controller/agent/calliniciate.js";
 import { callTranscript } from "../../controller/calls/callhistory.js";
 
 
@@ -22,7 +27,6 @@ router.delete("/delete/:id", deleteList);
 router.get("/get", fetchAllContactList);
 router.get("/get/:id",showcontactDetails);
 router.post("/call/:customerId",initiateCall);
-router.get("/callTranscript/:customerId",callTranscript);
-
+router.get("/callTranscript/:customerId",callTranscript)
 
 export default router;

@@ -75,6 +75,7 @@ export const stopAutoCaller = async (campaignId) => {
 };
 
 // Process calls in batches of 5
+// Process calls in batches of 5 - FIX: Handle null values
 const processCalls = async (campaignId) => {
   try {
     const campaign = await Campaign.findOne({ campaignId }).populate('taskId');
@@ -106,12 +107,17 @@ const processCalls = async (campaignId) => {
 
     console.log(`✅ Found ${allContacts.length} total contacts`);
 
-    // Get already called contact IDs - FIX: Convert to string comparison
+    // Get already called contact IDs - FIX: Handle null values
     const calledContactIds = await Calls.find({
-      customer_id: { $exists: true }
+      customer_id: { $exists: true, $ne: null }  // Exclude null values
     }).select('customer_id').lean();
 
-    const calledIds = new Set(calledContactIds.map(c => c.customer_id.toString()));
+    const calledIds = new Set(
+      calledContactIds
+        .map(c => c.customer_id?.toString()) // FIX: Use optional chaining
+        .filter(id => id !== undefined) // Filter out undefined
+    );
+    
     console.log(`📌 Already called: ${calledIds.size} contacts`);
 
     // Filter to get contacts that haven't been called yet
@@ -153,13 +159,14 @@ const processCalls = async (campaignId) => {
     activeCampaigns.set(campaignId, timeoutId);
 
   } catch (error) {
-    console.error('❌ Error processing calls:', error);
+    console.error('❌ Error processing calls:', error.message);
     const timeoutId = setTimeout(() => {
       processCalls(campaignId);
     }, BATCH_DELAY);
     activeCampaigns.set(campaignId, timeoutId);
   }
 };
+
 
 // Make individual call using Twilio
 const makeCall = async (contact, campaign) => {
@@ -251,6 +258,7 @@ const makeCall = async (contact, campaign) => {
 };
 
 // Update campaign progress - FIX: Correct progress calculation
+// Update campaign progress - FIX: Handle null customer_id
 const updateCampaignProgress = async (campaignId, taskId) => {
   try {
     const campaign = await Campaign.findOne({ campaignId });
@@ -265,11 +273,14 @@ const updateCampaignProgress = async (campaignId, taskId) => {
 
     // Get all contact IDs for this task
     const allContactIds = await UploadDetails.find({ taskId }).select('_id').lean();
-    const contactIds = allContactIds.map(c => c._id.toString());
-
-    // Count completed calls - FIX: Use correct comparison
+    
+    // FIX: Filter out null customer_id values
     const completedCalls = await Calls.countDocuments({
-      customer_id: { $in: allContactIds.map(c => c._id) }
+      customer_id: { 
+        $in: allContactIds.map(c => c._id),
+        $exists: true,
+        $ne: null
+      }
     });
 
     console.log(`Total: ${totalContacts}, Completed: ${completedCalls}`);
@@ -277,8 +288,13 @@ const updateCampaignProgress = async (campaignId, taskId) => {
     const inProgressCount = Math.min(CONCURRENT_CALLS, totalContacts - completedCalls);
     const queueCount = Math.max(0, totalContacts - completedCalls - inProgressCount);
 
+    // FIX: Filter null customer_id values
     const allCallsForTask = await Calls.find({
-      customer_id: { $in: allContactIds.map(c => c._id) }
+      customer_id: { 
+        $in: allContactIds.map(c => c._id),
+        $exists: true,
+        $ne: null
+      }
     });
 
     const answeredCalls = allCallsForTask.filter(
@@ -311,7 +327,7 @@ const updateCampaignProgress = async (campaignId, taskId) => {
       negative: negativeCalls
     };
 
-    // FIX: Correct progress calculation (not multiplying by 100)
+    // FIX: Correct progress calculation
     campaign.progress = Math.round((completedCalls / totalContacts) * 100);
 
     // Ensure progress doesn't exceed 100
@@ -327,6 +343,7 @@ const updateCampaignProgress = async (campaignId, taskId) => {
     console.error('❌ Error updating campaign progress:', error.message);
   }
 };
+
 
 // Complete campaign
 const completeCampaign = async (campaignId) => {

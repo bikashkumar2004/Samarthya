@@ -5,7 +5,7 @@ const callSchema = new mongoose.Schema(
     call_id: { type: String, required: true, unique: true },
     customer_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "ContactDetails",
+      ref: "UploadDetails",
       required: true,
       index: true,
     },
