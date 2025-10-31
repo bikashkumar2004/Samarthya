@@ -242,3 +242,45 @@ export const getid = async (req, res) => {
     });
   }
 };
+export const retrieveCampaigns = async (req, res) => {
+  try {
+    const { status, type, category, q } = req.query;
+
+    const filter = {};
+    if (status) filter.status = status;                // "running" | "pending" | "completed"
+    if (type) filter.type = type;                      // "call" | "message"
+    if (category) filter.category = category;         // exact category
+
+    // Text-like search on these fields (case-insensitive)
+    if (q && q.trim()) {
+      const rx = new RegExp(q.trim(), "i");
+      filter.$or = [
+        { campaignName: rx },
+        { campaignId: rx },
+        { campaignCode: rx },
+        { taskCode: rx },
+      ];
+    }
+
+    const rows = await Campaign.find(filter).sort({ createdAt: -1 }).lean();
+
+    const istRows = rows.map((c) => ({
+      ...c,
+      startedAtIst: toISTIso(c.startedAt),
+      createdAtIst: toISTIso(c.createdAt),
+      updatedAtIst: toISTIso(c.updatedAt),
+    }));
+
+    return res.status(200).json({
+      success: true,
+      message: "Campaigns retrieved.",
+      data: istRows,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Server error while retrieving campaigns.",
+      error: error.message,
+    });
+  }
+};
