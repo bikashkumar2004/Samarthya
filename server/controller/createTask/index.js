@@ -69,7 +69,8 @@ export const deleteTask = async (req, res) => {
   try {
     const userId = req.user?._id;
     const { taskId } = req.params;
-
+    console.log(taskId);
+    
     if (!userId)
       return res
         .status(401)

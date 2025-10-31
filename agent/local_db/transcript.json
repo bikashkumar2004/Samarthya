@@ -1,7 +1,37 @@
 [
   {
     "role": "assistant",
-    "timestamp_iso": "2025-10-30T00:21:45",
-    "content": "How can I assist you? This call is about: Follow-up on construction project inquiry."
+    "timestamp_iso": "2025-10-30T19:50:13",
+    "content": "How can I assist you? This call is about: Awareness Drive."
+  },
+  {
+    "role": "user",
+    "timestamp_iso": "2025-10-30T19:50:16",
+    "content": "Bring in. Well,"
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2025-10-30T19:50:17",
+    "content": "It seems like you might have a question or something specific in mind."
+  },
+  {
+    "role": "user",
+    "timestamp_iso": "2025-10-30T19:50:19",
+    "content": "Hello?"
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2025-10-30T19:50:20",
+    "content": "Hello!"
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2025-10-30T19:50:21",
+    "content": "How can I assist you today?"
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2025-10-30T19:50:23",
+    "content": "If you have questions about medications or need assistance with orders, I’m here to help."
   }
 ]

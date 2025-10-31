@@ -1,140 +1,46 @@
-import mongoose from 'mongoose'
+// models/campaign.js
+import mongoose, { Schema } from "mongoose";
 
-// Stats subdocument schema for active and completed campaigns
-const StatsSchema = new mongoose.Schema({
-  completed: {
-    type: Number,
-    default: 0
+const messageConfigSchema = new Schema(
+  {
+    channels: {
+      email: { type: Boolean, default: false },
+      sms: { type: Boolean, default: false },
+      whatsapp: { type: Boolean, default: false },
+    },
+    template: { type: String, default: "" },
   },
-  inProgress: {
-    type: Number,
-    default: 0
-  },
-  queue: {
-    type: Number,
-    default: 0
-  },
-  answered: {
-    type: Number,
-    default: 0
-  },
-  notAnswered: {
-    type: Number,
-    default: 0
-  },
-  failed: {
-    type: Number,
-    default: 0
-  },
-  positive: {
-    type: Number,
-    default: 0
-  },
-  neutral: {
-    type: Number,
-    default: 0
-  },
-  negative: {
-    type: Number,
-    default: 0
-  }
-}, { _id: false });
+  { _id: false }
+);
 
-// Main Campaign Schema
-const CampaignSchema = new mongoose.Schema({
-  campaignName: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  campaignId: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true
-  },
-  taskName: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  status: {
-    type: String,
-    enum: ['active', 'scheduled', 'completed', 'draft', 'running', 'paused'],
-    default: 'draft'
-  },
-  
-  // Active campaign fields
-  startedAt: {
-    type: Date
-  },
-  progress: {
-    type: Number,
-    min: 0,
-    max: 100,
-    default: 0
-  },
-  
-  // Scheduled campaign fields
-  scheduledFor: {
-    type: Date
-  },
-  totalContacts: {
-    type: Number,
-    default: 0
-  },
-  estimatedDuration: {
-    type: String
-  },
-  
-  // Completed campaign fields
-  completedAt: {
-    type: Date
-  },
-  completionRate: {
-    type: Number,
-    min: 0,
-    max: 100
-  },
-  
-  // Draft campaign fields
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-  lastModified: {
-    type: Date,
-    default: Date.now
-  },
-  
-  // Stats for active and completed campaigns
-  stats: StatsSchema
-  
-}, {
-  timestamps: true // Adds createdAt and updatedAt automatically
-});
+const campaignSchema = new Schema(
+  {
+    campaignId: { type: String, unique: true, index: true },   // legacy unique index support
+    campaignCode: { type: String, unique: true, index: true }, // CMP-YYYY-XXX
 
-// Indexes for better query performance
-CampaignSchema.index({ status: 1 });
-CampaignSchema.index({ campaignId: 1 });
-CampaignSchema.index({ createdAt: -1 });
+    campaignName: { type: String, required: true, trim: true },
+    taskId: { type: mongoose.Schema.Types.ObjectId, ref: "TaskDetails", required: true },
+    taskCode: { type: String, index: true },
 
-// Pre-save middleware to update lastModified
-CampaignSchema.pre('save', function(next) {
-  this.lastModified = new Date();
-  next();
-});
+    type: { type: String, enum: ["call", "message"], required: true },
+    category: { type: String, required: true },
 
-// Instance method to get campaign by status
-CampaignSchema.statics.findByStatus = function(status) {
-  return this.find({ status: status });
-};
+    messageConfig: { type: messageConfigSchema, default: undefined },
 
-// Instance method to update progress
-CampaignSchema.methods.updateProgress = function(newProgress) {
-  this.progress = newProgress;
-  return this.save();
-};
+    targetedUsers: [
+      {
+        name: { type: String, required: true },
+        phoneNo: { type: String, required: true },
+        email: { type: String },
+        description: { type: String },
+        category: { type: String },
+      },
+    ],
 
-export default mongoose.model("Campaign", CampaignSchema);
+    status: { type: String, enum: ["pending", "running", "completed"], default: "pending" },
+    startedAt: { type: Date, default: Date.now },
+  },
+  { timestamps: true }
+);
 
+export default mongoose.model("Campaign", campaignSchema);
