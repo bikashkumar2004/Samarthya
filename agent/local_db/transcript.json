@@ -1,22 +1,17 @@
 [
   {
     "role": "assistant",
-    "timestamp_iso": "2025-10-31T20:39:39",
-    "content": "Hello sushil! I am calling about ululululu"
-  },
-  {
-    "role": "assistant",
-    "timestamp_iso": "2025-10-31T20:39:40",
-    "content": "Hello bikash! I am calling about ululululu"
+    "timestamp_iso": "2025-10-31T21:19:36",
+    "content": "Hello bikash! I am calling about Interested in product demo."
   },
   {
     "role": "user",
-    "timestamp_iso": "2025-10-31T20:39:42",
-    "content": "So"
+    "timestamp_iso": "2025-10-31T21:19:44",
+    "content": "Why did you call me? I was doing some work. You interrupted me. I'm very angry."
   },
   {
-    "role": "assistant",
-    "timestamp_iso": "2025-10-31T20:39:59",
-    "content": "I’m here to help!"
+    "role": "user",
+    "timestamp_iso": "2025-10-31T21:19:45",
+    "content": "No need to talk to me."
   }
 ]
