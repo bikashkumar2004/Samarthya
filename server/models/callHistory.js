@@ -1,3 +1,4 @@
+// models/calls.js
 import mongoose from "mongoose";
 
 const callSchema = new mongoose.Schema(
@@ -10,8 +11,8 @@ const callSchema = new mongoose.Schema(
       index: true,
     },
     call_start_iso: { type: Date, required: true, default: Date.now },
-    call_end_iso: { type: Date, required: true, default: Date.now },
-    call_duration_seconds: { type: Number, required: true },
+    call_end_iso: { type: Date, default: null },
+    call_duration_seconds: { type: Number, default: 0 },
     summary: { type: String, default: "" },
     sentiment_overall: {
       type: String,
@@ -42,15 +43,11 @@ callSchema.index({ customer_id: 1, createdAt: -1 });
 callSchema.set("toJSON", {
   transform: function (doc, ret) {
     const formatDate = (date) =>
-      date
-        ? new Date(date).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
-        : null;
+      date ? new Date(date).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : null;
 
-    ["call_start_iso", "call_end_iso", "createdAt", "updatedAt"].forEach(
-      (field) => {
-        ret[field] = formatDate(ret[field]);
-      }
-    );
+    ["call_start_iso", "call_end_iso", "createdAt", "updatedAt"].forEach((field) => {
+      ret[field] = formatDate(ret[field]);
+    });
 
     if (ret.realtime) {
       ret.realtime.created_at_iso = formatDate(ret.realtime.created_at_iso);
@@ -67,5 +64,5 @@ callSchema.set("toJSON", {
     return ret;
   },
 });
-
-export default mongoose.model("Calls", callSchema);
+const Calls=mongoose.model("Calls", callSchema);
+export default Calls;

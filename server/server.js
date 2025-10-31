@@ -13,6 +13,8 @@ import userrouter from "./router/auth/userRoute.js";
 import contactLists from "./router/agent/contactList.js";
 import uploadData from "./router/createTask/index.js";
 import campaignRoutes  from './router/campaign/campaigns.js'
+import aiCallmanager from "./router/aiCall-Manager/index.js";
+
 
 
 mongoose
@@ -57,6 +59,7 @@ app.use("/api/user", userrouter);
 app.use("/api/agent/contactList", contactLists);
 app.use("/api/agent/create-task", uploadData);
 app.use('/api/campaigns', campaignRoutes);
+app.use("/api/aiCall",aiCallmanager)
 app.use((err, req, res, next) => {
   console.error("Server Error:", err);
   res.status(err.status || 500).json({
