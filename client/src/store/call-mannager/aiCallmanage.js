@@ -39,30 +39,6 @@ export const fetchLiveMonitor = createAsyncThunk(
   }
 );
 
-export const fetchAllCalls = createAsyncThunk(
-  "calls/fetchAllCalls",
-  async (params = {}, { getState, rejectWithValue }) => {
-    try {
-      const s = getState().calls.all;
-      const query = {
-        page: params.page ?? s.page,
-        pageSize: params.pageSize ?? s.pageSize,
-        sort: params.sort ?? s.sort,
-        order: params.order ?? s.order,
-      };
-      const res = await axios.get(`${API_URL}/fetch`, {
-        params: query,
-        withCredentials: true,
-      });
-      return res?.data;
-    } catch (err) {
-      return rejectWithValue(
-        err.response?.data?.message || "Failed to fetch calls"
-      );
-    }
-  }
-);
-
 const callsSlice = createSlice({
   name: "calls",
   initialState,
@@ -119,20 +95,6 @@ const callsSlice = createSlice({
       .addCase(fetchLiveMonitor.rejected, (state, action) => {
         state.live.isLoading = false;
         state.live.error = action.payload || "Live monitor fetch failed";
-      })
-      .addCase(fetchAllCalls.pending, (state) => {
-        state.all.isLoading = true;
-        state.all.error = null;
-      })
-      .addCase(fetchAllCalls.fulfilled, (state, action) => {
-        state.all.isLoading = false;
-        state.all.data = action.payload?.data || [];
-        state.all.page = action.payload?.page || state.all.page;
-        state.all.pageSize = action.payload?.pageSize || state.all.pageSize;
-      })
-      .addCase(fetchAllCalls.rejected, (state, action) => {
-        state.all.isLoading = false;
-        state.all.error = action.payload || "Fetch all calls failed";
       });
   },
 });
@@ -147,16 +109,14 @@ export const {
   resetAll,
 } = callsSlice.actions;
 
+// Existing selectors
 export const selectLiveData = (s) => s.calls.live.data;
 export const selectLiveLoading = (s) => s.calls.live.isLoading;
 export const selectLivePolling = (s) => s.calls.live.polling;
 
-export const selectAllRows = (s) => s.calls.all.data;
-export const selectAllMeta = (s) => ({
-  page: s.calls.all.page,
-  pageSize: s.calls.all.pageSize,
-  sort: s.calls.all.sort,
-  order: s.calls.all.order,
-});
+export const selectFirstDurationSec = (s) =>
+  (s.calls.live.data && s.calls.live.data.length > 0)
+    ? (s.calls.live.data[0].duration_seconds ?? 0)
+    : 0;
 
 export default callsSlice.reducer;

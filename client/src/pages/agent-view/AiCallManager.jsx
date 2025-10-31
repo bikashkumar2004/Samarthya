@@ -1,14 +1,17 @@
+// src/features/live/LiveMonitor.jsx
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { bulkCallsStart } from "@/store/call-mannager";
 import {
   fetchLiveMonitor,
+  selectFirstDurationSec,
   selectLiveData,
   selectLiveLoading,
   selectLivePolling,
   startLivePolling,
   stopLivePolling,
+ 
 } from "@/store/call-mannager/aiCallmanage";
 
 function formatDuration(totalSec = 0) {
@@ -34,6 +37,7 @@ export default function LiveMonitor() {
   const rows = useSelector(selectLiveData);
   const loading = useSelector(selectLiveLoading);
   const polling = useSelector(selectLivePolling);
+  const firstDurationSec = useSelector(selectFirstDurationSec); 
 
   const [enabled, setEnabled] = React.useState(false);
   const pollRef = React.useRef(null);
@@ -42,7 +46,7 @@ export default function LiveMonitor() {
   const beginPolling = React.useCallback(() => {
     if (pollRef.current) return;
     dispatch(startLivePolling());
-    dispatch(fetchLiveMonitor()); // no filter, default limit on server
+    dispatch(fetchLiveMonitor());
     pollRef.current = window.setInterval(() => {
       dispatch(fetchLiveMonitor());
     }, 4000);
@@ -57,7 +61,7 @@ export default function LiveMonitor() {
   }, [dispatch]);
 
   React.useEffect(() => {
-    dispatch(fetchLiveMonitor()); // initial fetch
+    dispatch(fetchLiveMonitor());
   }, [dispatch]);
 
   React.useEffect(() => {
@@ -88,19 +92,22 @@ export default function LiveMonitor() {
 
   return (
     <div className="p-4">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-2">
         <h2 className="text-xl font-semibold">Live Monitor Dashboard</h2>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={onToggleAutoCaller}
-            className={`px-3 py-1 rounded text-white font-semibold ${
-              enabled ? "bg-rose-600 hover:bg-rose-700" : "bg-emerald-600 hover:bg-emerald-700"
-            }`}
-            title={enabled ? "Disable Auto Caller" : "Enable Auto Caller"}
-          >
-            {enabled ? "Disable Auto Caller" : "Enable Auto Caller"}
-          </button>
-        </div>
+        <button
+          onClick={onToggleAutoCaller}
+          className={`px-3 py-1 rounded text-white font-semibold ${
+            enabled ? "bg-rose-600 hover:bg-rose-700" : "bg-emerald-600 hover:bg-emerald-700"
+          }`}
+          title={enabled ? "Disable Auto Caller" : "Enable Auto Caller"}
+        >
+          {enabled ? "Disable Auto Caller" : "Enable Auto Caller"}
+        </button>
+      </div>
+
+      {/* First call duration display */}
+      <div className="mb-4 text-sm text-gray-700">
+        Latest call duration: {formatDuration(firstDurationSec)}
       </div>
 
       <div className="border rounded overflow-hidden">
