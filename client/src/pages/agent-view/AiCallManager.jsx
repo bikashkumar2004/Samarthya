@@ -5,10 +5,8 @@ import { bulkCallsStart } from "@/store/call-mannager";
 import {
   fetchLiveMonitor,
   selectLiveData,
-  selectLiveFilter,
   selectLiveLoading,
   selectLivePolling,
-  setLiveFilter,
   startLivePolling,
   stopLivePolling,
 } from "@/store/call-mannager/aiCallmanage";
@@ -35,7 +33,6 @@ export default function LiveMonitor() {
   const dispatch = useDispatch();
   const rows = useSelector(selectLiveData);
   const loading = useSelector(selectLiveLoading);
-  const filter = useSelector(selectLiveFilter);
   const polling = useSelector(selectLivePolling);
 
   const [enabled, setEnabled] = React.useState(false);
@@ -45,12 +42,11 @@ export default function LiveMonitor() {
   const beginPolling = React.useCallback(() => {
     if (pollRef.current) return;
     dispatch(startLivePolling());
-    // immediate fetch so UI updates without waiting 4s
-    dispatch(fetchLiveMonitor(filter));
+    dispatch(fetchLiveMonitor()); // no filter, default limit on server
     pollRef.current = window.setInterval(() => {
-      dispatch(fetchLiveMonitor(filter));
+      dispatch(fetchLiveMonitor());
     }, 4000);
-  }, [dispatch, filter]);
+  }, [dispatch]);
 
   const endPolling = React.useCallback(() => {
     if (pollRef.current) {
@@ -60,12 +56,10 @@ export default function LiveMonitor() {
     dispatch(stopLivePolling());
   }, [dispatch]);
 
-  // Initial fetch and refetch when filter changes
   React.useEffect(() => {
-    dispatch(fetchLiveMonitor(filter));
-  }, [dispatch, filter]);
+    dispatch(fetchLiveMonitor()); // initial fetch
+  }, [dispatch]);
 
-  // Cleanup on unmount
   React.useEffect(() => {
     return () => {
       endPolling();
@@ -97,31 +91,10 @@ export default function LiveMonitor() {
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold">Live Monitor Dashboard</h2>
         <div className="flex items-center gap-2">
-          <select
-            value={filter.status}
-            onChange={(e) =>
-              dispatch(setLiveFilter({ status: e.target.value || "" }))
-            }
-            className="border rounded px-2 py-1"
-            title="Filter by status"
-          >
-            <option value="">All</option>
-            <option value="queued">Queued</option>
-            <option value="initiated">Initiated</option>
-            <option value="ringing">Ringing</option>
-            <option value="in-progress">In Progress</option>
-            <option value="completed">Completed</option>
-            <option value="busy">Busy</option>
-            <option value="failed">Failed</option>
-            <option value="no-answer">No Answer</option>
-            <option value="canceled">Canceled</option>
-          </select>
           <button
             onClick={onToggleAutoCaller}
             className={`px-3 py-1 rounded text-white font-semibold ${
-              enabled
-                ? "bg-rose-600 hover:bg-rose-700"
-                : "bg-emerald-600 hover:bg-emerald-700"
+              enabled ? "bg-rose-600 hover:bg-rose-700" : "bg-emerald-600 hover:bg-emerald-700"
             }`}
             title={enabled ? "Disable Auto Caller" : "Enable Auto Caller"}
           >
@@ -144,9 +117,7 @@ export default function LiveMonitor() {
           <tbody>
             {loading && rows.length === 0 && (
               <tr>
-                <td colSpan={5} className="px-3 py-4">
-                  Loading…
-                </td>
+                <td colSpan={5} className="px-3 py-4">Loading…</td>
               </tr>
             )}
 
@@ -167,9 +138,7 @@ export default function LiveMonitor() {
                     ⏱ {prettyStatus(r.status)}
                   </span>
                 </td>
-                <td className="px-3 py-2">
-                  {formatDuration(r.duration_seconds)}
-                </td>
+                <td className="px-3 py-2">{formatDuration(r.duration_seconds)}</td>
                 <td className="px-3 py-2">
                   <button className="px-2 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded">
                     Cancel
@@ -180,9 +149,7 @@ export default function LiveMonitor() {
 
             {!loading && rows.length === 0 && (
               <tr>
-                <td colSpan={5} className="px-3 py-4">
-                  No calls yet
-                </td>
+                <td colSpan={5} className="px-3 py-4">No calls yet</td>
               </tr>
             )}
           </tbody>
@@ -195,6 +162,7 @@ export default function LiveMonitor() {
     </div>
   );
 }
+
 // import React, { useState } from 'react';
 // import * as XLSX from 'xlsx';
 // import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

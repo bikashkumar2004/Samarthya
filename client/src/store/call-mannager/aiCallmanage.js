@@ -1,3 +1,4 @@
+// src/store/call-mannager/aiCallmanage.js
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -8,14 +9,12 @@ const initialState = {
     isLoading: false,
     data: [],
     error: null,
-    filter: { status: "", limit: 50 },
     lastFetchedAt: null,
     polling: false,
   },
   all: {
     isLoading: false,
     data: [],
-    total: 0,
     page: 1,
     pageSize: 100,
     sort: "updated_at_iso",
@@ -26,13 +25,9 @@ const initialState = {
 
 export const fetchLiveMonitor = createAsyncThunk(
   "calls/fetchLiveMonitor",
-  async ({ status = "", limit = 50 } = {}, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const params = {};
-      if (status) params.status = status;
-      if (limit) params.limit = limit;
       const res = await axios.get(`${API_URL}/live-monitor`, {
-        params,
         withCredentials: true,
       });
       return res?.data;
@@ -72,11 +67,6 @@ const callsSlice = createSlice({
   name: "calls",
   initialState,
   reducers: {
-    setLiveFilter(state, action) {
-      const { status, limit } = action.payload || {};
-      if (typeof status !== "undefined") state.live.filter.status = status;
-      if (typeof limit !== "undefined") state.live.filter.limit = limit;
-    },
     startLivePolling(state) {
       state.live.polling = true;
     },
@@ -88,12 +78,10 @@ const callsSlice = createSlice({
         isLoading: false,
         data: [],
         error: null,
-        filter: { status: "", limit: 50 },
         lastFetchedAt: null,
         polling: false,
       };
     },
-
     setAllPage(state, action) {
       state.all.page = action.payload || 1;
     },
@@ -109,7 +97,6 @@ const callsSlice = createSlice({
       state.all = {
         isLoading: false,
         data: [],
-        total: 0,
         page: 1,
         pageSize: 100,
         sort: "updated_at_iso",
@@ -140,7 +127,6 @@ const callsSlice = createSlice({
       .addCase(fetchAllCalls.fulfilled, (state, action) => {
         state.all.isLoading = false;
         state.all.data = action.payload?.data || [];
-        state.all.total = action.payload?.total || 0;
         state.all.page = action.payload?.page || state.all.page;
         state.all.pageSize = action.payload?.pageSize || state.all.pageSize;
       })
@@ -152,7 +138,6 @@ const callsSlice = createSlice({
 });
 
 export const {
-  setLiveFilter,
   startLivePolling,
   stopLivePolling,
   resetLive,
@@ -164,17 +149,14 @@ export const {
 
 export const selectLiveData = (s) => s.calls.live.data;
 export const selectLiveLoading = (s) => s.calls.live.isLoading;
-export const selectLiveFilter = (s) => s.calls.live.filter;
 export const selectLivePolling = (s) => s.calls.live.polling;
 
 export const selectAllRows = (s) => s.calls.all.data;
 export const selectAllMeta = (s) => ({
-  total: s.calls.all.total,
   page: s.calls.all.page,
   pageSize: s.calls.all.pageSize,
   sort: s.calls.all.sort,
   order: s.calls.all.order,
 });
-export const selectAllLoading = (s) => s.calls.all.isLoading;
 
 export default callsSlice.reducer;

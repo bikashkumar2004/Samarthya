@@ -1,27 +1,18 @@
+// src/controllers/aiCall.controller.js
 import Calls from "../../models/callHistory.js";
 import CallLiveStatus from "../../models/callLiveStatus.js";
 import UploadDetails from "../../models/uploadDetails.js";
 
-
-// controller getLiveMonitor (latest call per customer)
+// Live monitor: latest per customer, no status filter
 export async function getLiveMonitor(req, res) {
   try {
-    const { status, limit = 50 } = req.query;
-
-    const match = {};
-    if (status) match.last_status = status;
+    const { limit = 50 } = req.query;
 
     const rows = await CallLiveStatus.aggregate([
-      { $match: match },
       { $sort: { updated_at_iso: -1 } },
 
       // Keep only latest per customer
-      {
-        $group: {
-          _id: "$customer_id",
-          latest: { $first: "$$ROOT" },
-        },
-      },
+      { $group: { _id: "$customer_id", latest: { $first: "$$ROOT" } } },
       { $replaceRoot: { newRoot: "$latest" } },
 
       // Join UploadDetails.name
@@ -36,7 +27,7 @@ export async function getLiveMonitor(req, res) {
       },
       { $unwind: { path: "$contact", preserveNullAndEmptyArrays: true } },
 
-      // Join Calls to get the latest call’s duration_seconds by call_id
+      // Join Calls to get duration_seconds by call_id
       {
         $lookup: {
           from: Calls.collection.name,
@@ -48,10 +39,8 @@ export async function getLiveMonitor(req, res) {
       },
       { $unwind: { path: "$callDoc", preserveNullAndEmptyArrays: true } },
 
-      // Re-apply limit after grouping
       { $limit: Number(limit) },
 
-      // Final projection
       {
         $project: {
           _id: 0,
@@ -72,8 +61,7 @@ export async function getLiveMonitor(req, res) {
   }
 }
 
-
-// Full list with pagination
+// Full list with pagination (no total)
 export async function fetchAllCalls(req, res) {
   try {
     const {
@@ -126,16 +114,12 @@ export async function fetchAllCalls(req, res) {
       },
     ];
 
-    const [items, total] = await Promise.all([
-      CallLiveStatus.aggregate(pipeline),
-      CallLiveStatus.countDocuments(),
-    ]);
+    const items = await CallLiveStatus.aggregate(pipeline);
 
     return res.json({
       success: true,
       page: p,
       pageSize: ps,
-      total,
       data: items,
     });
   } catch (e) {
