@@ -2,11 +2,9 @@
 # Purpose: Manage a running list of transcript entries (user/assistant messages),
 # write them to a JSON file, and avoid saving near-duplicate entries.
 
-import time
-import json
-import os
-from pathlib import Path
 from typing import Dict, List, Optional
+from pathlib import Path
+import time, json, os
 
 # In-memory list holding transcript entries for the current run
 # Each entry is a dict like: {"role": "user"|"assistant", "timestamp_iso": "...", "content": "..."}
@@ -139,3 +137,36 @@ def append_transcript(decoded: Dict) -> None:
     except Exception as e:
         # Never break the caller; just log what went wrong
         print(f"[transcript_code] append_transcript error: {e}")
+
+class TranscriptSession:
+    def __init__(self, call_id: str, json_path: Optional[str] = None, dedup_window: float = 1.0):
+        self.call_id = call_id
+        self.entries: List[Dict[str, Optional[str]]] = []
+        self.json_path = json_path or f"local_db/calls/{call_id}.json"
+        self.dedup_window = dedup_window
+
+    def append(self, decoded: Dict) -> Optional[Dict]:
+        if not isinstance(decoded, dict):
+            return None
+        if decoded.get("type") == "History":
+            return None
+        role = decoded.get("role")
+        content = decoded.get("content")
+        if role not in ("user", "assistant") or not content or str(content).strip() == "":
+            return None
+        entry = {
+            "role": role,
+            "timestamp_iso": _now_iso(),
+            "content": content,
+        }
+        prev = self.entries[-1] if self.entries else None
+        if _is_duplicate(prev, entry, window_seconds=self.dedup_window):
+            return None
+        self.entries.append(entry)
+        return entry
+
+    def snapshot(self) -> List[Dict]:
+        return list(self.entries)
+
+    def flush(self) -> None:
+        _atomic_write_json(self.json_path, self.entries)

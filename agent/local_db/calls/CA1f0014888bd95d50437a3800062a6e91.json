@@ -1,0 +1,28 @@
+{
+  "call_id": "CA1f0014888bd95d50437a3800062a6e91",
+  "customer_id": "6903995488e386f350c47d06",
+  "call_start_iso": "2025-10-31T12:32:04",
+  "call_end_iso": "2025-10-31T12:32:04",
+  "call_duration_seconds": 0.0,
+  "summary": "Customer: Hi! I'm interested in learning more about your products, specifically the XYZ. Assistant: Hi there, thank you for your interest in our products. Our XYZ is a great solution for [describe the product's benefits]. Our team can provide a demo for you, would you like to schedule a time that works for you? Customer: Yes, please. Assistant: Great! I'd like to gather some information from you first. What industry are you in and what problem are you trying to solve with this product? Customer: We're in the healthcare industry and we're looking for a solution to help us streamline...",
+  "sentiment_overall": "Neutral",
+  "turn_counts": {
+    "user": 0,
+    "assistant": 1
+  },
+  "first_agent_utterance": "Hello bikash! I am calling about Interested in product demo.",
+  "last_user_utterance": null,
+  "transcript": [
+    {
+      "role": "assistant",
+      "timestamp_iso": "2025-10-31T12:32:04",
+      "content": "Hello bikash! I am calling about Interested in product demo."
+    }
+  ],
+  "realtime": {
+    "last_partial_sentiment": null,
+    "last_partial_updated_iso": null
+  },
+  "created_at_iso": "2025-10-31T12:32:04",
+  "updated_at_iso": "2025-10-31T12:32:04"
+}

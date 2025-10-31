@@ -109,7 +109,7 @@ def fetch_customer_config(customer_id):
     
     try:
         # Convert string to ObjectId
-        customer = db.contactdetails.find_one({"_id": ObjectId(customer_id)})
+        customer = db.uploaddetails.find_one({"_id": ObjectId(customer_id)})
     except Exception as e:
         raise Exception(f"Invalid customer_id format: {customer_id}")
     
