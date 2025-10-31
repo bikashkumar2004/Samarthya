@@ -58,7 +58,7 @@ const executeCall = async (callData) => {
     const description = contact.description || "";
     console.log(`📝 Description from DB for ${contact.name}: ${description}`);
 
-    const wsUrl = process.env.MEDIA_WS_URL;
+    const wsUrl = process.env.MEDIA_WS_URL_AMAR;
 
     // ✅ TwiML with description from database
     const twiml = `
@@ -120,7 +120,7 @@ export const initiateCall = async (req, res) => {
     console.log(`📝 Retrieved contact: ${contact.name} - ${contact.phoneNo}`);
     console.log(`📝 Description from DB: ${description}`);
 
-    const wsUrl = process.env.MEDIA_WS_URL;
+    const wsUrl = process.env.MEDIA_WS_URL_AMAR;
 
     const twiml = `
       <Response>
