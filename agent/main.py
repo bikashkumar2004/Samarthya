@@ -69,7 +69,7 @@ def build_config(customer_data):
     try:
         # Extract customer information
         name = customer_data.get("name", "there")
-        purpose = (customer_data.get("purpose") or "ululululu").strip()
+        purpose = (customer_data.get("description") or "ululululu").strip()
         
         # Build dynamic prompt
         dynamic_prompt = (
@@ -140,7 +140,7 @@ async def handle_text_message(decoded, twilio_ws, sts_ws, streamsid):
 
 async def sts_sender(sts_ws, audio_queue):
     """
-    Continuously sends audio data from Twilio to Deepgram
+    Continuously sends audio data from Twilio Receiver to Deepgram
     This takes incoming voice from phone call and sends it to AI for processing
     """
     count = 0
@@ -151,16 +151,18 @@ async def sts_sender(sts_ws, audio_queue):
         await sts_ws.send(chunk)
         count += 1
         if count % 50 == 0:
-            print(f"Sent to Deepgram: {count} chunks")  # DEBUG: sender throttle
+            print(f"STS Sender: Sent to Deepgram: {count} chunks")  # DEBUG: sender throttle
 
 async def sts_receiver(sts_ws, twilio_ws, streamsid_queue):
     """
     Receives messages from Deepgram and processes them
     This handles both AI responses and transcription data
+    Text messages: Transcripts, user interruptions, function calls
+    Binary audio: AI speech response
     """
     # Get the stream ID for this call
     streamsid = await streamsid_queue.get()
-    print(f"Deepgram receiver attached to streamSid={streamsid}")
+    print(f"STS Receiver: Deepgram attached to streamSid={streamsid}")
     
     # Listen for messages from Deepgram
     async for message in sts_ws:
@@ -171,7 +173,7 @@ async def sts_receiver(sts_ws, twilio_ws, streamsid_queue):
             except Exception:
                 # If JSON parsing fails, treat as raw text
                 decoded = {"type": "raw", "content": message}
-            print(f"Deepgram text event: type={decoded.get('type','raw')}")
+            print(f"STS Receiver: Text event: type={decoded.get('type','raw')}")
             print(decoded)
             
             # Save transcription data for later use
@@ -191,8 +193,12 @@ async def sts_receiver(sts_ws, twilio_ws, streamsid_queue):
             #print(f"Deepgram TTS audio: {audio_bytes} bytes -> Twilio")
 
 
-# Add an event so handler knows when 'purpose' is available
 async def twilio_receiver(twilio_ws, audio_queue, streamsid_queue, ctx, ready_evt):
+    """
+    Receives audio from phone call
+    Buffers into 3200-byte chunks (20×160)
+    Puts chunks in audio queue
+    """
     BUFFER_SIZE = 20 * 160
     inbuffer = bytearray()
     async for message in twilio_ws:
@@ -208,7 +214,7 @@ async def twilio_receiver(twilio_ws, audio_queue, streamsid_queue, ctx, ready_ev
             cp = start.get("customParameters") or {}
             ctx["customer_id"] = cp.get("customer_id") or ctx.get("customer_id")
             ready_evt.set()
-            print(f"Twilio start: streamSid={streamsid}, callSid={ctx['call_id']}, "
+            print(f"Receiver: streamSid={streamsid}, callSid={ctx['call_id']}, "
                   f"customer_id={ctx['customer_id']}")
             
         elif event == "media":
@@ -239,57 +245,58 @@ async def twilio_handler(twilio_ws):
         twilio_task = asyncio.create_task(
             twilio_receiver(twilio_ws, audio_queue, streamsid_queue, ctx, purpose_ready)
         )
-        print("Twilio: Receiver task started")
+        print("Handler: Receiver task started")
 
         # Wait for customer_id from Twilio start event
         try:
-            print("Twilio: Waiting for Twilio start/customParameters...")
+            print("Handler: Waiting for Twilio start/customParameters...")
             await asyncio.wait_for(purpose_ready.wait(), timeout=5.0)
             customer_id = ctx.get("customer_id")
             
             if not customer_id:
-                print("ERROR: No customer_id received from Twilio")
+                print("Handler ERROR: No customer_id received from Twilio")
                 await twilio_ws.close()
                 return
             
             # Fetch customer data from MongoDB
-            print(f"Server: Fetching customer {customer_id} from MongoDB")
+            print(f"Handler: Fetching customer {customer_id} from MongoDB")
             customer_data = fetch_customer_config(customer_id)
-            print(f"Server: Loaded config for {customer_data.get('name')}")
+            print(f"Handler: Loaded config for {customer_data.get('name')}")
             
             # Build dynamic config
             settings = build_config(customer_data)
             #print(f"Config ready: greeting='{settings['settings']['agent']['greeting']['text']}'") 
             
         except asyncio.TimeoutError:
-            print("ERROR: Timeout waiting for customer_id")
+            print("Handler ERROR: Timeout waiting for customer_id")
             await twilio_ws.close()
             return
         except Exception as e:
-            print(f"ERROR: Failed to load customer config: {e}")
+            print(f"Handler: ERROR: Failed to load customer config: {e}")
             await twilio_ws.close()
             return
 
         # Send Settings to Deepgram STS
-        print("Sending settings to Deepgram)")
+        print("Handler: Sending settings to Deepgram)")
         await sts_ws.send(json.dumps(settings))
-        print("Settings sent to Deepgram")
+        print("Handler: Settings sent to Deepgram")
 
         # Start the audio pipeline tasks
         sender_task = asyncio.create_task(sts_sender(sts_ws, audio_queue))
         receiver_task = asyncio.create_task(sts_receiver(sts_ws, twilio_ws, streamsid_queue))
-        print("Audio pipeline tasks started") 
+        print("Handler: Audio pipeline tasks started") 
 
         try:
+            #The three tasks run continuously until Twilio sends a stop event, creating a real-time bidirectional voice conversation.
             await twilio_task  # Ends on Twilio 'stop'
         finally:
-            print("Cancelling audio tasks...")
+            print("Handler: Cancelling audio tasks...")
             for t in (sender_task, receiver_task):
                 t.cancel()
             with contextlib.suppress(asyncio.CancelledError):
                 await sender_task
                 await receiver_task
-            print("Audio tasks cancelled")
+            print("Handler: Audio tasks cancelled")
 
         # Save transcript and call data
         transcript_code.save_transcripts()
