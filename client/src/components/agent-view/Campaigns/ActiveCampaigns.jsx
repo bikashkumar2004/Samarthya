@@ -27,8 +27,7 @@ export default function CampaignsPage() {
 
   useEffect(() => {
     load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // initial load
+  }, []); 
 
   return (
     <div className="p-4 space-y-4">

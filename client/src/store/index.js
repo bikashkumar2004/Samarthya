@@ -6,6 +6,8 @@ import agentDetails from "./auth-slice/accountVerified"
 import callInitiate from "./call-slice/index"
 import uploadDetails from "./create-task/createTask"
 import Campaigns from "./campaign/index.js";
+import bulkCall from "./call-mannager/index.js"
+import callReducer from "./call-mannager/aiCallmanage.js"
 
 
 const store = configureStore({
@@ -17,6 +19,8 @@ const store = configureStore({
     call:callInitiate,
     upload:uploadDetails,
     campaigns:Campaigns,
+    bulkCalls:bulkCall,
+    calls:callReducer,
   },
 });
 
