@@ -15,15 +15,16 @@ import {
 } from "@/store/call-mannager/aiCallmanage";
 
 function formatDuration(totalSec = 0) {
-  const s = Math.max(0, Number(totalSec) || 0);
-  const m = Math.floor(s / 60);
+  const sNum = Number(totalSec) || 0;
+  const s = Math.max(0, Math.round(sNum));    
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
   const rem = s % 60;
-  const h = Math.floor(m / 60);
-  const mm = m % 60;
-  if (h > 0) return `${h}h ${mm}m ${rem}s`;
+  if (h > 0) return `${h}h ${m}m ${rem}s`;
   if (m > 0) return `${m}m ${rem}s`;
   return `0m ${rem}s`;
 }
+
 
 function prettyStatus(s = "") {
   const v = String(s).toLowerCase();

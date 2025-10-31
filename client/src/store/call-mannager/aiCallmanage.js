@@ -118,5 +118,10 @@ export const selectFirstDurationSec = (s) =>
   (s.calls.live.data && s.calls.live.data.length > 0)
     ? (s.calls.live.data[0].duration_seconds ?? 0)
     : 0;
+export const selectTotalDurationSec = (s) =>
+  (s.calls.live.data || []).reduce(
+    (sum, r) => sum + (Number(r?.duration_seconds) || 0),
+    0
+  );
 
 export default callsSlice.reducer;
