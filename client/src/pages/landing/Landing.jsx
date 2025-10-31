@@ -6,6 +6,7 @@ import Header from "./sections/Header";
 import Hero from "./sections/Hero";
 import Pricing from "./sections/Pricing";
 import Roadmap from "./sections/Roadmap";
+import FAQ from "./sections/FAQ";
 
 
 const Landing = () => {
@@ -17,7 +18,8 @@ const Landing = () => {
           <Benefits />
           <Collaboration />
           <Pricing />
-          <Roadmap />
+          {/* <Roadmap /> */}
+          <FAQ/>
           <Footer />
         </div>
   

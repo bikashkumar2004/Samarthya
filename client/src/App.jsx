@@ -6,11 +6,11 @@ import { Route, Routes } from "react-router-dom";
 // import Home from "./pages/front-view/Home";
 import "./index.css";
 import AuthLayout from "./components/authentication/AuthLayout";
-import Register from "./pages/auth/Register.jsx";
-import Login from "./pages/auth/Login.jsx";
+// import Register from "./pages/auth/Register.jsx";
+// import Login from "./pages/auth/Login.jsx";
 import EmailVerify from "./pages/auth/EmailVerify";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import { checkAuth } from "./store/auth-slice";
 import AgentLayouts from "./components/agent-view/AgentLayouts";
 import Leads from "./pages/agent-view/Leads";
@@ -26,6 +26,9 @@ import ComposeMessage from "./pages/agent-view/ComposeMessage";
 import Sms from "./pages/agent-view/Sms";
 import Email from "./pages/agent-view/Email";
 import Whatsapp from "./pages/agent-view/Whatsapp";
+import SamarthyaLanding from "./pages/SamarthyaLanding";
+import LoginPage from "./pages/auth/LoginPage";
+import RegisterPage from "./pages/auth/RegisterPage";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -34,15 +37,15 @@ export default function App() {
   );
 
   // Global Theme State
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  // const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
   // Apply theme to <html> element (CRITICAL FIX)
-  useEffect(() => {
-    const root = window.document.documentElement;
-    root.classList.remove("light", "dark");
-    root.classList.add(theme);
-    localStorage.setItem("theme", theme);
-  }, [theme]);
+  // useEffect(() => {
+  //   const root = window.document.documentElement;
+  //   root.classList.remove("light", "dark");
+  //   root.classList.add(theme);
+  //   localStorage.setItem("theme", theme);
+  // }, [theme]);
 
   useEffect(() => {
     dispatch(checkAuth());
@@ -55,10 +58,10 @@ export default function App() {
 
         <Route
           path="/auth"
-          element={<AuthLayout theme={theme} setTheme={setTheme} />}
+          element={<AuthLayout  />}
         >
-          <Route path="register" element={<Register />} />
-          <Route path="login" element={<Login />} />
+          <Route path="register" element={<RegisterPage />} />
+          <Route path="login" element={<LoginPage/>} />
           <Route path="send-verify-otp" element={<EmailVerify />} />
         </Route>
 
@@ -80,6 +83,9 @@ export default function App() {
           <Route path="campaigns" element={<Campaigns />} />
         </Route>
       </Routes>
+      {/* <SamarthyaLanding/> */}
+      
+      {/* <RegisterPage/> */}
     </div>
   );
 }

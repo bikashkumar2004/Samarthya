@@ -218,16 +218,16 @@ export const pricing = [
 export const benefits = [
   {
     id: "0",
-    title: "Ask anything",
-    text: "Lets users quickly find answers to their questions without having to search through multiple sources.",
+    title: "Manual Calling Doesn't Scale",
+    text: "Your team spends 6 hours/day calling students about reminders. Yet 40% never pick up.",
     backgroundUrl: "./src/assets/benefits/card-1.svg",
     iconUrl: benefitIcon1,
     imageUrl: benefitImage2,
   },
   {
     id: "1",
-    title: "Improve everyday",
-    text: "The app uses natural language processing to understand user queries and provide accurate and relevant responses.",
+    title: "Students Call 10 Times",
+    text: "Merit lists released, 5-person helpline receives 500 calls in 2 hours. Complete chaos.",
     backgroundUrl: "./src/assets/benefits/card-2.svg",
     iconUrl: benefitIcon2,
     imageUrl: benefitImage2,
@@ -235,14 +235,17 @@ export const benefits = [
   },
   {
     id: "2",
-    title: "Connect everywhere",
-    text: "Connect with the AI chatbot from anywhere, on any device, making it more accessible and convenient.",
+    title: "44% Revenue Loss",
+    text: "Deadlines pass, verifications delay, applications rejected. Everyone loses.",
     backgroundUrl: "./src/assets/benefits/card-3.svg",
     iconUrl: benefitIcon3,
     imageUrl: benefitImage2,
-  },
+  }
+];
+
+export const solution = [
   {
-    id: "3",
+    id: "0",
     title: "Fast responding",
     text: "Lets users quickly find answers to their questions without having to search through multiple sources.",
     backgroundUrl: "./src/assets/benefits/card-4.svg",
@@ -251,7 +254,7 @@ export const benefits = [
     light: true,
   },
   {
-    id: "4",
+    id: "1",
     title: "Ask anything",
     text: "Lets users quickly find answers to their questions without having to search through multiple sources.",
     backgroundUrl: "./src/assets/benefits/card-5.svg",
@@ -259,7 +262,7 @@ export const benefits = [
     imageUrl: benefitImage2,
   },
   {
-    id: "5",
+    id: "2",
     title: "Improve everyday",
     text: "The app uses natural language processing to understand user queries and provide accurate and relevant responses.",
     backgroundUrl: "./src/assets/benefits/card-6.svg",

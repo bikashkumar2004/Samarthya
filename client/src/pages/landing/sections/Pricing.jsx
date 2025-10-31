@@ -28,11 +28,11 @@ const Pricing = () => {
         </div>
 
         <Heading
-          tag="Get started with Brainwave"
+          tag="Get started with Samarthya"
           title="Pay once, use forever"
         />
 
-        <div className="relative">
+        {/* <div className="relative">
           <PricingList />
           <LeftLine />
           <RightLine />
@@ -45,7 +45,7 @@ const Pricing = () => {
           >
             See the full details
           </a>
-        </div>
+        </div> */}
       </div>
     </Section>
   );
