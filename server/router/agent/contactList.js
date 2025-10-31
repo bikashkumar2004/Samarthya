@@ -28,15 +28,5 @@ router.get("/get", fetchAllContactList);
 router.get("/get/:id",showcontactDetails);
 router.post("/call/:customerId",initiateCall);
 router.get("/callTranscript/:customerId",callTranscript)
-// ✅ NEW: Bulk calls - 5 concurrent with queue
-router.post("/call-bulk", initiateBulkCalls);
-
-// ✅ NEW: Filtered calls with queue
-router.post("/call-filtered", initiateFilteredCalls);
-
-// ✅ NEW: Check queue status
-router.get("/queue-status", getQueueStatus);
-
-router.get("/callTranscript/:customerId", callTranscript);
 
 export default router;

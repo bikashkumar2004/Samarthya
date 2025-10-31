@@ -111,7 +111,7 @@ export const initiateCall = async (req, res) => {
     if (!contact || !contact.phoneNo) {
       return res.status(404).json({
         success: false,
-        message: "Contact not found or has no phone number",
+        message: "Invalid Customer ID.",
       });
     }
 
@@ -156,7 +156,7 @@ export const initiateCall = async (req, res) => {
     console.error("Call initiation error:", error);
     res.status(500).json({
       success: false,
-      message: "Failed to initiate call",
+      message: "Failed to initiate call.",
       error: error.message,
     });
   }

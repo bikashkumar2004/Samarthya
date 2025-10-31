@@ -43,6 +43,7 @@ export const fetchUploadDetails = async (req, res) => {
         data: [],
       });
     }
+
     const formattedTasks = taskList.map((t) => ({
       _id: t._id,
       taskID: t.taskId,
@@ -68,7 +69,8 @@ export const deleteTask = async (req, res) => {
   try {
     const userId = req.user?._id;
     const { taskId } = req.params;
-
+    console.log(taskId);
+    
     if (!userId)
       return res
         .status(401)
@@ -119,7 +121,6 @@ export const getSingleTask = async (req, res) => {
         rowsNo: task.rows || 0,
         createdAt: task.createdAt,
         uploads: uploadedUsers, 
-        
       },
     });
   } catch (error) {

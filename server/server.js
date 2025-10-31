@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// 🧩 Import routes
+
 import router from "./router/auth/authRoute.js";
 import userrouter from "./router/auth/userRoute.js";
 import contactLists from "./router/agent/contactList.js";
@@ -20,9 +20,9 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("✅ MongoDB connected"))
+  .then(() => console.log("MongoDB connected"))
   .catch((error) => {
-    console.error("❌ MongoDB connection error:", error);
+    console.error("MongoDB connection error:", error);
     process.exit(1);
   });
 
@@ -38,7 +38,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: "http://localhost:5173", // your frontend URL
-    credentials: true, // ✅ allow cookies & auth headers
+    credentials: true, // allow cookies & auth headers
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: [
       "Content-Type",
@@ -50,7 +50,7 @@ app.use(
   })
 );
 
-app.get("/", (req, res) => res.send("✅ API is working!"));
+app.get("/", (req, res) => res.send("API is working!"));
 
 app.use("/api/auth", router);
 app.use("/api/user", userrouter);
@@ -66,4 +66,4 @@ app.use((err, req, res, next) => {
 });
 
 
-app.listen(port, () => console.log(` Server started on port: ${port}`));
+app.listen(port, () => console.log(`Server started on port: ${port}`));
