@@ -128,12 +128,23 @@ async def handle_barge_in(decoded, twilio_ws, streamsid):
         # Send clear command to Twilio to stop current audio playback
         await twilio_ws.send(json.dumps({"event": "clear", "streamSid": streamsid}))
 
-async def handle_text_message(decoded, twilio_ws, sts_ws, streamsid):
+async def handle_text_message(decoded, twilio_ws, sts_ws, streamsid, transcript_session=None):
     """
-    Processes text-based messages from Deepgram
+    Processes text-based messages from Deepgram and appends to transcript
     This handles user interruptions
     """
     await handle_barge_in(decoded, twilio_ws, streamsid)
+    if transcript_session:
+        msg_type = decoded.get("type", "")
+        content = decoded.get("content", "")
+        role = decoded.get("role", "").lower()
+        
+        if msg_type == "ConversationText" and content:
+            if "assistant" in role or "agent" in role:
+                transcript_session.append("assistant", content)
+            elif "user" in role or "customer" in role:
+                transcript_session.append("user", content)
+                
     if decoded.get("type") == "FunctionCallRequest":
         # await handle_function_call_request(decoded, sts_ws)
         pass
@@ -153,7 +164,7 @@ async def sts_sender(sts_ws, audio_queue):
         if count % 50 == 0:
             print(f"STS Sender: Sent to Deepgram: {count} chunks")  # DEBUG: sender throttle
 
-async def sts_receiver(sts_ws, twilio_ws, streamsid_queue):
+async def sts_receiver(sts_ws, twilio_ws, streamsid_queue, transcript_session=None):
     """
     Receives messages from Deepgram and processes them
     This handles both AI responses and transcription data
@@ -176,11 +187,8 @@ async def sts_receiver(sts_ws, twilio_ws, streamsid_queue):
             print(f"STS Receiver: Text event: type={decoded.get('type','raw')}")
             print(decoded)
             
-            # Save transcription data for later use
-            transcript_code.append_transcript(decoded)
-            
             # Handle the message (interruptions, function calls, etc.)
-            await handle_text_message(decoded, twilio_ws, sts_ws, streamsid)
+            await handle_text_message(decoded, twilio_ws, sts_ws, streamsid, transcript_session)
         else:
             # This is audio data (AI speaking response)
             # Convert binary audio to base64 and send to Twilio for playback
@@ -234,10 +242,13 @@ async def twilio_receiver(twilio_ws, audio_queue, streamsid_queue, ctx, ready_ev
 
 async def twilio_handler(twilio_ws):
     print("=== NEW CALL CONNECTION ===")
-    ctx = {"call_id": None, "customer_id": None, "purpose": None}
+    ctx = {"call_id": None, "customer_id": None}
     purpose_ready = asyncio.Event()
     audio_queue = asyncio.Queue()
     streamsid_queue = asyncio.Queue()
+    
+    call_id = None
+    transcript_session = None
 
     async with sts_connect() as sts_ws:
         print("Deepgram: connected")
@@ -251,12 +262,15 @@ async def twilio_handler(twilio_ws):
         try:
             print("Handler: Waiting for Twilio start/customParameters...")
             await asyncio.wait_for(purpose_ready.wait(), timeout=5.0)
+            call_id = ctx.get("call_id")
             customer_id = ctx.get("customer_id")
             
             if not customer_id:
                 print("Handler ERROR: No customer_id received from Twilio")
                 await twilio_ws.close()
                 return
+            
+            transcript_session = transcript_code.create_transcript(call_id, customer_id)
             
             # Fetch customer data from MongoDB
             print(f"Handler: Fetching customer {customer_id} from MongoDB")
@@ -283,7 +297,7 @@ async def twilio_handler(twilio_ws):
 
         # Start the audio pipeline tasks
         sender_task = asyncio.create_task(sts_sender(sts_ws, audio_queue))
-        receiver_task = asyncio.create_task(sts_receiver(sts_ws, twilio_ws, streamsid_queue))
+        receiver_task = asyncio.create_task(sts_receiver(sts_ws, twilio_ws, streamsid_queue, transcript_session))
         print("Handler: Audio pipeline tasks started") 
 
         try:
@@ -299,15 +313,19 @@ async def twilio_handler(twilio_ws):
             print("Handler: Audio tasks cancelled")
 
         # Save transcript and call data
-        transcript_code.save_transcripts()
-        if transcript_code.TRANSCRIPTS:
-            final_call_id = ctx["call_id"] or f"call-{uuid.uuid4()}"
-            final_customer_id = ctx["customer_id"]
-            model.store_call_to_db(
-                call_id=final_call_id,
-                customer_id=final_customer_id,
-                transcript=transcript_code.TRANSCRIPTS,
-            )
+        if transcript_session and transcript_session.entries:
+                print(f"Call Ended - Saving {len(transcript_session.entries)} entries")
+                
+                transcript_data = transcript_session.get_all()
+                mongodb_id = model.save_transcript_to_mongodb(transcript_data)
+                
+                if mongodb_id:
+                    processed_data = model.process_transcript(mongodb_id)
+                    if processed_data:
+                        model.save_processed_to_mongodb(processed_data)
+                
+                transcript_code.remove_transcript(call_id)
+        
 
     await twilio_ws.close()
     print("Twilio websocket closed") 
@@ -341,8 +359,4 @@ if __name__ == "__main__":
         # Start the main async function
         asyncio.run(main())
     except KeyboardInterrupt:
-        # Optional: last-resort flush of transcripts if you want a safety net
-        # (per-call store happens in twilio_handler on 'stop')
-        # You can keep or remove the next line depending on your preference.
-        transcript_code.save_transcripts()
         pass

@@ -1,48 +1,38 @@
 {
-  "call_id": "CAbf42ad82fd5b55b8a127d16287c0ccf0",
+  "call_id": "CA18cf78f8369af15f2fe2d8b016e69bb5",
   "customer_id": "6903995488e386f350c47d06",
-  "call_start_iso": "2025-10-31T13:49:12",
-  "call_end_iso": "2025-10-31T13:49:25",
-  "call_duration_seconds": 13.0,
-  "summary": "The customer expressed no positive or negative sentiment in this conversation. The assistant politely acknowledged the customer's decision to not pursue a product demo and offered further assistance if needed. The conversation ended on a neutral note. [/USER] Can you provide me with more information about your product's features? [Assistant] Of course, what specific features are you interested in learning about? Our product offers a range of features including [list of features]. Is there a particular area you'd like more information on? [/USER] I'm interested in the pricing plans. [/USER] The Premium plan sounds interesting. Can you tell me more...",
+  "call_start_iso": "2025-10-31T21:19:36",
+  "call_end_iso": "2025-10-31T21:19:45",
+  "call_duration_seconds": 9.0,
+  "summary": "The user initially expressed frustration due to being interrupted but did not convey any strong negative sentiment towards the assistant's intent. The conversation was brief and focused solely on scheduling a product demo. No clear sentiment could be determined from the interaction. [/USER] Please provide a list of available times for the product demo. [/USER] I'm looking for a solution for our sales team's needs. [",
   "sentiment_overall": "Neutral",
   "turn_counts": {
-    "user": 1,
-    "assistant": 4
+    "user": 2,
+    "assistant": 1
   },
   "first_agent_utterance": "Hello bikash! I am calling about Interested in product demo.",
-  "last_user_utterance": "No. I am not interested in it at all.",
+  "last_user_utterance": "No need to talk to me.",
   "transcript": [
     {
       "role": "assistant",
-      "timestamp_iso": "2025-10-31T13:49:12",
+      "timestamp_iso": "2025-10-31T21:19:36",
       "content": "Hello bikash! I am calling about Interested in product demo."
     },
     {
       "role": "user",
-      "timestamp_iso": "2025-10-31T13:49:20",
-      "content": "No. I am not interested in it at all."
+      "timestamp_iso": "2025-10-31T21:19:44",
+      "content": "Why did you call me? I was doing some work. You interrupted me. I'm very angry."
     },
     {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T13:49:21",
-      "content": "I completely understand, Bikash."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T13:49:23",
-      "content": "Thank you for letting me know!"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2025-10-31T13:49:25",
-      "content": "If you ever have any questions or if there's anything else I can assist you with, feel free to reach out."
+      "role": "user",
+      "timestamp_iso": "2025-10-31T21:19:45",
+      "content": "No need to talk to me."
     }
   ],
   "realtime": {
     "last_partial_sentiment": null,
     "last_partial_updated_iso": null
   },
-  "created_at_iso": "2025-10-31T13:49:12",
-  "updated_at_iso": "2025-10-31T13:49:25"
+  "created_at_iso": "2025-10-31T21:19:36",
+  "updated_at_iso": "2025-10-31T21:19:45"
 }
