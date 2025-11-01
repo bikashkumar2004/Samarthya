@@ -9,7 +9,7 @@ import Campaigns from "./campaign/index.js";
 import bulkCall from "./call-mannager/index.js"
 import callReducer from "./call-mannager/aiCallmanage.js"
 import callhistoryDisplay from "./call-mannager/callhistory.js"
-
+import AllLeads from "./allLeads/index.js"
 
 const store = configureStore({
   reducer: {
@@ -23,6 +23,7 @@ const store = configureStore({
     bulkCalls:bulkCall,
     calls:callReducer,
     callHistory:callhistoryDisplay,
+    leads:AllLeads,
   },
 });
 

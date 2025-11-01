@@ -1,4 +1,4 @@
-// src/store/call-mannager/callHistory.slice.js
+
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -13,7 +13,7 @@ export const fetchCallHistory = createAsyncThunk(
         params: { limit },
         withCredentials: true,
       });
-      return res?.data; // { success, data: [...] }
+      return res?.data; 
     } catch (err) {
       return rejectWithValue(
         err.response?.data?.message || "Failed to fetch call history"
@@ -27,18 +27,16 @@ export const fetchCallHistoryByIds = createAsyncThunk(
   "callHistory/fetchByIds",
   async ({ customerId, callId }, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`${API_URL}/call-history/by-id`, {
-        params: { customerId, callId },
+      const res = await axios.get(`${API_URL}/call-history/${customerId}/${callId}`, {
         withCredentials: true,
-      });
+      }); 
       return res?.data;
     } catch (err) {
-      return rejectWithValue(
-        err.response?.data?.message || "Failed to fetch call detail"
-      );
+      return rejectWithValue(err.response?.data?.message || "Failed to fetch call detail"); 
     }
   }
 );
+
 
 const initialState = {
   list: {
@@ -64,7 +62,6 @@ const callHistorySlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // LIST
     builder
       .addCase(fetchCallHistory.pending, (state) => {
         state.list.isLoading = true;
@@ -80,7 +77,6 @@ const callHistorySlice = createSlice({
         state.list.error = action.payload || "Call history fetch failed";
       });
 
-    // DETAIL
     builder
       .addCase(fetchCallHistoryByIds.pending, (state) => {
         state.detail.isLoading = true;
@@ -103,15 +99,12 @@ const callHistorySlice = createSlice({
 
 export const { resetCallHistory } = callHistorySlice.actions;
 
-// Selectors (list)
 export const selectCallHistoryRows = (s) => s.callHistory.list.data;
 export const selectCallHistoryLoading = (s) => s.callHistory.list.isLoading;
 export const selectCallHistoryError = (s) => s.callHistory.list.error;
 
-// Selectors (detail)
 export const selectCallDetailLoading = (s) => s.callHistory.detail.isLoading;
 export const selectCallDetailError = (s) => s.callHistory.detail.error;
-// Factory selector for a specific customerId + callId
 export const makeSelectCallDetailByIds =
   (customerId, callId) =>
   (s) =>
