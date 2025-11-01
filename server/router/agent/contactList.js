@@ -19,8 +19,7 @@ import {
 } from "../../controller/agent/calliniciate.js";
 
 import { callTranscript } from "../../controller/calls/callhistory.js";
-import { getLiveStatus, saveLiveStatus } from "../../controller/agent/callstatus.js";
-import { authMiddleware } from "../../controller/auth/authController.js";
+import { getLiveStatus, saveLiveStatus } from "../../controller/agent/callStatus.js";
 
 const router = express.Router();
 
@@ -34,17 +33,17 @@ router.get("/get", fetchAllContactList);
 router.get("/get/:id", showcontactDetails);
 
 
-router.post("/call/:customerId", authMiddleware, initiateCall);
-router.get("/callTranscript/:customerId", authMiddleware, callTranscript);
-router.post("/call-bulk", authMiddleware,initiateBulkCalls);
-router.post("/call-filtered",authMiddleware, initiateFilteredCalls);
-router.get("/queue-status",authMiddleware, getQueueStatus);
+router.post("/call/:customerId", initiateCall);
+router.get("/callTranscript/:customerId",  callTranscript);
+router.post("/call-bulk",initiateBulkCalls);
+router.post("/call-filtered", initiateFilteredCalls);
+router.get("/queue-status", getQueueStatus);
 
 router.post(
   "/call/status",
   twilio.webhook({ validate: true }), 
   saveLiveStatus
 );
-router.get("/status/:callId",authMiddleware, getLiveStatus);
+router.get("/status/:callId", getLiveStatus);
 
 export default router;

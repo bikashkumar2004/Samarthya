@@ -6,9 +6,9 @@ import { authMiddleware } from "../../controller/auth/authController.js";
 
 const router = express.Router();
 
-router.post("/create", authMiddleware,createCampaign);
-router.get("/get/:id",authMiddleware, getid);
-router.get("/retrieve",authMiddleware, retrieveCampaigns);
+router.post("/create",createCampaign);
+router.get("/get/:id", getid);
+router.get("/retrieve", retrieveCampaigns);
 
 
 export default router;

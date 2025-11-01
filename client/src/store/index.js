@@ -10,6 +10,8 @@ import bulkCall from "./call-mannager/index.js"
 import callReducer from "./call-mannager/aiCallmanage.js"
 import callhistoryDisplay from "./call-mannager/callhistory.js"
 import AllLeads from "./allLeads/index.js"
+import pendingFollowUps from "./call-mannager/pendingFollowups.js"
+
 
 const store = configureStore({
   reducer: {
@@ -24,6 +26,7 @@ const store = configureStore({
     calls:callReducer,
     callHistory:callhistoryDisplay,
     leads:AllLeads,
+    pendingdata:pendingFollowUps,
   },
 });
 
