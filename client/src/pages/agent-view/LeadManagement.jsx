@@ -434,13 +434,13 @@ const LeadManagement = () => {
               All Leads
             </CardTitle>
             <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-              <div className="relative flex-1 sm:flex-initial">
+              <div className="relative flex-1 sm:flex-initial ">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <Input
                   placeholder="Search leads..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 w-full sm:w-64"
+                  className="pl-10 w-full sm:w-64 border border-[#8e8e94]"
                 />
               </div>
 

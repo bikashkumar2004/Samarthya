@@ -29,6 +29,8 @@ import Whatsapp from "./pages/agent-view/Whatsapp";
 import SamarthyaLanding from "./pages/SamarthyaLanding";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
+import ContactManagement from "./pages/agent-view/ContactManagement";
+import EmailVer from "./pages/auth/EmailVer";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -62,7 +64,8 @@ export default function App() {
         >
           <Route path="register" element={<RegisterPage />} />
           <Route path="login" element={<LoginPage/>} />
-          <Route path="send-verify-otp" element={<EmailVerify />} />
+          {/* <Route path="send-verify-otp" element={<EmailVerify />} /> */}
+          <Route path="send-verify-otp" element={<EmailVer />} />
         </Route>
 
         <Route path="/agent" element={<AgentLayouts />}>
@@ -75,6 +78,7 @@ export default function App() {
           </Route>
           
           <Route path="createtask" element={<CreateTask />} />
+          <Route path="my-contacts" element={<ContactManagement />} />
           {/* <Route path="Leads" element={<Leads />} /> */}
           <Route path="Leads" element={<LeadManagement />} />
           <Route path="aicallmanager" element={<AiCallMannager />} />
