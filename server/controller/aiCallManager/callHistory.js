@@ -1,11 +1,11 @@
-// src/controllers/callHistory.controller.js
+
 import mongoose from "mongoose";
 import UploadDetails from "../../models/uploadDetails.js";
 import CallLiveStatus from "../../models/callLiveStatus.js";
 import Calls from "../../models/callHistory.js";
 
-// LIST: summary excluded
-export async function getCallHistory(req, res) {
+
+export async function getCallHistory(req, res) { 
   try {
     const { limit = 50 } = req.query;
 
@@ -59,26 +59,32 @@ export async function getCallHistory(req, res) {
   }
 }
 
-// DETAIL: includes summary
 export async function getCallHistoryByIds(req, res) {
   try {
-    const { customerId, callId } = req.query;
+    let { customerId, callId } = req.params; // prefer /:customerId/:callId [web:51]
+    if ((!customerId || !callId) && req.params?.id) {
+      const decoded = decodeURIComponent(req.params.id || "");         // supports /:id [web:51]
+      const [cid, ccall] = decoded.split(":");                          // "customerId:callId" [web:51]
+      customerId = customerId || cid;
+      callId = callId || ccall;
+    }
+
     if (!customerId || !callId) {
-      return res.status(400).json({ success: false, message: "customerId and callId are required" });
+      return res.status(400).json({ success: false, message: "customerId and callId are required" }); 
     }
 
     const customerObjectId = mongoose.Types.ObjectId.isValid(customerId)
       ? new mongoose.Types.ObjectId(customerId)
-      : null;
+      : null; 
+
     if (!customerObjectId) {
-      return res.status(400).json({ success: false, message: "Invalid customerId" });
+      return res.status(400).json({ success: false, message: "Invalid customerId" }); 
     }
 
     const rows = await CallLiveStatus.aggregate([
       { $match: { customer_id: customerObjectId, call_id: callId } },
       { $sort: { updated_at_iso: -1 } },
       { $limit: 1 },
-
       {
         $lookup: {
           from: UploadDetails.collection.name,
@@ -89,7 +95,6 @@ export async function getCallHistoryByIds(req, res) {
         },
       },
       { $unwind: { path: "$contact", preserveNullAndEmptyArrays: true } },
-
       {
         $lookup: {
           from: Calls.collection.name,
@@ -100,7 +105,6 @@ export async function getCallHistoryByIds(req, res) {
         },
       },
       { $unwind: { path: "$callDoc", preserveNullAndEmptyArrays: true } },
-
       {
         $project: {
           _id: 0,
@@ -115,15 +119,15 @@ export async function getCallHistoryByIds(req, res) {
           updated_at_iso: 1,
         },
       },
-    ]);
+    ]); 
 
     if (!rows.length) {
-      return res.status(404).json({ success: false, message: "Record not found" });
+      return res.status(404).json({ success: false, message: "Record not found" }); 
     }
 
-    return res.json({ success: true, data: rows[0] });
+    return res.json({ success: true, data: rows[0] }); 
   } catch (e) {
     console.error("getCallHistoryByIds error:", e);
-    return res.status(500).json({ success: false, message: "Server error" });
+    return res.status(500).json({ success: false, message: "Server error" }); 
   }
 }
