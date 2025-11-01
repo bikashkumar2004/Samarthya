@@ -36,9 +36,12 @@ const Header = () => {
           }`}
       >
         <div className="flex items-center px-5 lg:px-7.5 xl:px-10 max-lg:py-4 justify-between">
-          <a className="block w-[12rem] xl:mr-8" href="#hero">
+          {/* <a className="block w-[12rem] xl:mr-8" href="#hero">
             <img src={brainwave} width={190} height={40} alt="Samarthya" />
-          </a>
+          </a> */}
+          <div>
+            Samarthya
+          </div>
 
           {/* <nav
           className={`${

@@ -1,29 +1,13 @@
-import React, { useState } from 'react';
-import * as XLSX from 'xlsx';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '@/components/ui/table';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+// src/pages/LeadManagement.jsx
+import React, { useEffect, useMemo, useState } from "react";
+import * as XLSX from "xlsx";
+import { useDispatch, useSelector } from "react-redux";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
   Download,
   Search,
@@ -38,308 +22,86 @@ import {
   Users,
   ChevronLeft,
   ChevronRight,
-  AlertCircle
-} from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Checkbox } from '@/components/ui/checkbox';
-import { toast } from 'sonner';
+  AlertCircle,
+} from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "sonner";
+import { fetchAllLeads, selectLeadsData, selectLeadsError, selectLeadsLoading, setOrder, setPage, setPageSize } from "@/store/allLeads";
 
 const LeadManagement = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  // Redux
+  const dispatch = useDispatch();
+  const leads = useSelector(selectLeadsData);
+  const isLoading = useSelector(selectLeadsLoading);
+  const loadError = useSelector(selectLeadsError);
+
+  // Local UI state
+  const [searchTerm, setSearchTerm] = useState("");
   const [filterOpen, setFilterOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
 
-  // Pagination states
+  // Client-side pagination for table view (server returns a page already; we fetch a larger page to support local paging)
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
 
-  // Filter States
+  // Filters (keep only sentiment and category since API doesn’t include source/lastContacted)
   const [sentimentFilter, setSentimentFilter] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState([]);
-  const [sourceFilter, setSourceFilter] = useState([]);
-  const [lastContactedFilter, setLastContactedFilter] = useState('');
 
-  // Sample leads data
-  const [leadsData, setLeadsData] = useState([
-    {
-      id: 1,
-      name: 'Rajesh Kumar',
-      category: 'Product Inquiry',
-      callSummary: 'Interested in enterprise plan, requested demo',
-      sentiment: 'Positive',
-      callTime: '2025-10-29 10:30 AM',
-      source: 'Manager',
-      lastContacted: new Date('2025-10-29 10:30')
-    },
-    {
-      id: 2,
-      name: 'Priya Sharma',
-      category: 'Technical Support',
-      callSummary: 'Facing login issues, provided troubleshooting steps',
-      sentiment: 'Neutral',
-      callTime: '2025-10-29 09:15 AM',
-      source: 'Imported',
-      lastContacted: new Date('2025-10-29 09:15')
-    },
-    {
-      id: 3,
-      name: 'Amit Patel',
-      category: 'Pricing Query',
-      callSummary: 'Requested discount for annual subscription',
-      sentiment: 'Positive',
-      callTime: '2025-10-29 08:45 AM',
-      source: 'Manager',
-      lastContacted: new Date('2025-10-29 08:45')
-    },
-    {
-      id: 4,
-      name: 'Sneha Reddy',
-      category: 'Complaint',
-      callSummary: 'Unhappy with service quality, escalated to senior team',
-      sentiment: 'Negative',
-      callTime: '2025-10-28 16:20 PM',
-      source: 'Imported',
-      lastContacted: new Date('2025-10-28 16:20')
-    },
-    {
-      id: 5,
-      name: 'Vikram Singh',
-      category: 'Follow-up',
-      callSummary: 'Checking on previous inquiry, still considering options',
-      sentiment: 'Neutral',
-      callTime: '2025-10-28 14:30 PM',
-      source: 'Manager',
-      lastContacted: new Date('2025-10-28 14:30')
-    },
-    {
-      id: 6,
-      name: 'Anita Desai',
-      category: 'New Lead',
-      callSummary: 'First contact, gathering requirements',
-      sentiment: 'Positive',
-      callTime: '2025-10-28 11:00 AM',
-      source: 'Imported',
-      lastContacted: new Date('2025-10-28 11:00')
-    },
-    {
-      id: 7,
-      name: 'Rahul Mehta',
-      category: 'Product Inquiry',
-      callSummary: 'Interested in premium features, sent brochure',
-      sentiment: 'Positive',
-      callTime: '2025-10-27 15:45 PM',
-      source: 'Manager',
-      lastContacted: new Date('2025-10-27 15:45')
-    },
-    {
-      id: 8,
-      name: 'Kavita Joshi',
-      category: 'Technical Support',
-      callSummary: 'Integration issue resolved',
-      sentiment: 'Positive',
-      callTime: '2025-10-27 13:20 PM',
-      source: 'Imported',
-      lastContacted: new Date('2025-10-27 13:20')
-    },
-    {
-      id: 9,
-      name: 'Suresh Nair',
-      category: 'Pricing Query',
-      callSummary: 'Comparing with competitors, needs time to decide',
-      sentiment: 'Neutral',
-      callTime: '2025-10-27 10:00 AM',
-      source: 'Manager',
-      lastContacted: new Date('2025-10-27 10:00')
-    },
-    {
-      id: 10,
-      name: 'Deepa Iyer',
-      category: 'Follow-up',
-      callSummary: 'Ready to proceed with purchase',
-      sentiment: 'Positive',
-      callTime: '2025-10-26 16:30 PM',
-      source: 'Imported',
-      lastContacted: new Date('2025-10-26 16:30')
-    },
-    {
-      id: 11,
-      name: 'Manish Gupta',
-      category: 'Complaint',
-      callSummary: 'Billing discrepancy, investigating the issue',
-      sentiment: 'Negative',
-      callTime: '2025-10-26 14:15 PM',
-      source: 'Manager',
-      lastContacted: new Date('2025-10-26 14:15')
-    },
-    {
-      id: 12,
-      name: 'Pooja Kapoor',
-      category: 'New Lead',
-      callSummary: 'Referred by existing customer, high potential',
-      sentiment: 'Positive',
-      callTime: '2025-10-26 11:45 AM',
-      source: 'Manager',
-      lastContacted: new Date('2025-10-26 11:45')
-    },
-    {
-      id: 13,
-      name: 'Arun Kumar',
-      category: 'Product Inquiry',
-      callSummary: 'Questions about implementation timeline',
-      sentiment: 'Neutral',
-      callTime: '2025-10-25 09:30 AM',
-      source: 'Imported',
-      lastContacted: new Date('2025-10-25 09:30')
-    },
-    {
-      id: 14,
-      name: 'Nisha Verma',
-      category: 'Technical Support',
-      callSummary: 'Training session scheduled for next week',
-      sentiment: 'Positive',
-      callTime: '2025-10-24 15:00 PM',
-      source: 'Manager',
-      lastContacted: new Date('2025-10-24 15:00')
-    },
-    {
-      id: 15,
-      name: 'Sanjay Rao',
-      category: 'Follow-up',
-      callSummary: 'No response, will try again tomorrow',
-      sentiment: 'Neutral',
-      callTime: '2025-10-24 12:00 PM',
-      source: 'Imported',
-      lastContacted: new Date('2025-10-24 12:00')
-    },
-    {
-      id: 16,
-      name: 'Ritu Singh',
-      category: 'Pricing Query',
-      callSummary: 'Requesting payment plan options',
-      sentiment: 'Positive',
-      callTime: '2025-10-23 16:45 PM',
-      source: 'Manager',
-      lastContacted: new Date('2025-10-23 16:45')
-    },
-    {
-      id: 17,
-      name: 'Kiran Malhotra',
-      category: 'Complaint',
-      callSummary: 'Service downtime issue, provided compensation',
-      sentiment: 'Negative',
-      callTime: '2025-10-23 14:30 PM',
-      source: 'Imported',
-      lastContacted: new Date('2025-10-23 14:30')
-    },
-    {
-      id: 18,
-      name: 'Vijay Sharma',
-      category: 'New Lead',
-      callSummary: 'Initial contact made, sending information pack',
-      sentiment: 'Positive',
-      callTime: '2025-10-22 11:15 AM',
-      source: 'Manager',
-      lastContacted: new Date('2025-10-22 11:15')
-    }
-  ]);
+  // Fetch first page of leads on mount; adjust as needed to match server paging
+  useEffect(() => {
+    dispatch(setPage(1));
+    dispatch(setPageSize(200)); // grab a larger chunk to enable local pagination
+    dispatch(setOrder("desc"));
+    dispatch(fetchAllLeads({ page: 1, pageSize: 200, order: "desc" }));
+  }, [dispatch]);
 
-  // Filter by last contacted
-  const filterByLastContacted = (lead) => {
-    if (!lastContactedFilter) return true;
+  // Derive categories from data
+  const categories = useMemo(
+    () => Array.from(new Set((leads || []).map((l) => l?.category).filter(Boolean))).sort(),
+    [leads]
+  );
 
-    const now = new Date();
-    const lastContacted = new Date(lead.lastContacted);
-    const diffMs = now - lastContacted;
-    const diffHours = diffMs / (1000 * 60 * 60);
-    const diffDays = diffHours / 24;
-
-    switch (lastContactedFilter) {
-      case 'last_1_hour':
-        return diffHours <= 1;
-      case 'last_1_day':
-        return diffDays <= 1;
-      case 'last_1_week':
-        return diffDays <= 7;
-      default:
-        return true;
-    }
-  };
-
-  const filteredLeads = leadsData.filter((lead) => {
-    const matchesSearch =
-      lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      lead.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      lead.callSummary.toLowerCase().includes(searchTerm.toLowerCase());
-
-    const matchesSentiment = sentimentFilter.length === 0 || sentimentFilter.includes(lead.sentiment);
-    const matchesCategory = categoryFilter.length === 0 || categoryFilter.includes(lead.category);
-    const matchesSource = sourceFilter.length === 0 || sourceFilter.includes(lead.source);
-    const matchesLastContacted = filterByLastContacted(lead);
-
-    return matchesSearch && matchesSentiment && matchesCategory && matchesSource && matchesLastContacted;
-  });
-
-  // Pagination
-  const totalPages = Math.ceil(filteredLeads.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentLeads = filteredLeads.slice(startIndex, endIndex);
-
-  // Reset to page 1 when filters change
-  React.useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, sentimentFilter, categoryFilter, sourceFilter, lastContactedFilter]);
-
+  // Helpers
   const getSentimentClass = (sentiment) => {
     const classes = {
-      Positive: 'text-green-600 bg-green-100 border-green-300',
-      Neutral: 'text-yellow-600 bg-yellow-100 border-yellow-300',
-      Negative: 'text-red-600 bg-red-100 border-red-300',
+      Positive: "text-green-600 bg-green-100 border-green-300",
+      Neutral: "text-yellow-600 bg-yellow-100 border-yellow-300",
+      Negative: "text-red-600 bg-red-100 border-red-300",
     };
-    return classes[sentiment] || 'text-gray-600 bg-gray-100 border-gray-300';
+    return classes[sentiment] || "text-gray-600 bg-gray-100 border-gray-300";
   };
 
   const getSentimentIcon = (sentiment) => {
-    if (sentiment === 'Positive') return <Smile className="w-4 h-4" />;
-    if (sentiment === 'Neutral') return <Meh className="w-4 h-4" />;
-    if (sentiment === 'Negative') return <Frown className="w-4 h-4" />;
+    if (sentiment === "Positive") return <Smile className="w-4 h-4" />;
+    if (sentiment === "Neutral") return <Meh className="w-4 h-4" />;
+    if (sentiment === "Negative") return <Frown className="w-4 h-4" />;
     return null;
   };
 
   const clearAllFilters = () => {
     setSentimentFilter([]);
     setCategoryFilter([]);
-    setSourceFilter([]);
-    setLastContactedFilter('');
     setCurrentPage(1);
   };
 
   const handleSentimentChange = (sentiment) => {
-    setSentimentFilter(prev =>
-      prev.includes(sentiment)
-        ? prev.filter(s => s !== sentiment)
-        : [...prev, sentiment]
+    setSentimentFilter((prev) =>
+      prev.includes(sentiment) ? prev.filter((s) => s !== sentiment) : [...prev, sentiment]
     );
+    setCurrentPage(1);
   };
 
   const handleCategoryChange = (category) => {
-    setCategoryFilter(prev =>
-      prev.includes(category)
-        ? prev.filter(c => c !== category)
-        : [...prev, category]
+    setCategoryFilter((prev) =>
+      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
     );
-  };
-
-  const handleSourceChange = (source) => {
-    setSourceFilter(prev =>
-      prev.includes(source)
-        ? prev.filter(s => s !== source)
-        : [...prev, source]
-    );
+    setCurrentPage(1);
   };
 
   const handleEdit = (lead) => {
@@ -353,20 +115,54 @@ const LeadManagement = () => {
   };
 
   const confirmDelete = () => {
-    setLeadsData(leadsData.filter(lead => lead.id !== selectedLead.id));
-    toast.success(`Lead "${selectedLead.name}" deleted successfully`);
+    toast.info("Delete API not implemented yet"); // placeholder
     setDeleteDialogOpen(false);
     setSelectedLead(null);
   };
 
-  const downloadExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(filteredLeads);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Leads');
-    XLSX.writeFile(wb, 'leads_data.xlsx');
-  };
+  // Filtering against API fields: name, category, summary, sentiment, call_time
+  const filteredLeads = useMemo(() => {
+    const term = searchTerm.trim().toLowerCase();
+    return (leads || []).filter((lead) => {
+      const matchesSearch =
+        !term ||
+        String(lead?.name || "").toLowerCase().includes(term) ||
+        String(lead?.category || "").toLowerCase().includes(term) ||
+        String(lead?.summary || "").toLowerCase().includes(term);
 
-  const categories = [...new Set(leadsData.map(lead => lead.category))];
+      const matchesSentiment = sentimentFilter.length === 0 || sentimentFilter.includes(lead?.sentiment);
+      const matchesCategory = categoryFilter.length === 0 || categoryFilter.includes(lead?.category);
+
+      return matchesSearch && matchesSentiment && matchesCategory;
+    });
+  }, [leads, searchTerm, sentimentFilter, categoryFilter]);
+
+  // Pagination calculations
+  const totalPages = Math.max(1, Math.ceil((filteredLeads?.length || 0) / itemsPerPage));
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentLeads = filteredLeads.slice(startIndex, endIndex);
+
+  // Stats
+  const totalCount = leads?.length || 0;
+  const positiveCount = (leads || []).filter((l) => l?.sentiment === "Positive").length;
+  const neutralCount = (leads || []).filter((l) => l?.sentiment === "Neutral").length;
+  const negativeCount = (leads || []).filter((l) => l?.sentiment === "Negative").length;
+
+  const downloadExcel = () => {
+    const exportRows = filteredLeads.map((l, idx) => ({
+      "Sl No": idx + 1,
+      Name: l?.name || "",
+      Category: l?.category || "",
+      Sentiment: l?.sentiment || "",
+      "Call Time": l?.call_time || "",
+      Summary: l?.summary || "",
+    }));
+    const ws = XLSX.utils.json_to_sheet(exportRows);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Leads");
+    XLSX.writeFile(wb, "leads_data.xlsx");
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50 p-4 md:p-6 space-y-6">
@@ -386,7 +182,7 @@ const LeadManagement = () => {
           </CardHeader>
           <CardContent>
             <div className="text-4xl font-black bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-              {leadsData.length}
+              {isLoading ? "…" : totalCount}
             </div>
           </CardContent>
         </Card>
@@ -397,7 +193,7 @@ const LeadManagement = () => {
           </CardHeader>
           <CardContent>
             <div className="text-4xl font-black bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-              {leadsData.filter(l => l.sentiment === 'Positive').length}
+              {isLoading ? "…" : positiveCount}
             </div>
           </CardContent>
         </Card>
@@ -408,7 +204,7 @@ const LeadManagement = () => {
           </CardHeader>
           <CardContent>
             <div className="text-4xl font-black bg-gradient-to-r from-yellow-600 to-amber-600 bg-clip-text text-transparent">
-              {leadsData.filter(l => l.sentiment === 'Neutral').length}
+              {isLoading ? "…" : neutralCount}
             </div>
           </CardContent>
         </Card>
@@ -419,7 +215,7 @@ const LeadManagement = () => {
           </CardHeader>
           <CardContent>
             <div className="text-4xl font-black bg-gradient-to-r from-red-600 to-rose-600 bg-clip-text text-transparent">
-              {leadsData.filter(l => l.sentiment === 'Negative').length}
+              {isLoading ? "…" : negativeCount}
             </div>
           </CardContent>
         </Card>
@@ -434,13 +230,13 @@ const LeadManagement = () => {
               All Leads
             </CardTitle>
             <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-              <div className="relative flex-1 sm:flex-initial">
+              <div className="relative flex-1 sm:flex-initial ">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <Input
                   placeholder="Search leads..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 w-full sm:w-64"
+                  className="pl-10 w-full sm:w-64 border border-[#8e8e94]"
                 />
               </div>
 
@@ -452,9 +248,9 @@ const LeadManagement = () => {
                   >
                     <Filter className="w-4 h-4 mr-2" />
                     Filter By
-                    {(sentimentFilter.length > 0 || categoryFilter.length > 0 || sourceFilter.length > 0 || lastContactedFilter) && (
+                    {(sentimentFilter.length > 0 || categoryFilter.length > 0) && (
                       <span className="ml-2 bg-[#043927] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                        {sentimentFilter.length + categoryFilter.length + sourceFilter.length + (lastContactedFilter ? 1 : 0)}
+                        {sentimentFilter.length + categoryFilter.length}
                       </span>
                     )}
                   </Button>
@@ -469,7 +265,7 @@ const LeadManagement = () => {
                     <div className="space-y-3">
                       <Label className="text-base font-bold text-gray-900">Sentiment</Label>
                       <div className="space-y-2">
-                        {['Positive', 'Neutral', 'Negative'].map((sentiment) => (
+                        {["Positive", "Neutral", "Negative"].map((sentiment) => (
                           <div key={sentiment} className="flex items-center space-x-2">
                             <Checkbox
                               id={`sentiment-${sentiment}`}
@@ -510,60 +306,7 @@ const LeadManagement = () => {
                       </div>
                     </div>
 
-                    {/* Source Filter */}
-                    <div className="space-y-3 border-t pt-6">
-                      <Label className="text-base font-bold text-gray-900">Source</Label>
-                      <div className="space-y-2">
-                        {['Manager', 'Imported'].map((source) => (
-                          <div key={source} className="flex items-center space-x-2">
-                            <Checkbox
-                              id={`source-${source}`}
-                              checked={sourceFilter.includes(source)}
-                              onCheckedChange={() => handleSourceChange(source)}
-                            />
-                            <label
-                              htmlFor={`source-${source}`}
-                              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-                            >
-                              {source}
-                            </label>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Last Contacted Filter */}
-                    <div className="space-y-3 border-t pt-6">
-                      <Label className="text-base font-bold text-gray-900">Last Contacted</Label>
-                      <RadioGroup value={lastContactedFilter} onValueChange={setLastContactedFilter}>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="" id="contacted-all" />
-                          <label htmlFor="contacted-all" className="text-sm font-medium cursor-pointer">
-                            All Time
-                          </label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="last_1_hour" id="contacted-1h" />
-                          <label htmlFor="contacted-1h" className="text-sm font-medium cursor-pointer">
-                            Last 1 Hour
-                          </label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="last_1_day" id="contacted-1d" />
-                          <label htmlFor="contacted-1d" className="text-sm font-medium cursor-pointer">
-                            Last 1 Day
-                          </label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="last_1_week" id="contacted-1w" />
-                          <label htmlFor="contacted-1w" className="text-sm font-medium cursor-pointer">
-                            Last 1 Week
-                          </label>
-                        </div>
-                      </RadioGroup>
-                    </div>
-
-                    {/* Action Buttons */}
+                    {/* Actions */}
                     <div className="space-y-3 border-t pt-6">
                       <Button
                         onClick={clearAllFilters}
@@ -584,17 +327,14 @@ const LeadManagement = () => {
                 </SheetContent>
               </Sheet>
 
-              {/* Clear Filter Button */}
-              {(sentimentFilter.length > 0 || categoryFilter.length > 0 || sourceFilter.length > 0 || lastContactedFilter) && (
-                <Button
-                  onClick={clearAllFilters}
-                  variant="outline"
-                  className="border-2 border-red-500 text-red-600 hover:bg-red-50 hover:text-red-700 font-bold transition-all"
-                >
-                  <X className="w-4 h-4 mr-2" />
-                  Clear Filters
-                </Button>
-              )}
+              <Button
+                onClick={clearAllFilters}
+                variant="outline"
+                className="border-2 border-red-500 text-red-600 hover:bg-red-50 hover:text-red-700 font-bold transition-all"
+              >
+                <X className="w-4 h-4 mr-2" />
+                Clear Filters
+              </Button>
 
               <Button
                 onClick={downloadExcel}
@@ -606,6 +346,7 @@ const LeadManagement = () => {
             </div>
           </div>
         </CardHeader>
+
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
@@ -620,61 +361,87 @@ const LeadManagement = () => {
                   <TableHead className="font-bold text-gray-900 text-center">Action</TableHead>
                 </TableRow>
               </TableHeader>
+
               <TableBody>
-                {currentLeads.length > 0 ? (
-                  currentLeads.map((lead, index) => (
-                    <TableRow key={lead.id} className="hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 transition-colors">
-                      <TableCell className="font-semibold">{startIndex + index + 1}</TableCell>
-                      <TableCell>
-                        <div>
-                          <div className="font-semibold text-gray-900">{lead.name}</div>
-                          <div className="text-xs text-gray-500 lg:hidden">{lead.category}</div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden lg:table-cell">
-                        <span className="inline-flex px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-700 border border-purple-300">
-                          {lead.category}
-                        </span>
-                      </TableCell>
-                      <TableCell className="max-w-xs">
-                        <div className="truncate text-gray-700">{lead.callSummary}</div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold border ${getSentimentClass(lead.sentiment)}`}>
-                          {getSentimentIcon(lead.sentiment)}
-                          {lead.sentiment}
-                        </span>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell font-mono text-sm text-gray-700">
-                        {lead.callTime}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-gray-100">
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="w-40">
-                            <DropdownMenuItem
-                              onClick={() => handleEdit(lead)}
-                              className="cursor-pointer hover:bg-blue-50"
-                            >
-                              <Edit className="w-4 h-4 mr-2 text-blue-600" />
-                              <span className="font-semibold">Edit</span>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => handleDelete(lead)}
-                              className="cursor-pointer hover:bg-red-50"
-                            >
-                              <Trash2 className="w-4 h-4 mr-2 text-red-600" />
-                              <span className="font-semibold">Delete</span>
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))
+                {isLoading ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center py-8 text-gray-500">
+                      Loading…
+                    </TableCell>
+                  </TableRow>
+                ) : loadError ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center py-8 text-red-600">
+                      {loadError}
+                    </TableCell>
+                  </TableRow>
+                ) : currentLeads.length > 0 ? (
+                  currentLeads.map((lead, index) => {
+                    const callTimeStr =
+                      lead?.call_time
+                        ? new Date(lead.call_time).toLocaleString("en-IN", { hour12: true })
+                        : "-";
+                    return (
+                      <TableRow
+                        key={`${lead?.customer_id || "na"}-${lead?.call_time || index}`}
+                        className="hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 transition-colors"
+                      >
+                        <TableCell className="font-semibold">{startIndex + index + 1}</TableCell>
+                        <TableCell>
+                          <div>
+                            <div className="font-semibold text-gray-900">{lead?.name || "-"}</div>
+                            <div className="text-xs text-gray-500 lg:hidden">{lead?.category || "-"}</div>
+                          </div>
+                        </TableCell>
+                        <TableCell className="hidden lg:table-cell">
+                          <span className="inline-flex px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-700 border border-purple-300">
+                            {lead?.category || "-"}
+                          </span>
+                        </TableCell>
+                        <TableCell className="max-w-xs">
+                          <div className="truncate text-gray-700">{lead?.summary || "-"}</div>
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          <span
+                            className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold border ${getSentimentClass(
+                              lead?.sentiment
+                            )}`}
+                          >
+                            {getSentimentIcon(lead?.sentiment)}
+                            {lead?.sentiment || "-"}
+                          </span>
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell font-mono text-sm text-gray-700">
+                          {callTimeStr}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-gray-100">
+                                <MoreVertical className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-40">
+                              <DropdownMenuItem
+                                onClick={() => handleEdit(lead)}
+                                className="cursor-pointer hover:bg-blue-50"
+                              >
+                                <Edit className="w-4 h-4 mr-2 text-blue-600" />
+                                <span className="font-semibold">Edit</span>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleDelete(lead)}
+                                className="cursor-pointer hover:bg-red-50"
+                              >
+                                <Trash2 className="w-4 h-4 mr-2 text-red-600" />
+                                <span className="font-semibold">Delete</span>
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
                 ) : (
                   <TableRow>
                     <TableCell colSpan={7} className="text-center py-8 text-gray-500">
@@ -692,14 +459,14 @@ const LeadManagement = () => {
             <div className="border-t-2 border-gray-200 bg-gradient-to-r from-gray-50 to-white px-6 py-4">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="text-sm text-gray-700">
-                  Showing <span className="font-bold text-[#043927]">{startIndex + 1}</span> to{' '}
-                  <span className="font-bold text-[#043927]">{Math.min(endIndex, filteredLeads.length)}</span> of{' '}
+                  Showing <span className="font-bold text-[#043927]">{startIndex + 1}</span> to{" "}
+                  <span className="font-bold text-[#043927]">{Math.min(endIndex, filteredLeads.length)}</span> of{" "}
                   <span className="font-bold text-[#043927]">{filteredLeads.length}</span> results
                 </div>
 
                 <div className="flex items-center gap-2">
                   <Button
-                    onClick={() => setCurrentPage(currentPage - 1)}
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                     disabled={currentPage === 1}
                     variant="outline"
                     size="sm"
@@ -726,7 +493,7 @@ const LeadManagement = () => {
 
                     {currentPage > 1 && (
                       <Button
-                        onClick={() => setCurrentPage(currentPage - 1)}
+                        onClick={() => setCurrentPage((p) => p - 1)}
                         variant="outline"
                         size="sm"
                         className="w-10 h-10 border-2 border-gray-300 hover:bg-gray-100 font-bold"
@@ -745,7 +512,7 @@ const LeadManagement = () => {
 
                     {currentPage < totalPages && (
                       <Button
-                        onClick={() => setCurrentPage(currentPage + 1)}
+                        onClick={() => setCurrentPage((p) => p + 1)}
                         variant="outline"
                         size="sm"
                         className="w-10 h-10 border-2 border-gray-300 hover:bg-gray-100 font-bold"
@@ -774,7 +541,7 @@ const LeadManagement = () => {
                   </div>
 
                   <Button
-                    onClick={() => setCurrentPage(currentPage + 1)}
+                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                     disabled={currentPage === totalPages}
                     variant="outline"
                     size="sm"
@@ -812,7 +579,7 @@ const LeadManagement = () => {
                 </div>
                 <div className="space-y-2">
                   <Label>Call Summary</Label>
-                  <Input defaultValue={selectedLead?.callSummary} />
+                  <Input defaultValue={selectedLead?.summary} />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
@@ -820,21 +587,17 @@ const LeadManagement = () => {
                     <Input defaultValue={selectedLead?.sentiment} />
                   </div>
                   <div className="space-y-2">
-                    <Label>Source</Label>
-                    <Input defaultValue={selectedLead?.source} />
+                    <Label>Call Time</Label>
+                    <Input defaultValue={selectedLead?.call_time} />
                   </div>
                 </div>
                 <div className="flex gap-3 pt-4">
-                  <Button
-                    onClick={() => setEditDialogOpen(false)}
-                    variant="outline"
-                    className="flex-1 border-2 font-bold"
-                  >
+                  <Button onClick={() => setEditDialogOpen(false)} variant="outline" className="flex-1 border-2 font-bold">
                     Cancel
                   </Button>
                   <Button
                     onClick={() => {
-                      toast.success('Lead updated successfully');
+                      toast.success("Lead updated successfully");
                       setEditDialogOpen(false);
                     }}
                     className="flex-1 bg-gradient-to-r from-[#043927] to-emerald-700 text-white font-bold"
@@ -859,7 +622,8 @@ const LeadManagement = () => {
             <DialogDescription>
               <div className="mt-4 space-y-4">
                 <p className="text-gray-700">
-                  Are you sure you want to delete the lead <strong>{selectedLead?.name}</strong>? This action cannot be undone.
+                  Are you sure you want to delete the lead <strong>{selectedLead?.name}</strong>? This action cannot be
+                  undone.
                 </p>
                 <div className="bg-gradient-to-br from-red-50 to-rose-50 p-4 rounded-xl border-2 border-red-200">
                   <div className="space-y-2">
@@ -874,11 +638,7 @@ const LeadManagement = () => {
                   </div>
                 </div>
                 <div className="flex gap-3 pt-4">
-                  <Button
-                    onClick={() => setDeleteDialogOpen(false)}
-                    variant="outline"
-                    className="flex-1 border-2 font-bold"
-                  >
+                  <Button onClick={() => setDeleteDialogOpen(false)} variant="outline" className="flex-1 border-2 font-bold">
                     Cancel
                   </Button>
                   <Button

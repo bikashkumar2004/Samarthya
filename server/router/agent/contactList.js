@@ -20,10 +20,10 @@ import {
 
 import { callTranscript } from "../../controller/calls/callhistory.js";
 import { getLiveStatus, saveLiveStatus } from "../../controller/agent/callstatus.js";
+import { authMiddleware } from "../../controller/auth/authController.js";
 
 const router = express.Router();
 
-// Parse Twilio's application/x-www-form-urlencoded payloads
 router.use(express.urlencoded({ extended: true }));
 
 router.post("/upload-xlsx", upload.single("file"), handleContactUpload);
@@ -32,12 +32,18 @@ router.put("/edit/:id", editList);
 router.delete("/delete/:id", deleteList);
 router.get("/get", fetchAllContactList);
 router.get("/get/:id", showcontactDetails);
+
+
 router.post("/call/:customerId", initiateCall);
 router.get("/callTranscript/:customerId", callTranscript);
-
 router.post("/call-bulk", initiateBulkCalls);
 router.post("/call-filtered", initiateFilteredCalls);
 router.get("/queue-status", getQueueStatus);
+// router.post("/call/:customerId", authMiddleware, initiateCall);
+// router.get("/callTranscript/:customerId", authMiddleware, callTranscript);
+// router.post("/call-bulk", authMiddleware,initiateBulkCalls);
+// router.post("/call-filtered",authMiddleware, initiateFilteredCalls);
+// router.get("/queue-status",authMiddleware, getQueueStatus);
 
 router.post(
   "/call/status",
@@ -45,5 +51,6 @@ router.post(
   saveLiveStatus
 );
 router.get("/status/:callId", getLiveStatus);
+// router.get("/status/:callId",authMiddleware, getLiveStatus);
 
 export default router;
