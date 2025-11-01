@@ -22,7 +22,6 @@ import Campaigns from "./pages/agent-view/Campaigns";
 import LeadManagement from "./pages/agent-view/LeadManagement";
 import Pending from "./pages/agent-view/Pending";
 import Inbox from "./components/agent-view/Inbox";
-import ComposeMessage from "./pages/agent-view/ComposeMessage";
 import Sms from "./pages/agent-view/Sms";
 import Email from "./pages/agent-view/Email";
 import Whatsapp from "./pages/agent-view/Whatsapp";
@@ -31,6 +30,7 @@ import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import ContactManagement from "./pages/agent-view/ContactManagement";
 import EmailVer from "./pages/auth/EmailVer";
+import ComposeMsg from "./pages/agent-view/ComposeMsg";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -71,7 +71,7 @@ export default function App() {
         <Route path="/agent" element={<AgentLayouts />}>
           <Route path="Dashboard" element={<Dashboard />} />
           <Route path="inbox" element={<Inbox/>}>
-            <Route path="composemessage" element={<ComposeMessage/>}/>
+            <Route path="composemessage" element={<ComposeMsg/>}/>
             <Route path="sms" element={<Sms/>}/>
             <Route path="email" element={<Email/>}/>
             <Route path="whatsapp" element={<Whatsapp/>}/>

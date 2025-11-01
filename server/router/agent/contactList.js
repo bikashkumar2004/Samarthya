@@ -34,17 +34,23 @@ router.get("/get", fetchAllContactList);
 router.get("/get/:id", showcontactDetails);
 
 
-router.post("/call/:customerId", authMiddleware, initiateCall);
-router.get("/callTranscript/:customerId", authMiddleware, callTranscript);
-router.post("/call-bulk", authMiddleware,initiateBulkCalls);
-router.post("/call-filtered",authMiddleware, initiateFilteredCalls);
-router.get("/queue-status",authMiddleware, getQueueStatus);
+router.post("/call/:customerId", initiateCall);
+router.get("/callTranscript/:customerId", callTranscript);
+router.post("/call-bulk", initiateBulkCalls);
+router.post("/call-filtered", initiateFilteredCalls);
+router.get("/queue-status", getQueueStatus);
+// router.post("/call/:customerId", authMiddleware, initiateCall);
+// router.get("/callTranscript/:customerId", authMiddleware, callTranscript);
+// router.post("/call-bulk", authMiddleware,initiateBulkCalls);
+// router.post("/call-filtered",authMiddleware, initiateFilteredCalls);
+// router.get("/queue-status",authMiddleware, getQueueStatus);
 
 router.post(
   "/call/status",
   twilio.webhook({ validate: true }), 
   saveLiveStatus
 );
-router.get("/status/:callId",authMiddleware, getLiveStatus);
+router.get("/status/:callId", getLiveStatus);
+// router.get("/status/:callId",authMiddleware, getLiveStatus);
 
 export default router;
