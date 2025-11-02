@@ -42,6 +42,14 @@ export default function Sbody({ selectedChannel, onMessageSent }) {
           validate: (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val),
           errorMsg: "Please enter a valid email address"
         };
+      case "whatsapp":  // ✅ Add this case
+        return {
+          label: "WhatsApp Number",
+          placeholder: "+1 234-567-8900",
+          icon: Phone,
+          validate: (val) => /^[\d\s\-\+()]+$/.test(val) && val.length >= 10,
+          errorMsg: "Please enter a valid WhatsApp number"
+        };
       default:
         return {
           label: "Recipient",
@@ -84,7 +92,14 @@ export default function Sbody({ selectedChannel, onMessageSent }) {
         name: "Customer",
         description: `This recipient has been verified for EMAIL delivery. The email address has been validated and confirmed active in the system.`
       };
-    }
+    } else if (selectedChannel === "whatsapp") {
+      newVerifiedData = {
+        ...newVerifiedData,
+        number: recipientData,
+        name: "Customer",
+        description: `This recipient has been verified for WHATSAPP delivery. The whatsapp address has been validated and confirmed active in the system.`
+      };
+    } 
 
     setVerifiedData(newVerifiedData);
     setShowVerifiedSection(true);
@@ -134,9 +149,12 @@ export default function Sbody({ selectedChannel, onMessageSent }) {
       } else if (selectedChannel === "email") {
         endpoint = '/api/email/send';
         payload.to_email = verifiedData.email;
-      } else{
+      } else if(selectedChannel === "whatsapp") {
+        payload = {
+          to:verifiedData.number,
+          body: generatedMessage,
+        };
         endpoint = '/api/send-whatsapp';
-        payload.to_number = verifiedData.number;
       }
       
       console.log(`📱 Sending ${selectedChannel.toUpperCase()} (${selectedLanguage})`, payload);

@@ -244,7 +244,7 @@ const LeadManagement = () => {
                 <SheetTrigger asChild>
                   <Button
                     variant="outline"
-                    className="border-2 border-[#043927] text-[#043927] hover:bg-[#043927] hover:text-white font-bold"
+                    className="border-[#808085] text-black font-bold"
                   >
                     <Filter className="w-4 h-4 mr-2" />
                     Filter By
@@ -505,7 +505,7 @@ const LeadManagement = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="w-10 h-10 border-2 border-[#043927] bg-gradient-to-r from-[#043927] to-emerald-600 text-white font-bold shadow-lg"
+                      className="w-10 h-10 border-2 border-[#043927] text-black font-bold shadow-lg"
                     >
                       {currentPage}
                     </Button>

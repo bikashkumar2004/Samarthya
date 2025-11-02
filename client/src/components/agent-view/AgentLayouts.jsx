@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "./Sidebars";
 import { Outlet } from "react-router-dom";
 import Headers from "./Headers";
+import SidebarDemo from "../SidebarDemo";
 
 export default function AgentLayouts() {
   const [openSidebar, setopenSidebar] = useState(false);
@@ -9,7 +10,8 @@ export default function AgentLayouts() {
   return (
     <div className="flex h-screen w-screen overflow-hidden">
    
-      <Sidebar open={openSidebar} setOpen={setopenSidebar} />
+      {/* <Sidebar open={openSidebar} setOpen={setopenSidebar} /> */}
+      <SidebarDemo/>
       <div className="flex flex-1 flex-col h-screen overflow-hidden">
         <div className="sticky top-0 z-50">
           <Headers setOpen={setopenSidebar} />

@@ -340,10 +340,10 @@ const ContactManagement = () => {
                               <MoreVertical className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="w-40">
+                          <DropdownMenuContent align="end" className="w-40 bg-white">
                             <DropdownMenuItem
                               onClick={() => handleEdit(contact)}
-                              className="cursor-pointer hover:bg-blue-50"
+                              className="cursor-pointer hover:bg-blue-50 "
                             >
                               <Edit className="w-4 h-4 mr-2 text-blue-600" />
                               <span className="font-semibold">Edit</span>
@@ -481,7 +481,7 @@ const ContactManagement = () => {
 
       {/* Edit Dialog */}
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl bg-white">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-[#043927] flex items-center gap-2">
               <Edit className="w-6 h-6" />
@@ -542,7 +542,7 @@ const ContactManagement = () => {
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent>
+        <DialogContent className="bg-white">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-red-600 flex items-center gap-2">
               <AlertCircle className="w-6 h-6" />

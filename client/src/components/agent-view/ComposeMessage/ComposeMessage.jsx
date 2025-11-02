@@ -3,7 +3,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import Single from "./Single";
 
 
-export default function ComposeMessage({ onMessageSent }) {
+export default function ComposeMessage({ onMessageSent, onwpMessageSent }) {
   const [channels, setChannels] = useState({
     sms: false,
     email: false,
@@ -28,6 +28,7 @@ export default function ComposeMessage({ onMessageSent }) {
             channels={channels} 
             onChannelChange={handleChannelChange}
             onMessageSent={onMessageSent}
+            onwpMessageSent={onwpMessageSent}
           />
     </div>
   );
