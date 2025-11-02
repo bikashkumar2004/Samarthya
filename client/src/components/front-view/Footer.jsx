@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="flex flex-col items-start gap-5 md:col-span-2">
           <h2 className="text-2xl font-semibold mb-2">Samarthya</h2>
           <p>
-            CRM Solutions is dedicated to helping businesses manage their
+            Samarthya is dedicated to helping businesses manage their
             customer relationships and grow efficiently with our comprehensive
             CRM software.
           </p>

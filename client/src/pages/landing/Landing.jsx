@@ -19,7 +19,6 @@ const Landing = () => {
           <Collaboration />
           <Pricing />
           {/* <Roadmap /> */}
-          <FAQ/>
           <Footer />
         </div>
   

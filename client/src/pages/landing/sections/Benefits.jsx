@@ -1,4 +1,4 @@
-import { benefits } from "../../constants";
+
 import Heading from "./Heading";
 import Section from "./Section";
 import Arrow from "../../../assets/svg/Arrow";
@@ -66,7 +66,6 @@ const Benefits = () => {
                 <Phone className="w-8 h-8 text-blue-600 mb-4" />
                 <h3 className="text-lg font-semibold mb-3">AI Voice Agent</h3>
                 <ul className="space-y-2 text-sm text-slate-600">
-                  <li>✓ Calls in Odia, Hindi & English</li>
                   <li>✓ Understands natural speech</li>
                   <li>✓ Detects frustration & escalates</li>
                   <li>✓ Answers questions in real-time</li>
@@ -78,8 +77,7 @@ const Benefits = () => {
                 <h3 className="text-lg font-semibold mb-3">Unified Dashboard</h3>
                 <ul className="space-y-2 text-sm text-slate-600">
                   <li>✓ All channels in one place</li>
-                  <li>✓ Real-time call transcripts</li>
-                  <li>✓ Auto-ticket creation</li>
+                  <li>✓ Call transcripts & Summary</li>
                   <li>✓ Team performance tracking</li>
                 </ul>
               </Card>
@@ -89,9 +87,8 @@ const Benefits = () => {
                 <h3 className="text-lg font-semibold mb-3">Sentiment Analytics</h3>
                 <ul className="space-y-2 text-sm text-slate-600">
                   <li>✓ Real-time sentiment detection</li>
-                  <li>✓ Predict churn & intervene</li>
-                  <li>✓ 87% accuracy in emotions</li>
-                  <li>✓ Identify frustrated students</li>
+                  <li>✓ Dynamic scripts based on purpose</li>
+                  <li>✓ Identify frustrated clients</li>
                 </ul>
               </Card>
             </div>
