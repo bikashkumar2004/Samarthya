@@ -29,7 +29,7 @@ const Pricing = () => {
 
         <Heading
           tag="Get started with Samarthya"
-          title="Pay once, use forever"
+          title="Stop Calling, Start Converting!"
         />
 
         {/* <div className="relative">

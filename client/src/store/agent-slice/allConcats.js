@@ -1,0 +1,115 @@
+// src/features/contactList/contactListSlice.js
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+
+const API_URL = "http://localhost:4000/api/agent/contactList";
+
+const initialState = {
+  isLoading: false,
+  contactList: [],
+  error: null,
+  successMessage: null,
+  byId: {},        
+  selectedContactId: null, 
+};
+
+export const fetchAllContacts = createAsyncThunk(
+  "agent/contactList/allcontacts",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${API_URL}/allcontacts`, {
+        withCredentials: true,
+      });
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error.message);
+    }
+  }
+);
+
+// GET: /allcontacts/:id (detail)
+export const fetchContactById = createAsyncThunk(
+  "agent/contactList/contactById",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${API_URL}/allcontacts/${id}`, {
+        withCredentials: true,
+      });
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || error.message);
+    }
+  }
+);
+
+const contactListSlice = createSlice({
+  name: "contactList",
+  initialState,
+  reducers: {
+    clearMessages: (state) => {
+      state.error = null;
+      state.successMessage = null;
+    },
+    setContactList: (state, action) => {
+      state.contactList = Array.isArray(action.payload) ? action.payload : [];
+    },
+    setSelectedContactId: (state, action) => {
+      state.selectedContactId = action.payload || null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      // list
+      .addCase(fetchAllContacts.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchAllContacts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.contactList = action.payload?.data || [];
+        for (const doc of state.contactList) {
+          if (doc && doc._id) state.byId[doc._id] = doc;
+        }
+        state.successMessage = "Contacts loaded";
+      })
+      .addCase(fetchAllContacts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || "Failed to load contacts";
+      })
+
+      // detail
+      .addCase(fetchContactById.pending, (state) => {
+        // keep global spinner optional; add local UI loader if desired
+        state.error = null;
+      })
+      .addCase(fetchContactById.fulfilled, (state, action) => {
+        const doc = action.payload?.data;
+        if (doc && doc._id) {
+          state.byId[doc._id] = doc;
+          state.selectedContactId = doc._id;
+        }
+      })
+      .addCase(fetchContactById.rejected, (state, action) => {
+        state.error = action.payload || "Failed to load contact";
+      });
+  },
+});
+
+export const {
+  clearMessages,
+  setContactList,
+  setSelectedContactId,
+} = contactListSlice.actions;
+
+// Selectors
+export const selectContacts = (state) => state.contactList.contactList;
+export const selectContactsLoading = (state) => state.contactList.isLoading;
+export const selectContactsError = (state) => state.contactList.error;
+export const selectContactsSuccess = (state) => state.contactList.successMessage;
+export const selectContactById = (state, id) => state.contactList.byId[id];
+export const selectSelectedContact = (state) =>
+  state.contactList.selectedContactId
+    ? state.contactList.byId[state.contactList.selectedContactId]
+    : null;
+
+export default contactListSlice.reducer;

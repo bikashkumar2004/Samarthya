@@ -7,7 +7,6 @@ import dotenv from "dotenv";
 import twilio from 'twilio';
 
 dotenv.config();
-
 import smsRoutes from './router/msg/smsRoutes.js';
 import emailRoutes from './router/msg/emailRoutes.js';
 import messageRoutes from './router/msg/messageRoutes.js';
@@ -19,6 +18,7 @@ import contactLists from "./router/agent/contactList.js";
 import uploadData from "./router/createTask/index.js";
 import campaignRoutes  from './router/campaign/campaigns.js'
 import aiCallmanager from "./router/aiCall-Manager/index.js";
+import Dashboard from "./router/Dashboard/index.js";
 
 
 const client = twilio(process.env.TWILIO_ACCOUNT_SID_WP, process.env.TWILIO_AUTH_TOKEN_WP);
@@ -71,7 +71,7 @@ app.use("/api/agent/contactList", contactLists);
 app.use("/api/agent/create-task", uploadData);
 app.use('/api/campaigns', campaignRoutes);
 app.use("/api/aiCall",aiCallmanager);
-
+app.use("/api/dashboard",Dashboard)
 
 app.use((err, req, res, next) => {
   console.error("Server Error:", err);

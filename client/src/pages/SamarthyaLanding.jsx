@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+//import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ChevronRight, Phone, BarChart3, MessageSquare, Zap, Clock, Users } from 'lucide-react';
 
 export default function SamarthyaLanding() {
-  const [activeTab, setActiveTab] = useState('problem');
+  //const [activeTab, setActiveTab] = useState('problem');
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50">
@@ -136,7 +136,6 @@ export default function SamarthyaLanding() {
                 <Phone className="w-8 h-8 text-blue-600 mb-4" />
                 <h3 className="text-lg font-semibold mb-3">AI Voice Agent</h3>
                 <ul className="space-y-2 text-sm text-slate-600">
-                  <li>✓ Calls in Odia, Hindi & English</li>
                   <li>✓ Understands natural speech</li>
                   <li>✓ Detects frustration & escalates</li>
                   <li>✓ Answers questions in real-time</li>
@@ -149,7 +148,6 @@ export default function SamarthyaLanding() {
                 <ul className="space-y-2 text-sm text-slate-600">
                   <li>✓ All channels in one place</li>
                   <li>✓ Real-time call transcripts</li>
-                  <li>✓ Auto-ticket creation</li>
                   <li>✓ Team performance tracking</li>
                 </ul>
               </Card>
@@ -159,8 +157,6 @@ export default function SamarthyaLanding() {
                 <h3 className="text-lg font-semibold mb-3">Sentiment Analytics</h3>
                 <ul className="space-y-2 text-sm text-slate-600">
                   <li>✓ Real-time sentiment detection</li>
-                  <li>✓ Predict churn & intervene</li>
-                  <li>✓ 87% accuracy in emotions</li>
                   <li>✓ Identify frustrated students</li>
                 </ul>
               </Card>
@@ -179,8 +175,8 @@ export default function SamarthyaLanding() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { step: 1, title: 'Import Contacts', desc: 'Upload CSV from SAMS or connect via API', icon: '📥' },
-              { step: 2, title: 'Configure AI', desc: 'Customize message in Odia/Hindi/English', icon: '✏️' },
+              { step: 1, title: 'Import Contacts', desc: 'Upload CSV from your portal or connect via API', icon: '📥' },
+              { step: 2, title: 'Configure AI', desc: 'Customize purpose message', icon: '✏️' },
               { step: 3, title: 'Launch & Monitor', desc: 'AI makes 1,000 calls while you relax', icon: '🚀' },
             ].map((item) => (
               <div key={item.step} className="relative">
@@ -219,7 +215,6 @@ export default function SamarthyaLanding() {
               {[
                 { feature: 'Monthly Cost', agents: '₹2,50,000', samarthya: '₹49,999' },
                 { feature: 'Availability', agents: '8h/day, 5 days/week', samarthya: '24/7/365' },
-                { feature: 'Languages', agents: '1-2 per agent', samarthya: 'Odia, Hindi, English' },
                 { feature: 'Call Capacity', agents: '~500 calls/day', samarthya: '10,000+ calls/day' },
                 { feature: 'Sick Days', agents: '10 days/agent/year', samarthya: 'Never' },
               ].map((row) => (

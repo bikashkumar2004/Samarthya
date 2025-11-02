@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+// src/pages/Pending.jsx
+import React, { useState, useMemo, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -15,13 +22,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Clock,
   AlertCircle,
@@ -33,86 +40,56 @@ import {
   Smile,
   Meh,
   Frown,
-  Phone
-} from 'lucide-react';
-import View from '@/components/agent-view/View';
-
+  Phone,
+} from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "sonner";
+import View from "@/components/agent-view/View";
+import { clearSelectedCall, fetchCallDetail, fetchLeads, selectCallError, selectCallLoading, selectLeadsData, selectLeadsError, selectLeadsLoading, selectSelectedCall } from "@/store/call-mannager/pendingFollowups";
 
 export default function Pending() {
-  const [selectedCall, setSelectedCall] = useState(null);
+  const dispatch = useDispatch();
+  const leads = useSelector(selectLeadsData);
+  const isLoading = useSelector(selectLeadsLoading);
+  const loadError = useSelector(selectLeadsError);
+
+  const selectedCall = useSelector(selectSelectedCall);
+  const loadingCall = useSelector(selectCallLoading);
+  const callError = useSelector(selectCallError);
+
+  const [filterStatus, setFilterStatus] = useState("all");
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
-  const [filterStatus, setFilterStatus] = useState('all');
 
-  const tableData = [
-    {
-      name: 'John Doe',
-      phone: '+1 234-567-8900',
-      status: 'Pending',
-      sentiment: 'Positive',
-      duration: '5:30',
-      category: 'Sales',
-      calledAt: '10:30 AM',
-      summary: 'Customer expressed interest in our premium package. Requested a follow-up call next week.',
-      transcription: 'Agent: Good morning! How can I help?\nCustomer: I want to know about premium package...',
-    },
-    {
-      name: 'Jane Smith',
-      phone: '+1 234-567-8901',
-      status: 'Completed',
-      sentiment: 'Neutral',
-      duration: '3:45',
-      category: 'Support',
-      calledAt: '11:15 AM',
-      summary: 'Technical support request resolved successfully.',
-      transcription: 'Agent: Hello, thank you for calling support...',
-    },
-    {
-      name: 'Robert Johnson',
-      phone: '+1 234-567-8902',
-      status: 'Rejected',
-      sentiment: 'Negative',
-      duration: '2:15',
-      category: 'Complaint',
-      calledAt: '2:45 PM',
-      summary: 'Customer complaint about service delays.',
-      transcription: 'Customer: I am not satisfied with the service...',
-    },
-    {
-      name: 'Emily Davis',
-      phone: '+1 234-567-8903',
-      status: 'Pending',
-      sentiment: 'Positive',
-      duration: '4:20',
-      category: 'Follow-up',
-      calledAt: '3:30 PM',
-      summary: 'Follow-up call scheduled for next week.',
-      transcription: 'Agent: Thanks for your time today...',
-    },
-    {
-      name: 'Michael Brown',
-      phone: '+1 234-567-8904',
-      status: 'Completed',
-      sentiment: 'Positive',
-      duration: '6:10',
-      category: 'Sales',
-      calledAt: '4:00 PM',
-      summary: 'Deal closed successfully. Contract signed.',
-      transcription: 'Agent: Congratulations on your purchase...',
-    },
-  ];
+  // Fetch leads on mount
+  useEffect(() => {
+    dispatch(fetchLeads({ page: 1, pageSize: 100, order: "desc" }));
+  }, [dispatch]);
 
-  const filteredData = filterStatus === 'all' 
-    ? tableData 
-    : tableData.filter(item => item.status.toLowerCase() === filterStatus);
+  // Filter leads by status
+  const filteredData = useMemo(() => {
+    return filterStatus === "all"
+      ? leads
+      : (leads || []).filter(
+          (item) => item.status?.toLowerCase() === filterStatus.toLowerCase()
+        );
+  }, [leads, filterStatus]);
 
+  // Helper functions
   function getStatusBadge(status) {
     const statusStyles = {
-      Pending: 'bg-yellow-100 text-yellow-700 border-yellow-300',
-      Completed: 'bg-green-100 text-green-700 border-green-300',
-      Rejected: 'bg-red-100 text-red-700 border-red-300',
+      Pending: "bg-yellow-100 text-yellow-700 border-yellow-300",
+      Completed: "bg-green-100 text-green-700 border-green-300",
+      Rejected: "bg-red-100 text-red-700 border-red-300",
     };
     return (
-      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border ${statusStyles[status] || 'bg-gray-100 text-gray-700 border-gray-300'}`}>
+      <span
+        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border ${
+          statusStyles[status] || "bg-gray-100 text-gray-700 border-gray-300"
+        }`}
+      >
         {status}
       </span>
     );
@@ -120,11 +97,11 @@ export default function Pending() {
 
   function getSentimentBadge(sentiment) {
     const sentimentStyles = {
-      Positive: 'bg-emerald-100 text-emerald-700 border-emerald-300',
-      Neutral: 'bg-gray-100 text-gray-700 border-gray-300',
-      Negative: 'bg-rose-100 text-rose-700 border-rose-300',
+      Positive: "bg-emerald-100 text-emerald-700 border-emerald-300",
+      Neutral: "bg-gray-100 text-gray-700 border-gray-300",
+      Negative: "bg-rose-100 text-rose-700 border-rose-300",
     };
-    
+
     const sentimentIcons = {
       Positive: <Smile className="w-4 h-4" />,
       Neutral: <Meh className="w-4 h-4" />,
@@ -132,23 +109,37 @@ export default function Pending() {
     };
 
     return (
-      <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold border ${sentimentStyles[sentiment] || 'bg-gray-100 text-gray-700 border-gray-300'}`}>
+      <span
+        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold border ${
+          sentimentStyles[sentiment] || "bg-gray-100 text-gray-700 border-gray-300"
+        }`}
+      >
         {sentimentIcons[sentiment]}
         {sentiment}
       </span>
     );
   }
 
-  function handleViewCall(call) {
-    setSelectedCall(call);
+  // Open call details view dialog and fetch transcript
+  function handleViewCall(row) {
+    dispatch(fetchCallDetail(row.customer_id)); // or row.call_id depending on data shape
     setViewDialogOpen(true);
   }
 
+  // Close dialog and clear call detail state
+  function handleCloseDialog() {
+    setViewDialogOpen(false);
+    dispatch(clearSelectedCall());
+  }
+
+  // Stats calculation
   const stats = {
-    rejected: tableData.filter(d => d.status === 'Rejected').length,
-    followups: tableData.filter(d => d.status === 'Pending').length,
-    missed: tableData.filter(d => d.sentiment === 'Negative').length,
-    urgent: tableData.filter(d => d.status === 'Pending' && d.sentiment === 'Negative').length,
+    rejected: leads.filter((d) => d.status === "Rejected").length,
+    followups: leads.filter((d) => d.status === "Pending").length,
+    missed: leads.filter((d) => d.sentiment === "Negative").length,
+    urgent: leads.filter(
+      (d) => d.status === "Pending" && d.sentiment === "Negative"
+    ).length,
   };
 
   return (
@@ -232,7 +223,10 @@ export default function Pending() {
               Call History
             </CardTitle>
             <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-              <Select value={filterStatus} onValueChange={setFilterStatus}>
+              <Select
+                value={filterStatus}
+                onValueChange={(value) => setFilterStatus(value)}
+              >
                 <SelectTrigger className="w-full sm:w-[180px] border-2 border-gray-300">
                   <SelectValue placeholder="Filter by status" />
                 </SelectTrigger>
@@ -256,26 +250,49 @@ export default function Pending() {
               <TableHeader>
                 <TableRow className="bg-gradient-to-r from-gray-100 to-gray-50">
                   <TableHead className="font-bold text-gray-900">Name</TableHead>
-                  <TableHead className="font-bold text-gray-900 hidden md:table-cell">Phone</TableHead>
-                  <TableHead className="font-bold text-gray-900 hidden lg:table-cell">Category</TableHead>
-                  <TableHead className="font-bold text-gray-900 hidden sm:table-cell">Status</TableHead>
+                  <TableHead className="font-bold text-gray-900 hidden md:table-cell">
+                    Phone
+                  </TableHead>
+                  <TableHead className="font-bold text-gray-900 hidden lg:table-cell">
+                    Category
+                  </TableHead>
+                  <TableHead className="font-bold text-gray-900 hidden sm:table-cell">
+                    Status
+                  </TableHead>
                   <TableHead className="font-bold text-gray-900">Sentiment</TableHead>
-                  <TableHead className="font-bold text-gray-900 hidden md:table-cell">Duration</TableHead>
+                  <TableHead className="font-bold text-gray-900 hidden md:table-cell">
+                    Duration
+                  </TableHead>
                   <TableHead className="font-bold text-gray-900 text-center">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredData.length > 0 ? (
+                {isLoading ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center py-8 text-gray-500">
+                      Loading…
+                    </TableCell>
+                  </TableRow>
+                ) : loadError ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center py-8 text-red-600">
+                      {loadError}
+                    </TableCell>
+                  </TableRow>
+                ) : filteredData.length > 0 ? (
                   filteredData.map((row, index) => (
-                    <TableRow key={index} className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 transition-colors">
+                    <TableRow
+                      key={row.customer_id || index}
+                      className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 transition-colors"
+                    >
                       <TableCell>
                         <div>
                           <div className="font-semibold text-gray-900">{row.name}</div>
-                          <div className="text-xs text-gray-500 md:hidden">{row.phone}</div>
+                          <div className="text-xs text-gray-500 md:hidden">{row.phoneNo}</div>
                         </div>
                       </TableCell>
                       <TableCell className="hidden md:table-cell font-mono text-sm">
-                        {row.phone}
+                        {row.phoneNo}
                       </TableCell>
                       <TableCell className="hidden lg:table-cell">
                         <span className="inline-flex px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-700 border border-purple-300">
@@ -285,11 +302,9 @@ export default function Pending() {
                       <TableCell className="hidden sm:table-cell">
                         {getStatusBadge(row.status)}
                       </TableCell>
-                      <TableCell>
-                        {getSentimentBadge(row.sentiment)}
-                      </TableCell>
+                      <TableCell>{getSentimentBadge(row.sentiment)}</TableCell>
                       <TableCell className="hidden md:table-cell font-mono text-sm font-semibold">
-                        {row.duration}
+                        {row.call_duration_seconds ? `${row.call_duration_seconds.toFixed(2)} s` : "-"}
                       </TableCell>
                       <TableCell className="text-center">
                         <Button
@@ -319,7 +334,7 @@ export default function Pending() {
       </Card>
 
       {/* View Dialog */}
-      <Dialog open={viewDialogOpen} onOpenChange={setViewDialogOpen}>
+      <Dialog open={viewDialogOpen} onOpenChange={handleCloseDialog}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-[#043927] flex items-center gap-2">
@@ -327,6 +342,8 @@ export default function Pending() {
               Call Details
             </DialogTitle>
           </DialogHeader>
+          {loadingCall && <div>Loading call details…</div>}
+          {callError && <div className="text-red-600">{callError}</div>}
           {selectedCall && <View callData={selectedCall} />}
         </DialogContent>
       </Dialog>

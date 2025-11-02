@@ -52,7 +52,7 @@ const executeCall = async (callData) => {
     const description = contact.description || "";
     console.log(`📝 Description from DB for ${contact.name}: ${description}`);
 
-    const wsUrl = process.env.MEDIA_WS_URL;
+    const wsUrl = process.env.MEDIA_WS_URL_BIKASH;
 
     const twiml = `
       <Response>
@@ -125,7 +125,7 @@ export const initiateCall = async (req, res) => {
     console.log(`Retrieved contact: ${contact.name} - ${contact.phoneNo}`);
     console.log(`Description from DB: ${description}`);
 
-    const wsUrl = process.env.MEDIA_WS_URL;
+    const wsUrl = process.env.MEDIA_WS_URL_BIKASH;
 
     const twiml = `
       <Response>
@@ -138,17 +138,18 @@ export const initiateCall = async (req, res) => {
       </Response>
     `;
 
+
+
     // KEEP ONLY ONE CREATE WITH statusCallback
     const call = await client.calls.create({
       to: contact.phoneNo,
       from: process.env.TWILIO_NUMBER,
       twiml: twiml,
-      statusCallback: `${process.env.SERVER_URL}/api/agent/contactList/call/status`,
+      statusCallback: `${process.env.SERVER_API_URL}/call/status`,
       statusCallbackEvent: ["initiated", "ringing", "answered", "completed"],
       statusCallbackMethod: "POST",
     });
 
-    // MINIMAL PATCH: Save CallSid first
     await CallLiveStatus.updateOne(
       { call_id: call.sid },
       {

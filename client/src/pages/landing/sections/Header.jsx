@@ -7,6 +7,7 @@ import Button from "./Button";
 import MenuSvg from "../../../assets/svg/MenuSvg";
 import { HamburgerMenu } from "../design/Header";
 import { useState } from "react";
+import { Shield } from 'lucide-react';
 
 const Header = () => {
   const pathname = useLocation();
@@ -39,7 +40,8 @@ const Header = () => {
           {/* <a className="block w-[12rem] xl:mr-8" href="#hero">
             <img src={brainwave} width={190} height={40} alt="Samarthya" />
           </a> */}
-          <div>
+          <div className="flex">
+          <Shield className="h-5 w-6 text-blue-600 dark:text-blue-400" strokeWidth={2.5} />
             Samarthya
           </div>
 

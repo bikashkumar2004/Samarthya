@@ -13,7 +13,6 @@ export default function Home() {
       <Hiw />
       <Services />
       <Details />
-      <Faq />
     </div>
   );
 }

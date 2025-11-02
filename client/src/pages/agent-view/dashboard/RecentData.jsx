@@ -97,32 +97,7 @@ export default function RecentData() {
           </div>
 
           {/* --- Sentiment Overview Section --- */}
-          <div className="bg-white rounded-lg shadow-md p-5 mt-4">
-            <h3 className="text-lg font-semibold text-gray-800 mb-3">Sentiment Overview</h3>
-
-            {/* Sentiment Analysis Breakdown */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="bg-green-100 rounded-lg p-4 text-center">
-                <div className="text-4xl">😊</div>
-                <div className="text-2xl font-bold text-green-700 mt-2">62%</div>
-                <div className="text-sm text-green-700">Positive</div>
-              </div>
-              <div className="bg-yellow-100 rounded-lg p-4 text-center">
-                <div className="text-4xl">😐</div>
-                <div className="text-2xl font-bold text-yellow-700 mt-2">29%</div>
-                <div className="text-sm text-yellow-700">Neutral</div>
-              </div>
-              <div className="bg-red-100 rounded-lg p-4 text-center">
-                <div className="text-4xl">😟</div>
-                <div className="text-2xl font-bold text-red-700 mt-2">9%</div>
-                <div className="text-sm text-red-700">Negative</div>
-              </div>
-            </div>
-
-            <div className="text-right mt-4">
-              <button className="text-sm font-medium text-blue-600 hover:underline">View More</button>
-            </div>
-          </div>
+          
         </main>
       </div>
     </div>
