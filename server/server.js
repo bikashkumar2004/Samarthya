@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 import twilio from 'twilio';
 
 dotenv.config();
-
+import { getDashboardSummary } from "./controller/dashboard/index.js";
 import smsRoutes from './router/msg/smsRoutes.js';
 import emailRoutes from './router/msg/emailRoutes.js';
 import messageRoutes from './router/msg/messageRoutes.js';
@@ -68,7 +68,7 @@ app.use("/api/agent/contactList", contactLists);
 app.use("/api/agent/create-task", uploadData);
 app.use('/api/campaigns', campaignRoutes);
 app.use("/api/aiCall",aiCallmanager);
-
+app.use("/api/dashboard",getDashboardSummary)
 
 app.use((err, req, res, next) => {
   console.error("Server Error:", err);
