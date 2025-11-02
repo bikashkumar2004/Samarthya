@@ -88,7 +88,18 @@ export async function getCategoryDistribution(req, res) {
           name: g.display || "Other",
           value: g.count,                   // Recharts Pie uses value for slice sizing [web:329]
           count: g.count,                   // raw count for tooltips/tables [web:329]
-          percent: Number(((g.count / total) * 100).toFixed(2)), // explicit percent if needed [web:323]
+
+
+
+
+
+
+
+
+
+
+          
+          percent: Number(((g.count / total) ).toFixed(2)), // explicit percent if needed [web:323]
         }));
 
     return res.status(200).json({

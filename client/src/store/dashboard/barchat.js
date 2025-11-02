@@ -1,4 +1,4 @@
-// src/features/dashboard/categoryDistributionSlice.js
+
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 

@@ -13,7 +13,10 @@ import AllLeads from "./allLeads/index.js"
 import pendingFollowUps from "./call-mannager/pendingFollowups.js"
 import AllConcats  from "./agent-slice/allConcats.js"
 import dashbord from "./dashboard/index.js"
+
+
 import barchat from "./dashboard/barchat.js"
+import weaklychat from "./dashboard/wealychat.js"
 
 const store = configureStore({
   reducer: {
@@ -32,6 +35,8 @@ const store = configureStore({
     contactList:AllConcats ,
     dashboardSummary:dashbord,
     categoryDistribution:barchat,
+    weeklyPerformance:weaklychat,
+
   },
 });
 
