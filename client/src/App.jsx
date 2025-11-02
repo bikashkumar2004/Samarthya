@@ -31,8 +31,13 @@ import RegisterPage from "./pages/auth/RegisterPage";
 import ContactManagement from "./pages/agent-view/ContactManagement";
 import EmailVer from "./pages/auth/EmailVer";
 import ComposeMsg from "./pages/agent-view/ComposeMsg";
-import SidebarDemo from "./components/SidebarDemo";
+import SidebarDemo from "./components/agent-view/SidebarDemo";
 import WhatsappInbox from "./pages/agent-view/WhatsappInbox";
+import Man from "./pages/manager-view/Man";
+import SidebarManager from "./components/manager-view/SidebarManager";
+import Assign from "./pages/manager-view/Assign";
+import Team from "./pages/manager-view/Team";
+import ReviewRejection from "./pages/manager-view/ReviewRejection";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -70,7 +75,7 @@ export default function App() {
         </Route>
 
         <Route path="/agent" element={<SidebarDemo />}>
-          <Route path="Dashboard" element={<Dashboard />} />
+          <Route path="dashboard" element={<Dashboard />} />
           <Route path="composemessage" element={<ComposeMsg/>}/>
           <Route path="whatsapp-inbox" element={<WhatsappInbox/>}/>
           
@@ -83,11 +88,19 @@ export default function App() {
 
           <Route path="campaigns" element={<Campaigns />} />
         </Route>
+        <Route path="/manager" element={<SidebarManager />}>
+          <Route path="dashboard" element={<Man />} />
+          <Route path="team" element={<Team/>}/>
+          <Route path="assign" element={<Assign/>}/>
+          <Route path="review-rejection" element={<ReviewRejection/>}/>
+          
+        </Route>
       </Routes>
+
       {/* <SamarthyaLanding/> */}
-      
       {/* <RegisterPage/> */}
       {/* <SidebarDemo/> */}
+      {/* <Man/> */}
     </div>
   );
 }

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "./Sidebars";
 import { Outlet } from "react-router-dom";
 import Headers from "./Headers";
-import SidebarDemo from "../SidebarDemo";
+import SidebarDemo from "./SidebarDemo";
 
 export default function AgentLayouts() {
   const [openSidebar, setopenSidebar] = useState(false);

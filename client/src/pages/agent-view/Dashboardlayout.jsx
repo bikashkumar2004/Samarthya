@@ -1,12 +1,17 @@
 import React from 'react'
 import Dashboard from './dashboard/Dashboard'
-import RecentData from './dashboard/RecentData'
+// import RecentData from './dashboard/RecentData'
+import LiveMonitor from './LiveMonitor'
 
 export default function Dashboardlayout() {
   return (
     <>
     <Dashboard/>
-    <RecentData/>
+    {/* <RecentData/> */}
+    <div className='mt-5'>
+      <LiveMonitor/>
+
+    </div>
     </>
   )
 }

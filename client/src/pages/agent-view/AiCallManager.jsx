@@ -51,6 +51,7 @@ import {
  
 } from "@/store/call-mannager/aiCallmanage";
 import CallHistory from '@/components/agent-view/aicallmanager/CallHistory';
+import LiveMonitor from './LiveMonitor';
 
 function formatDuration(totalSec = 0) {
   const sNum = Number(totalSec) || 0;
@@ -547,7 +548,7 @@ const AICallManager = () => {
       </div>
 
       {/* Live Monitor Dashboard */}
-      <Card className="border-2 border-blue-200 shadow-xl">
+      {/* <Card className="border-2 border-blue-200 shadow-xl">
         <CardHeader className="bg-gradient-to-r from-blue-50 to-cyan-50 border-b-2 border-blue-200">
           <CardTitle className="text-xl font-bold text-[#043927] flex items-center gap-2">
             <Activity className="w-6 h-6 text-blue-600 animate-pulse" />
@@ -611,7 +612,8 @@ const AICallManager = () => {
             </Table>
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
+      <LiveMonitor/>
 
       <CallHistory/>
 

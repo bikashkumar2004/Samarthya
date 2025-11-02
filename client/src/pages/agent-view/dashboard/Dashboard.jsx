@@ -85,7 +85,7 @@ const Dashboard = () => {
       </div>
 
       {/* Sentiment Analysis */}
-      <div className="bg-white p-6 rounded-lg shadow-md">
+      {/* <div className="bg-white p-6 rounded-lg shadow-md">
         <h3 className="text-lg font-semibold text-gray-800 mb-4">
           Sentiment Analysis
         </h3>
@@ -109,7 +109,7 @@ const Dashboard = () => {
             {sentimentData.neutral}% Neutral
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
