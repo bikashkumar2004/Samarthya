@@ -19,8 +19,9 @@ import {
 } from "../../controller/agent/calliniciate.js";
 
 import { callTranscript } from "../../controller/calls/callhistory.js";
-import { getLiveStatus, saveLiveStatus } from "../../controller/agent/callstatus.js";
-import { authMiddleware } from "../../controller/auth/authController.js";
+import { getLiveStatus, saveLiveStatus } from "../../controller/agent/callStatus.js";
+import { fetchAllContacts, getUploadDetail } from "../../controller/agent/allContacts.js";
+import {authMiddleware} from "../../controller/auth/authController.js"
 
 const router = express.Router();
 
@@ -51,6 +52,8 @@ router.post(
   saveLiveStatus
 );
 router.get("/status/:callId", getLiveStatus);
-// router.get("/status/:callId",authMiddleware, getLiveStatus);
 
 export default router;
+//All concats
+router.get("/allcontacts",authMiddleware,fetchAllContacts);
+router.get("/allconcats/:id",authMiddleware,getUploadDetail)

@@ -1,4 +1,3 @@
-// controller/allLeads.js
 import Calls from "../../models/callHistory.js";
 import UploadDetails from "../../models/uploadDetails.js";
 
@@ -10,9 +9,9 @@ export async function allLeads(req, res) {
     const sortDir = String(order).toLowerCase() === "asc" ? 1 : -1;
 
     const pipeline = [
-      { $match: {} },
+      { $match: {} }, // Match all customers
 
-      // Latest call per lead; handle ObjectId vs string customer_id
+      // Lookup latest updated call per customer by updatedAt
       {
         $lookup: {
           from: Calls.collection.name,
@@ -22,13 +21,13 @@ export async function allLeads(req, res) {
               $match: {
                 $expr: {
                   $or: [
-                    { $eq: ["$customer_id", "$$uid"] },                // ObjectId == ObjectId
-                    { $eq: [{ $toString: "$customer_id" }, { $toString: "$$uid" }] }, // string compare fallback
+                    { $eq: ["$customer_id", "$$uid"] },
+                    { $eq: [{ $toString: "$customer_id" }, { $toString: "$$uid" }] },
                   ],
                 },
               },
             },
-            { $sort: { createdAt: -1 } },
+            { $sort: { updatedAt: -1 } }, // Sort by updatedAt for latest changes
             { $limit: 1 },
             {
               $project: {
@@ -44,9 +43,10 @@ export async function allLeads(req, res) {
           as: "latestCall",
         },
       },
+
       { $unwind: { path: "$latestCall", preserveNullAndEmptyArrays: true } },
 
-      // Alias to UI and derive call_time with preferred order: end, start, then createdAt
+      // Derive call_time (prefer end > start > createdAt)
       {
         $project: {
           _id: 0,
@@ -71,7 +71,6 @@ export async function allLeads(req, res) {
             },
           },
 
-          // Keep a Date for reliable sorting, independent of string formatting
           call_time_sort_key: {
             $let: {
               vars: {
@@ -88,10 +87,10 @@ export async function allLeads(req, res) {
         },
       },
 
-      // Sort by Date
+      // Sort by call time
       { $sort: { call_time_sort_key: sortDir } },
 
-      // Row numbers
+      // Add row numbers
       {
         $setWindowFields: {
           sortBy: { call_time_sort_key: sortDir },
@@ -99,7 +98,6 @@ export async function allLeads(req, res) {
         },
       },
 
-      // Final shape; keep call_time as Date and format on client, or replace with $dateToString here
       {
         $project: {
           customer_id: 1,

@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect} from "react";
 import { checkAuth } from "./store/auth-slice";
 import AgentLayouts from "./components/agent-view/AgentLayouts";
-import Leads from "./pages/agent-view/Leads";
+// import Leads from "./pages/agent-view/Leads";
 import CreateTask from "./pages/agent-view/CreateTask";
 import AiCallMannager from "./pages/agent-view/AiCallManager";
 import Dashboard from "./pages/agent-view/Dashboardlayout";

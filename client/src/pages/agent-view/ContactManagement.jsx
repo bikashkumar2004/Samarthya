@@ -1,248 +1,102 @@
-import React, { useState } from 'react';
-import * as XLSX from 'xlsx';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '@/components/ui/table';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import {
-  Download,
-  Search,
-  Filter,
-  X,
-  MoreVertical,
-  Edit,
-  Trash2,
-  Smile,
-  Meh,
-  Frown,
-  Users,
-  ChevronLeft,
-  ChevronRight,
-  AlertCircle
-} from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Checkbox } from '@/components/ui/checkbox';
-import { toast } from 'sonner';
+import React, { useEffect, useMemo, useState } from "react";
+import * as XLSX from "xlsx";
+import { useDispatch, useSelector } from "react-redux";
 
 
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow
+} from "@/components/ui/table";
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Download, Search, Filter, X, MoreVertical, Edit, Trash2, Users,
+  ChevronLeft, ChevronRight, AlertCircle
+} from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "sonner";
+import { fetchAllContacts, selectContacts, selectContactsError, selectContactsLoading } from "@/store/agent-slice/allConcats";
+import { clearMessages, deleteContactList, editContactList } from "@/store/agent-slice";
+// import DetailDialog from "@/components/agent-view/DetailDialog";
 
 const ContactManagement = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const dispatch = useDispatch();
+
+  // Redux state
+  const contacts = useSelector(selectContacts);
+  const isLoading = useSelector(selectContactsLoading);
+  const error = useSelector(selectContactsError);
+
+  // UI state
+  const [searchTerm, setSearchTerm] = useState("");
   const [filterOpen, setFilterOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
-  
 
-  // Pagination states
+  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
 
-  // Filter States
+  // Filters
   const [categoryFilter, setCategoryFilter] = useState([]);
 
+  // Load data on mount
+  useEffect(() => {
+    dispatch(fetchAllContacts());
+    return () => {
+      dispatch(clearMessages());
+    };
+  }, [dispatch]);
 
-  // Sample contacts data
-  const [contactsData, setContactsData] = useState([
-    {
-      id: 1,
-      name: 'Rajesh Kumar',
-      category: 'Enterprise',
-      description: 'Senior Manager, Tech Division',
-      phone: '+91-9876543210',
-      email: 'rajesh.kumar@company.com'
-    },
-    {
-      id: 2,
-      name: 'Priya Sharma',
-      category: 'SME',
-      description: 'Business Owner, IT Solutions',
-      phone: '+91-9876543211',
-      email: 'priya.sharma@company.com'
-    },
-    {
-      id: 3,
-      name: 'Amit Patel',
-      category: 'Startup',
-      description: 'Founder & CEO',
-      phone: '+91-9876543212',
-      email: 'amit.patel@startup.com'
-    },
-    {
-      id: 4,
-      name: 'Sneha Reddy',
-      category: 'Enterprise',
-      description: 'HR Manager',
-      phone: '+91-9876543213',
-      email: 'sneha.reddy@company.com'
-    },
-    {
-      id: 5,
-      name: 'Vikram Singh',
-      category: 'SME',
-      description: 'Operations Head',
-      phone: '+91-9876543214',
-      email: 'vikram.singh@company.com'
-    },
-    {
-      id: 6,
-      name: 'Anita Desai',
-      category: 'Startup',
-      description: 'Co-founder',
-      phone: '+91-9876543215',
-      email: 'anita.desai@startup.com'
-    },
-    {
-      id: 7,
-      name: 'Rahul Mehta',
-      category: 'Enterprise',
-      description: 'Project Manager',
-      phone: '+91-9876543216',
-      email: 'rahul.mehta@company.com'
-    },
-    {
-      id: 8,
-      name: 'Kavita Joshi',
-      category: 'SME',
-      description: 'Finance Director',
-      phone: '+91-9876543217',
-      email: 'kavita.joshi@company.com'
-    },
-    {
-      id: 9,
-      name: 'Suresh Nair',
-      category: 'Startup',
-      description: 'CTO',
-      phone: '+91-9876543218',
-      email: 'suresh.nair@startup.com'
-    },
-    {
-      id: 10,
-      name: 'Deepa Iyer',
-      category: 'Enterprise',
-      description: 'Sales Manager',
-      phone: '+91-9876543219',
-      email: 'deepa.iyer@company.com'
-    },
-    {
-      id: 11,
-      name: 'Manish Gupta',
-      category: 'SME',
-      description: 'Technical Lead',
-      phone: '+91-9876543220',
-      email: 'manish.gupta@company.com'
-    },
-    {
-      id: 12,
-      name: 'Pooja Kapoor',
-      category: 'Startup',
-      description: 'Marketing Head',
-      phone: '+91-9876543221',
-      email: 'pooja.kapoor@startup.com'
-    },
-    {
-      id: 13,
-      name: 'Arun Kumar',
-      category: 'Enterprise',
-      description: 'Consultant',
-      phone: '+91-9876543222',
-      email: 'arun.kumar@company.com'
-    },
-    {
-      id: 14,
-      name: 'Nisha Verma',
-      category: 'SME',
-      description: 'Account Manager',
-      phone: '+91-9876543223',
-      email: 'nisha.verma@company.com'
-    },
-    {
-      id: 15,
-      name: 'Sanjay Rao',
-      category: 'Startup',
-      description: 'Product Manager',
-      phone: '+91-9876543224',
-      email: 'sanjay.rao@startup.com'
-    },
-    {
-      id: 16,
-      name: 'Sanjay Rao',
-      category: 'Startup',
-      description: 'Product Manager',
-      phone: '+91-9876543224',
-      email: 'sanjay.rao@startup.com'
-    },
-    {
-      id: 17,
-      name: 'Sanjay Rao',
-      category: 'Startup',
-      description: 'Product Manager',
-      phone: '+91-9876543224',
-      email: 'sanjay.rao@startup.com'
-    },
-  ]);
+  // Compute unique categories from server data
+  const categories = useMemo(
+    () => Array.from(new Set((contacts || []).map((c) => c?.category).filter(Boolean))),
+    [contacts]
+  );
 
+  // Filtered list
+  const filteredContact = useMemo(() => {
+    const term = searchTerm.trim().toLowerCase();
+    return (contacts || []).filter((c) => {
+      const name = (c?.name || "").toLowerCase();
+      const category = (c?.category || "").toLowerCase();
+      const matchesSearch = term === "" || name.includes(term) || category.includes(term);
+      const matchesCategory =
+        categoryFilter.length === 0 || categoryFilter.includes(c?.category || "");
+      return matchesSearch && matchesCategory;
+    });
+  }, [contacts, searchTerm, categoryFilter]);
 
-
-  const filteredContact = contactsData.filter((contact) => {
-    const matchesSearch =
-      contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      contact.category.toLowerCase().includes(searchTerm.toLowerCase());
-
-    const matchesCategory = categoryFilter.length === 0 || categoryFilter.includes(contact.category);
-
-
-    return matchesSearch && matchesCategory;
-  });
-
-  // Pagination
-  const totalPages = Math.ceil(filteredContact.length / itemsPerPage);
+  // Pagination window
+  const totalPages = Math.max(1, Math.ceil(filteredContact.length / itemsPerPage));
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentContact = filteredContact.slice(startIndex, endIndex);
 
-  // Reset to page 1 when filters change
-  React.useEffect(() => {
+  // Reset to first page when filters change
+  useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm, categoryFilter]);
-
 
   const clearAllFilters = () => {
     setCategoryFilter([]);
     setCurrentPage(1);
   };
 
-
   const handleCategoryChange = (category) => {
-    setCategoryFilter(prev =>
-      prev.includes(category)
-        ? prev.filter(c => c !== category)
-        : [...prev, category]
+    setCategoryFilter((prev) =>
+      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
     );
   };
-
 
   const handleEdit = (contact) => {
     setSelectedContact(contact);
@@ -254,21 +108,56 @@ const ContactManagement = () => {
     setDeleteDialogOpen(true);
   };
 
-  const confirmDelete = () => {
-    setContactsData(contactsData.filter(contact => contact.id !== selectedContact.id));
-    toast.success(`Contact "${selectedContact.name}" deleted successfully`);
-    setDeleteDialogOpen(false);
-    setSelectedContact(null);
+  const confirmDelete = async () => {
+    try {
+      if (!selectedContact?._id) return;
+      await dispatch(deleteContactList(selectedContact._id)).unwrap();
+      toast.success(`Contact "${selectedContact.name}" deleted successfully`);
+    } catch (e) {
+      toast.error(typeof e === "string" ? e : "Failed to delete contact");
+    } finally {
+      setDeleteDialogOpen(false);
+      setSelectedContact(null);
+    }
+  };
+
+  const saveEdit = async (form) => {
+    try {
+      if (!selectedContact?._id) return;
+      // Minimal form read; adapt as needed
+      const payload = {
+        name: form.get("name"),
+        category: form.get("category"),
+        description: form.get("description"),
+        phoneNo: form.get("phoneNo"),
+        purpose: form.get("purpose") || "General", // if required by API
+      };
+      await dispatch(
+        editContactList({ id: selectedContact._id, formData: payload })
+      ).unwrap();
+      toast.success("Contact updated successfully");
+      setEditDialogOpen(false);
+      setSelectedContact(null);
+    } catch (e) {
+      toast.error(typeof e === "string" ? e : "Failed to update contact");
+    }
   };
 
   const downloadExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(filteredContact);
+    // Map to a flat export structure
+    const exportRows = filteredContact.map((c, idx) => ({
+      "Sl No": idx + 1,
+      Name: c?.name || "",
+      Category: c?.category || "",
+      Description: c?.description || "",
+      "Phone Number": c?.phoneNo || "",
+      Email: c?.email || "",
+    }));
+    const ws = XLSX.utils.json_to_sheet(exportRows);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Contacts');
-    XLSX.writeFile(wb, 'contacts_data.xlsx');
+    XLSX.utils.book_append_sheet(wb, ws, "Contacts");
+    XLSX.writeFile(wb, "contacts_data.xlsx");
   };
-
-  const categories = [...new Set(contactsData.map(contact => contact.category))];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50 p-4 md:p-6 space-y-6">
@@ -280,7 +169,18 @@ const ContactManagement = () => {
         </h1>
       </div>
 
-      
+      {/* Status / Error */}
+      {isLoading && (
+        <div className="rounded-md border p-3 text-sm text-gray-700 bg-yellow-50">
+          Loading contacts…
+        </div>
+      )}
+      {error && (
+        <div className="rounded-md border p-3 text-sm text-red-700 bg-red-50">
+          {typeof error === "string" ? error : "Failed to load contacts"}
+        </div>
+      )}
+
       {/* Contacts Table */}
       <Card className="border-2 border-gray-200 shadow-xl overflow-hidden">
         <CardHeader className="bg-gradient-to-r from-gray-50 to-white border-b-2 border-gray-200">
@@ -302,22 +202,21 @@ const ContactManagement = () => {
 
               <Sheet open={filterOpen} onOpenChange={setFilterOpen}>
                 <SheetTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="border-[#808085] text-black font-bold"
-                  >
+                  <Button variant="outline" className="border-[#808085] text-black font-bold">
                     <Filter className="w-4 h-4 mr-2" />
                     Filter By
-                    {( categoryFilter.length > 0) && (
+                    {categoryFilter.length > 0 && (
                       <span className="ml-2 bg-[#043927] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                        {categoryFilter.length }
+                        {categoryFilter.length}
                       </span>
                     )}
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="right" className="w-full sm:w-96 overflow-y-auto bg-white">
                   <SheetHeader>
-                    <SheetTitle className="text-2xl font-bold text-[#043927]">Filter Options</SheetTitle>
+                    <SheetTitle className="text-2xl font-bold text-[#043927]">
+                      Filter Options
+                    </SheetTitle>
                   </SheetHeader>
 
                   <div className="space-y-6 mt-6">
@@ -343,8 +242,6 @@ const ContactManagement = () => {
                       </div>
                     </div>
 
-
-
                     {/* Action Buttons */}
                     <div className="space-y-3 border-t pt-6">
                       <Button
@@ -367,7 +264,7 @@ const ContactManagement = () => {
               </Sheet>
 
               {/* Clear Filter Button */}
-              {(categoryFilter.length > 0) && (
+              {categoryFilter.length > 0 && (
                 <Button
                   onClick={clearAllFilters}
                   variant="outline"
@@ -388,6 +285,7 @@ const ContactManagement = () => {
             </div>
           </div>
         </CardHeader>
+
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
@@ -395,17 +293,23 @@ const ContactManagement = () => {
                 <TableRow className="bg-gradient-to-r from-gray-100 to-gray-50">
                   <TableHead className="font-bold text-[#8f8e94]">Sl No.</TableHead>
                   <TableHead className="font-bold text-[#8f8e94]">Name</TableHead>
-                  <TableHead className="font-bold text-[#8f8e94] hidden lg:table-cell">Category</TableHead>
+                  <TableHead className="font-bold text-[#8f8e94] hidden lg:table-cell">
+                    Category
+                  </TableHead>
                   <TableHead className="font-bold text-[#8f8e94]">Description</TableHead>
-                  <TableHead className="font-bold text-[#8f8e94] hidden sm:table-cell">Phone Number</TableHead>
-                  <TableHead className="font-bold text-[#8f8e94] hidden md:table-cell">Email</TableHead>
+                  <TableHead className="font-bold text-[#8f8e94] hidden sm:table-cell">
+                    Phone Number
+                  </TableHead>
+                  <TableHead className="font-bold text-[#8f8e94] hidden md:table-cell">
+                    Email
+                  </TableHead>
                   <TableHead className="font-bold text-[#8f8e94] text-center">Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {currentContact.length > 0 ? (
                   currentContact.map((contact, index) => (
-                    <TableRow key={contact.id} className=" hover:bg-[#f7f7f8] transition-colors">
+                    <TableRow key={contact._id} className="hover:bg-[#f7f7f8] transition-colors">
                       <TableCell className="font-semibold">{startIndex + index + 1}</TableCell>
                       <TableCell>
                         <div>
@@ -414,7 +318,7 @@ const ContactManagement = () => {
                         </div>
                       </TableCell>
                       <TableCell className="hidden lg:table-cell">
-                        <span className="inline-flex  py-1 rounded-full text-sm font-semibold ">
+                        <span className="inline-flex py-1 rounded-full text-sm font-semibold ">
                           {contact.category}
                         </span>
                       </TableCell>
@@ -422,11 +326,11 @@ const ContactManagement = () => {
                         <div className="truncate text-gray-700">{contact.description}</div>
                       </TableCell>
                       <TableCell className="hidden sm:table-cell">
-                        <span className={`inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold`}>
-                          {contact.phone}
+                        <span className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold">
+                          {contact.phoneNo}
                         </span>
                       </TableCell>
-                      <TableCell className="hidden md:table-cell  text-s text-gray-700">
+                      <TableCell className="hidden md:table-cell text-s text-gray-700">
                         {contact.email}
                       </TableCell>
                       <TableCell className="text-center">
@@ -473,9 +377,11 @@ const ContactManagement = () => {
             <div className="border-t-2 border-gray-200 bg-gradient-to-r from-gray-50 to-white px-6 py-4">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="text-sm text-gray-700">
-                  Showing <span className="font-bold text-[#043927]">{startIndex + 1}</span> to{' '}
-                  <span className="font-bold text-[#043927]">{Math.min(endIndex, filteredContact.length)}</span> of{' '}
-                  <span className="font-bold text-[#043927]">{filteredContact.length}</span> results
+                  Showing <span className="font-bold text-[#043927]">{startIndex + 1}</span> to{" "}
+                  <span className="font-bold text-[#043927]">
+                    {Math.min(endIndex, filteredContact.length)}
+                  </span>{" "}
+                  of <span className="font-bold text-[#043927]">{filteredContact.length}</span> results
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -537,7 +443,9 @@ const ContactManagement = () => {
 
                     {currentPage < totalPages - 1 && (
                       <>
-                        {currentPage < totalPages - 2 && <span className="px-2 text-gray-500">...</span>}
+                        {currentPage < totalPages - 2 && (
+                          <span className="px-2 text-gray-500">...</span>
+                        )}
                         <Button
                           onClick={() => setCurrentPage(totalPages)}
                           variant="outline"
@@ -577,32 +485,42 @@ const ContactManagement = () => {
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-[#043927] flex items-center gap-2">
               <Edit className="w-6 h-6" />
-              Edit Contact - {selectedContact?.name}
+              Edit Contact {selectedContact?.name ? `- ${selectedContact.name}` : ""}
             </DialogTitle>
             <DialogDescription>
-              <div className="mt-4 space-y-4">
+              <form
+                className="mt-4 space-y-4"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const form = new FormData(e.currentTarget);
+                  saveEdit(form);
+                }}
+              >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Name</Label>
-                    <Input defaultValue={selectedContact?.name} />
+                    <Label htmlFor="name">Name</Label>
+                    <Input name="name" defaultValue={selectedContact?.name} />
                   </div>
                   <div className="space-y-2">
-                    <Label>Category</Label>
-                    <Input defaultValue={selectedContact?.category} />
+                    <Label htmlFor="category">Category</Label>
+                    <Input name="category" defaultValue={selectedContact?.category} />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label>Description</Label>
-                  <Input defaultValue={selectedContact?.description} />
+                  <Label htmlFor="description">Description</Label>
+                  <Input name="description" defaultValue={selectedContact?.description} />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Phone Number</Label>
-                    <Input defaultValue={selectedContact?.phone} />
+                    <Label htmlFor="phoneNo">Phone Number</Label>
+                    <Input name="phoneNo" defaultValue={selectedContact?.phoneNo} />
                   </div>
                 </div>
+                {/* Only if your API requires a purpose field */}
+                <input type="hidden" name="purpose" defaultValue="General" />
                 <div className="flex gap-3 pt-4">
                   <Button
+                    type="button"
                     onClick={() => setEditDialogOpen(false)}
                     variant="outline"
                     className="flex-1 border-2 font-bold"
@@ -610,16 +528,13 @@ const ContactManagement = () => {
                     Cancel
                   </Button>
                   <Button
-                    onClick={() => {
-                      toast.success('Contact updated successfully');
-                      setEditDialogOpen(false);
-                    }}
+                    type="submit"
                     className="flex-1 bg-gradient-to-r from-[#043927] to-emerald-700 text-white font-bold"
                   >
                     Save Changes
                   </Button>
                 </div>
-              </div>
+              </form>
             </DialogDescription>
           </DialogHeader>
         </DialogContent>
@@ -636,17 +551,22 @@ const ContactManagement = () => {
             <DialogDescription>
               <div className="mt-4 space-y-4">
                 <p className="text-gray-700">
-                  Are you sure you want to delete the contact <strong>{selectedContact?.name}</strong>? This action cannot be undone.
+                  Are you sure you want to delete the contact{" "}
+                  <strong>{selectedContact?.name}</strong>? This action cannot be undone.
                 </p>
                 <div className="bg-gradient-to-br from-red-50 to-rose-50 p-4 rounded-xl border-2 border-red-200">
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-sm text-red-700 font-semibold">Name:</span>
-                      <span className="text-sm font-bold text-gray-900">{selectedContact?.name}</span>
+                      <span className="text-sm font-bold text-gray-900">
+                        {selectedContact?.name}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-red-700 font-semibold">Category:</span>
-                      <span className="text-sm font-bold text-gray-900">{selectedContact?.category}</span>
+                      <span className="text-sm font-bold text-gray-900">
+                        {selectedContact?.category}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -671,6 +591,8 @@ const ContactManagement = () => {
           </DialogHeader>
         </DialogContent>
       </Dialog>
+
+      {/* <DetailDialog/> */}
     </div>
   );
 };

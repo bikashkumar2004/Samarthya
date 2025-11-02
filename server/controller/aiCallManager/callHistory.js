@@ -4,16 +4,18 @@ import UploadDetails from "../../models/uploadDetails.js";
 import CallLiveStatus from "../../models/callLiveStatus.js";
 import Calls from "../../models/callHistory.js";
 
-
-export async function getCallHistory(req, res) { 
+export async function getCallHistory(req, res) {
   try {
     const { limit = 50 } = req.query;
 
     const rows = await CallLiveStatus.aggregate([
       { $sort: { updated_at_iso: -1 } },
+
+      // Get latest update per call
       { $group: { _id: "$call_id", latest: { $first: "$$ROOT" } } },
       { $replaceRoot: { newRoot: "$latest" } },
 
+      // Join with UploadDetails (customer info)
       {
         $lookup: {
           from: UploadDetails.collection.name,
@@ -25,18 +27,21 @@ export async function getCallHistory(req, res) {
       },
       { $unwind: { path: "$contact", preserveNullAndEmptyArrays: true } },
 
+      // Join with Calls collection for sentiment and call details
       {
         $lookup: {
           from: Calls.collection.name,
           localField: "call_id",
           foreignField: "call_id",
-          pipeline: [{ $project: { _id: 0, sentiment: 1, call_duration_seconds: 1 } }],
+          pipeline: [{ $project: { _id: 0, sentiment_overall: 1, call_duration_seconds: 1, summary: 1 } }],
           as: "callDoc",
         },
       },
       { $unwind: { path: "$callDoc", preserveNullAndEmptyArrays: true } },
 
       { $limit: Number(limit) },
+
+      // Final projection
       {
         $project: {
           _id: 0,
@@ -45,8 +50,9 @@ export async function getCallHistory(req, res) {
           name: { $ifNull: ["$contact.name", "Unknown"] },
           phoneNo: { $ifNull: ["$contact.phoneNo", "Unknown"] },
           status: "$last_status",
-          sentiment: "$callDoc.sentiment",
+          sentiment: "$callDoc.sentiment_overall", // ensure this matches actual field name
           duration_seconds: { $ifNull: ["$callDoc.call_duration_seconds", 0] },
+          summary: "$callDoc.summary",
           updated_at_iso: 1,
         },
       },
@@ -59,32 +65,36 @@ export async function getCallHistory(req, res) {
   }
 }
 
+
+
 export async function getCallHistoryByIds(req, res) {
   try {
-    let { customerId, callId } = req.params; // prefer /:customerId/:callId [web:51]
+    let { customerId, callId } = req.params;
     if ((!customerId || !callId) && req.params?.id) {
-      const decoded = decodeURIComponent(req.params.id || "");         // supports /:id [web:51]
-      const [cid, ccall] = decoded.split(":");                          // "customerId:callId" [web:51]
+      const decoded = decodeURIComponent(req.params.id || "");
+      const [cid, ccall] = decoded.split(":");
       customerId = customerId || cid;
       callId = callId || ccall;
     }
 
     if (!customerId || !callId) {
-      return res.status(400).json({ success: false, message: "customerId and callId are required" }); 
+      return res.status(400).json({ success: false, message: "customerId and callId are required" });
     }
 
     const customerObjectId = mongoose.Types.ObjectId.isValid(customerId)
       ? new mongoose.Types.ObjectId(customerId)
-      : null; 
+      : null;
 
     if (!customerObjectId) {
-      return res.status(400).json({ success: false, message: "Invalid customerId" }); 
+      return res.status(400).json({ success: false, message: "Invalid customerId" });
     }
 
     const rows = await CallLiveStatus.aggregate([
       { $match: { customer_id: customerObjectId, call_id: callId } },
       { $sort: { updated_at_iso: -1 } },
       { $limit: 1 },
+
+      // Join with UploadDetails
       {
         $lookup: {
           from: UploadDetails.collection.name,
@@ -95,16 +105,19 @@ export async function getCallHistoryByIds(req, res) {
         },
       },
       { $unwind: { path: "$contact", preserveNullAndEmptyArrays: true } },
+
+      // Join with Calls for sentiment and details
       {
         $lookup: {
           from: Calls.collection.name,
           localField: "call_id",
           foreignField: "call_id",
-          pipeline: [{ $project: { _id: 0, sentiment: 1, call_duration_seconds: 1, summary: 1 } }],
+          pipeline: [{ $project: { _id: 0, sentiment_overall: 1, call_duration_seconds: 1, summary: 1 } }],
           as: "callDoc",
         },
       },
       { $unwind: { path: "$callDoc", preserveNullAndEmptyArrays: true } },
+
       {
         $project: {
           _id: 0,
@@ -113,21 +126,21 @@ export async function getCallHistoryByIds(req, res) {
           name: { $ifNull: ["$contact.name", "Unknown"] },
           phoneNo: { $ifNull: ["$contact.phoneNo", "Unknown"] },
           status: "$last_status",
-          sentiment: "$callDoc.sentiment",
+          sentiment: "$callDoc.sentiment_overall",
           duration_seconds: { $ifNull: ["$callDoc.call_duration_seconds", 0] },
           summary: "$callDoc.summary",
           updated_at_iso: 1,
         },
       },
-    ]); 
+    ]);
 
     if (!rows.length) {
-      return res.status(404).json({ success: false, message: "Record not found" }); 
+      return res.status(404).json({ success: false, message: "Record not found" });
     }
-
-    return res.json({ success: true, data: rows[0] }); 
+    return res.json({ success: true, data: rows[0] });
   } catch (e) {
     console.error("getCallHistoryByIds error:", e);
-    return res.status(500).json({ success: false, message: "Server error" }); 
+    return res.status(500).json({ success: false, message: "Server error" });
   }
 }
+
