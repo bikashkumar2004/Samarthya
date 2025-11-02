@@ -36,6 +36,7 @@ export const fetchAllDetails = createAsyncThunk(
     }
   }
 );
+
 export const fetchSingleTask = createAsyncThunk(
   "upload/fetchSingleTask",
   async (taskId, { rejectWithValue }) => {

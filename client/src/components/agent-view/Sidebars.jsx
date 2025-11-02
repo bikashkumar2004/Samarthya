@@ -39,6 +39,12 @@ const adminSidebarMenuItems = [
     icon: <Hash className="w-5 h-5" />,
   },
   {
+    id: "contacts",
+    label: "My Contacts",
+    path: "/agent/my-contacts",
+    icon: <Hash className="w-5 h-5" />,
+  },
+  {
     id: "lead",
     label: "Leads",
     path: "/agent/leads",
