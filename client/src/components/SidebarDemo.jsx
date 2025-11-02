@@ -1,6 +1,20 @@
 import React, { useState, createContext, useContext } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, X, LayoutDashboard, MessageSquarePlus, MessageCircle, ClipboardList, Users, Target, Phone, Clock, Megaphone, Shield } from "lucide-react";
+import {
+  Menu,
+  X,
+  LayoutDashboard,
+  MessageSquarePlus,
+  MessageCircle,
+  ClipboardList,
+  Users,
+  Target,
+  Phone,
+  Clock,
+  Megaphone,
+  Shield,
+  User
+} from "lucide-react";
 import Dashboard from "@/pages/agent-view/dashboard/Dashboard";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 
@@ -150,10 +164,13 @@ export const SidebarLink = ({ link, className, ...props }) => {
 export const Logo = () => {
   return (
     <a
-      href="#"
+      href="/agent/dashboard"
       className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20"
     >
-      <Shield className="h-5 w-6 text-blue-600 dark:text-blue-400" strokeWidth={2.5} />
+      <Shield
+        className="h-5 w-6 text-blue-600 dark:text-blue-400"
+        strokeWidth={2.5}
+      />
       <motion.span
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -171,13 +188,13 @@ export const LogoIcon = () => {
       href="#"
       className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20"
     >
-      <Shield className="h-5 w-6 text-blue-600 dark:text-blue-400" strokeWidth={2.5} />
-
+      <Shield
+        className="h-5 w-6 text-blue-600 dark:text-blue-400"
+        strokeWidth={2.5}
+      />
     </a>
   );
 };
-
-
 
 // Main Demo Component
 export default function SidebarDemo() {
@@ -246,9 +263,9 @@ export default function SidebarDemo() {
       ),
     },
   ];
-  
+
   const [open, setOpen] = useState(false);
-  
+
   return (
     <div className="h-screen w-full bg-neutral-100 dark:bg-neutral-900">
       <div
@@ -270,14 +287,12 @@ export default function SidebarDemo() {
             <div>
               <SidebarLink
                 link={{
-                  label: "Manu Arora",
+                  label: "Agent 1",
                   href: "#",
                   icon: (
-                    <img
-                      src="https://assets.aceternity.com/manu.png"
-                      className="h-7 w-7 flex-shrink-0 rounded-full"
-                      alt="Avatar"
-                    />
+                    <div className="h-7 w-7 flex-shrink-0 rounded-full bg-gray-200 flex items-center justify-center">
+                      <User className="h-4 w-4 text-gray-700" />
+                    </div>
                   ),
                 }}
               />
