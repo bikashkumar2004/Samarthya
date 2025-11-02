@@ -5,8 +5,13 @@ import ComposeMessage from "@/components/agent-view/ComposeMessage/ComposeMessag
 
 export default function ComposeMsg() {
   const [sentMessages, setSentMessages] = useState([]);
+  const [sentwpMessages, setSentwpMessages] = useState([]);
+
 
   const handleMessageSent = (messageData) => {
+    setSentMessages(prev => [messageData, ...prev]);
+  };
+  const handlewpMessageSent = (messageData) => {
     setSentMessages(prev => [messageData, ...prev]);
   };
 
@@ -16,7 +21,7 @@ export default function ComposeMsg() {
         {/* Left Card - Compose Message with Scrollbar */}
         <Card className="h-full overflow-hidden">
           <CardContent className="p-6 h-full overflow-y-auto">
-            <ComposeMessage onMessageSent={handleMessageSent} />
+            <ComposeMessage onMessageSent={handleMessageSent} onwpMessageSent={handlewpMessageSent} />
           </CardContent>
         </Card>
 

@@ -31,6 +31,8 @@ import RegisterPage from "./pages/auth/RegisterPage";
 import ContactManagement from "./pages/agent-view/ContactManagement";
 import EmailVer from "./pages/auth/EmailVer";
 import ComposeMsg from "./pages/agent-view/ComposeMsg";
+import SidebarDemo from "./components/SidebarDemo";
+import WhatsappInbox from "./pages/agent-view/WhatsappInbox";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -64,22 +66,17 @@ export default function App() {
         >
           <Route path="register" element={<RegisterPage />} />
           <Route path="login" element={<LoginPage/>} />
-          {/* <Route path="send-verify-otp" element={<EmailVerify />} /> */}
           <Route path="send-verify-otp" element={<EmailVer />} />
         </Route>
 
-        <Route path="/agent" element={<AgentLayouts />}>
+        <Route path="/agent" element={<SidebarDemo />}>
           <Route path="Dashboard" element={<Dashboard />} />
-          <Route path="inbox" element={<Inbox/>}>
-            <Route path="composemessage" element={<ComposeMsg/>}/>
-            <Route path="sms" element={<Sms/>}/>
-            <Route path="email" element={<Email/>}/>
-            <Route path="whatsapp" element={<Whatsapp/>}/>
-          </Route>
+          <Route path="composemessage" element={<ComposeMsg/>}/>
+          <Route path="whatsapp-inbox" element={<WhatsappInbox/>}/>
           
-          <Route path="createtask" element={<CreateTask />} />
+          
+          <Route path="task-management" element={<CreateTask />} />
           <Route path="my-contacts" element={<ContactManagement />} />
-          {/* <Route path="Leads" element={<Leads />} /> */}
           <Route path="Leads" element={<LeadManagement />} />
           <Route path="aicallmanager" element={<AiCallMannager />} />
           <Route path="pending-followups" element={<Pending />} />
@@ -90,6 +87,7 @@ export default function App() {
       {/* <SamarthyaLanding/> */}
       
       {/* <RegisterPage/> */}
+      {/* <SidebarDemo/> */}
     </div>
   );
 }

@@ -11,6 +11,7 @@ dotenv.config();
 import smsRoutes from './router/msg/smsRoutes.js';
 import emailRoutes from './router/msg/emailRoutes.js';
 import messageRoutes from './router/msg/messageRoutes.js';
+import whatsappRoutes from './router/msg/whatsappRoutes.js';
 
 import router from "./router/auth/authRoute.js";
 import userrouter from "./router/auth/userRoute.js";
@@ -18,6 +19,7 @@ import contactLists from "./router/agent/contactList.js";
 import uploadData from "./router/createTask/index.js";
 import campaignRoutes  from './router/campaign/campaigns.js'
 import aiCallmanager from "./router/aiCall-Manager/index.js";
+
 
 const client = twilio(process.env.TWILIO_ACCOUNT_SID_WP, process.env.TWILIO_AUTH_TOKEN_WP);
 
@@ -61,6 +63,7 @@ app.get("/", (req, res) => res.send("API is working!"));
 app.use('/api/sms', smsRoutes);
 app.use('/api/email', emailRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/whatsapp', whatsappRoutes);
 
 app.use("/api/auth", router);
 app.use("/api/user", userrouter);
@@ -91,6 +94,8 @@ app.get('/api/health', (req, res) => {
     }
   });
 });
+
+
 
 
 
@@ -127,6 +132,28 @@ app.post('/api/send-whatsapp', async (req, res) => {
       body,
       ...(mediaUrl ? { mediaUrl } : {})
     });
+
+    // ✅ NEW: Store sent message in database
+    if (channel === 'whatsapp') {
+      const WhatsAppMessage = (await import('./models/WhatsAppMessage.js')).default;
+      
+      const conversationId = toNumber.replace('whatsapp:', '');
+      
+      const outboundMessage = new WhatsAppMessage({
+        messageSid: msg.sid,
+        from: fromNumber,
+        to: toNumber,
+        body: body,
+        direction: 'outbound',
+        status: msg.status,
+        conversationId: conversationId,
+        timestamp: new Date(),
+        mediaUrl: mediaUrl || null
+      });
+
+      await outboundMessage.save();
+      console.log('✅ Outbound message stored:', msg.sid);
+    }
 
     res.json({ 
       success: true,
