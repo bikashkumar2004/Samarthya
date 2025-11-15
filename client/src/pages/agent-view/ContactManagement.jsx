@@ -162,8 +162,8 @@ const ContactManagement = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50 p-4 md:p-6 space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-[#043927] via-emerald-700 to-green-600 p-6 rounded-2xl shadow-xl">
-        <h1 className="text-3xl md:text-4xl font-black text-white flex items-center gap-3">
+      <div className=" ">
+        <h1 className="text-3xl md:text-4xl font-black text-black flex items-center gap-3">
           <Users className="w-8 h-8 md:w-10 md:h-10" />
           My Contacts
         </h1>
@@ -184,96 +184,95 @@ const ContactManagement = () => {
       {/* Contacts Table */}
       <Card className="border-2 border-gray-200 shadow-xl overflow-hidden">
         <CardHeader className="bg-gradient-to-r from-gray-50 to-white border-b-2 border-gray-200">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <CardTitle className="text-2xl font-bold text-[#043927] flex items-center gap-2">
-              <Users className="w-6 h-6" />
-              All Contacts
-            </CardTitle>
-            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-              <div className="relative flex-1 sm:flex-initial">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input
-                  placeholder="Search contacts..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 w-full sm:w-64"
-                />
-              </div>
+          <div className=" sm:flex-row items-start sm:items-center justify-between">
+            <div className="flex flex-col justify-between sm:flex-row gap-3 w-full sm:w-auto">
+              <div className="flex gap-3">
+                <div className="relative flex-1 sm:flex-initial">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Input
+                    placeholder="Search contacts..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10 w-full sm:w-64"
+                  />
+                </div>
 
-              <Sheet open={filterOpen} onOpenChange={setFilterOpen}>
-                <SheetTrigger asChild>
-                  <Button variant="outline" className="border-[#808085] text-black font-bold">
-                    <Filter className="w-4 h-4 mr-2" />
-                    Filter By
-                    {categoryFilter.length > 0 && (
-                      <span className="ml-2 bg-[#043927] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                        {categoryFilter.length}
-                      </span>
-                    )}
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="right" className="w-full sm:w-96 overflow-y-auto bg-white">
-                  <SheetHeader>
-                    <SheetTitle className="text-2xl font-bold text-[#043927]">
-                      Filter Options
-                    </SheetTitle>
-                  </SheetHeader>
+                <Sheet open={filterOpen} onOpenChange={setFilterOpen}>
+                  <SheetTrigger asChild>
+                    <Button variant="outline" className="border-[#808085] text-black font-bold">
+                      <Filter className="w-4 h-4 mr-2" />
+                      Filter By
+                      {categoryFilter.length > 0 && (
+                        <span className="ml-2 bg-[#043927] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                          {categoryFilter.length}
+                        </span>
+                      )}
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="right" className="w-full sm:w-96 overflow-y-auto bg-white">
+                    <SheetHeader>
+                      <SheetTitle className="text-2xl font-bold text-[#043927]">
+                        Filter Options
+                      </SheetTitle>
+                    </SheetHeader>
 
-                  <div className="space-y-6 mt-6">
-                    {/* Category Filter */}
-                    <div className="space-y-3 border-t pt-6">
-                      <Label className="text-base font-bold text-gray-900">Category</Label>
-                      <div className="space-y-2">
-                        {categories.map((category) => (
-                          <div key={category} className="flex items-center space-x-2">
-                            <Checkbox
-                              id={`category-${category}`}
-                              checked={categoryFilter.includes(category)}
-                              onCheckedChange={() => handleCategoryChange(category)}
-                            />
-                            <label
-                              htmlFor={`category-${category}`}
-                              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-                            >
-                              {category}
-                            </label>
-                          </div>
-                        ))}
+                    <div className="space-y-6 mt-6">
+                      {/* Category Filter */}
+                      <div className="space-y-3 border-t pt-6">
+                        <Label className="text-base font-bold text-gray-900">Category</Label>
+                        <div className="space-y-2">
+                          {categories.map((category) => (
+                            <div key={category} className="flex items-center space-x-2">
+                              <Checkbox
+                                id={`category-${category}`}
+                                checked={categoryFilter.includes(category)}
+                                onCheckedChange={() => handleCategoryChange(category)}
+                              />
+                              <label
+                                htmlFor={`category-${category}`}
+                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                              >
+                                {category}
+                              </label>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="space-y-3 border-t pt-6">
+                        <Button
+                          onClick={clearAllFilters}
+                          variant="outline"
+                          className="w-full border-2 border-red-500 text-red-600 hover:bg-red-50 hover:text-red-700 font-bold"
+                        >
+                          <X className="w-4 h-4 mr-2" />
+                          Clear All Filters
+                        </Button>
+                        <Button
+                          onClick={() => setFilterOpen(false)}
+                          className="w-full bg-gradient-to-r from-[#043927] to-emerald-700 hover:from-[#032d1f] hover:to-emerald-800 text-white font-bold"
+                        >
+                          Apply Filters
+                        </Button>
                       </div>
                     </div>
+                  </SheetContent>
+                </Sheet>
 
-                    {/* Action Buttons */}
-                    <div className="space-y-3 border-t pt-6">
-                      <Button
-                        onClick={clearAllFilters}
-                        variant="outline"
-                        className="w-full border-2 border-red-500 text-red-600 hover:bg-red-50 hover:text-red-700 font-bold"
-                      >
-                        <X className="w-4 h-4 mr-2" />
-                        Clear All Filters
-                      </Button>
-                      <Button
-                        onClick={() => setFilterOpen(false)}
-                        className="w-full bg-gradient-to-r from-[#043927] to-emerald-700 hover:from-[#032d1f] hover:to-emerald-800 text-white font-bold"
-                      >
-                        Apply Filters
-                      </Button>
-                    </div>
-                  </div>
-                </SheetContent>
-              </Sheet>
+                {/* Clear Filter Button */}
+                {categoryFilter.length > 0 && (
+                  <Button
+                    onClick={clearAllFilters}
+                    variant="outline"
+                    className="border-2 border-red-500 text-red-600 hover:bg-red-50 hover:text-red-700 font-bold transition-all"
+                  >
+                    <X className="w-4 h-4 mr-2" />
+                    Clear Filters
+                  </Button>
+                )}
 
-              {/* Clear Filter Button */}
-              {categoryFilter.length > 0 && (
-                <Button
-                  onClick={clearAllFilters}
-                  variant="outline"
-                  className="border-2 border-red-500 text-red-600 hover:bg-red-50 hover:text-red-700 font-bold transition-all"
-                >
-                  <X className="w-4 h-4 mr-2" />
-                  Clear Filters
-                </Button>
-              )}
+              </div>
 
               <Button
                 onClick={downloadExcel}

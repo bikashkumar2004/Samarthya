@@ -157,7 +157,7 @@ export default function LiveMonitor() {
                   <TableHead className="font-bold text-gray-900">Name</TableHead>
                   <TableHead className="font-bold text-gray-900 hidden sm:table-cell">Status</TableHead>
                   <TableHead className="font-bold text-gray-900">Duration</TableHead>
-                  <TableHead className="font-bold text-gray-900 text-right">Action</TableHead>
+                  <TableHead className="font-bold text-gray-900 text-right pr-5">Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -185,10 +185,9 @@ export default function LiveMonitor() {
                           onClick={() => cancelLiveCall(call.sl)}
                           variant="destructive"
                           size="sm"
-                          className="bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 font-bold shadow-md"
+                          className=" font-bold "
                         >
-                          <X className="w-4 h-4 sm:mr-1" />
-                          <span className="hidden sm:inline">Cancel</span>
+                          <span className="hidden sm:inline cursor-pointer text-black">Cancel</span>
                         </Button>
                       </TableCell>
                     </TableRow>

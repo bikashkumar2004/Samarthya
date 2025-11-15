@@ -239,7 +239,7 @@ const CallHistory = () => {
 
               <Sheet open={filterOpen} onOpenChange={setFilterOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="outline" className="border-2 border-[#043927] text-[#043927] hover:bg-[#043927] hover:text-white font-bold">
+                  <Button variant="outline" className="border text-black border-gray-500 cursor-pointer font-bold">
                     <Filter className="w-4 h-4 mr-2" />
                     Filter By
                     {(statusFilter.length > 0 ||
@@ -371,7 +371,7 @@ const CallHistory = () => {
                       </Button>
                       <Button
                         onClick={() => setFilterOpen(false)}
-                        className="w-full bg-gradient-to-r from-[#043927] to-emerald-700 hover:from-[#032d1f] hover:to-emerald-800 text-white font-bold"
+                        className="w-full cursor-pointer bg-gradient-to-r from-[#043927] to-emerald-700 hover:from-[#032d1f] hover:to-emerald-800 text-white font-bold"
                       >
                         Apply Filters
                       </Button>
@@ -384,7 +384,7 @@ const CallHistory = () => {
                 <Button
                   onClick={clearAllFilters}
                   variant="outline"
-                  className="border-2 border-red-500 text-red-600 hover:bg-red-50 hover:text-red-700 font-bold transition-all"
+                  className="border cursor-pointer text-black border-gray-500 font-bold transition-all"
                 >
                   <X className="w-4 h-4 mr-2" />
                   Clear Filters
@@ -393,7 +393,7 @@ const CallHistory = () => {
 
               <Button
                 onClick={downloadExcel}
-                className="bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white font-bold shadow-lg"
+                className=" text-black font-bold border border-gray-500 cursor-pointer bg-white"
               >
                 <Download className="w-4 h-4 mr-2" />
                 Export
@@ -460,11 +460,11 @@ const CallHistory = () => {
                     <TableCell className="text-right">
                       <Button
                         onClick={() => viewDetails(call)}
-                        variant="outline"
+                        variant=""
                         size="sm"
-                        className="border-2 border-[#043927] text-[#043927] hover:bg-[#043927] hover:text-white font-bold"
+                        className="text-black font-bold bg-transparent cursor-pointer"
                       >
-                        <Eye className="w-4 h-4 sm:mr-1" />
+                        {/* <Eye className="w-4 h-4 sm:mr-1" /> */}
                         <span className="hidden sm:inline">View</span>
                       </Button>
                     </TableCell>

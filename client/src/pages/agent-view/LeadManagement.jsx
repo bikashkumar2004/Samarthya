@@ -167,8 +167,8 @@ const LeadManagement = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50 p-4 md:p-6 space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-[#043927] via-emerald-700 to-green-600 p-6 rounded-2xl shadow-xl">
-        <h1 className="text-3xl md:text-4xl font-black text-white flex items-center gap-3">
+      <div className="">
+        <h1 className="text-3xl md:text-4xl font-black text-black flex items-center gap-3">
           <Users className="w-8 h-8 md:w-10 md:h-10" />
           Lead Management
         </h1>
@@ -224,121 +224,120 @@ const LeadManagement = () => {
       {/* Leads Table */}
       <Card className="border-2 border-gray-200 shadow-xl overflow-hidden">
         <CardHeader className="bg-gradient-to-r from-gray-50 to-white border-b-2 border-gray-200">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <CardTitle className="text-2xl font-bold text-[#043927] flex items-center gap-2">
-              <Users className="w-6 h-6" />
-              All Leads
-            </CardTitle>
-            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-              <div className="relative flex-1 sm:flex-initial ">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input
-                  placeholder="Search leads..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 w-full sm:w-64 border border-[#8e8e94]"
-                />
+          <div className="sm:items-center">
+            <div className="flex justify-between w-full sm:w-auto">
+              <div className="flex gap-3">
+
+                <div className="relative flex-1 sm:flex-initial ">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Input
+                    placeholder="Search leads..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10 w-full sm:w-64 border border-[#8e8e94]"
+                  />
+                </div>
+
+                <Sheet open={filterOpen} onOpenChange={setFilterOpen}>
+                  <SheetTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="border-[#808085] text-black font-bold"
+                    >
+                      <Filter className="w-4 h-4 mr-2" />
+                      Filter By
+                      {(sentimentFilter.length > 0 || categoryFilter.length > 0) && (
+                        <span className="ml-2 bg-[#043927] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                          {sentimentFilter.length + categoryFilter.length}
+                        </span>
+                      )}
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="right" className="w-full sm:w-96 overflow-y-auto bg-white">
+                    <SheetHeader>
+                      <SheetTitle className="text-2xl font-bold text-[#043927]">Filter Options</SheetTitle>
+                    </SheetHeader>
+
+                    <div className="space-y-6 mt-6">
+                      {/* Sentiment Filter */}
+                      <div className="space-y-3">
+                        <Label className="text-base font-bold text-gray-900">Sentiment</Label>
+                        <div className="space-y-2">
+                          {["Positive", "Neutral", "Negative"].map((sentiment) => (
+                            <div key={sentiment} className="flex items-center space-x-2">
+                              <Checkbox
+                                id={`sentiment-${sentiment}`}
+                                checked={sentimentFilter.includes(sentiment)}
+                                onCheckedChange={() => handleSentimentChange(sentiment)}
+                              />
+                              <label
+                                htmlFor={`sentiment-${sentiment}`}
+                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer flex items-center gap-2"
+                              >
+                                {getSentimentIcon(sentiment)}
+                                {sentiment}
+                              </label>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Category Filter */}
+                      <div className="space-y-3 border-t pt-6">
+                        <Label className="text-base font-bold text-gray-900">Category</Label>
+                        <div className="space-y-2">
+                          {categories.map((category) => (
+                            <div key={category} className="flex items-center space-x-2">
+                              <Checkbox
+                                id={`category-${category}`}
+                                checked={categoryFilter.includes(category)}
+                                onCheckedChange={() => handleCategoryChange(category)}
+                              />
+                              <label
+                                htmlFor={`category-${category}`}
+                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                              >
+                                {category}
+                              </label>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="space-y-3 border-t pt-6">
+                        <Button
+                          onClick={clearAllFilters}
+                          variant="outline"
+                          className="w-full border-2 border-red-500 text-red-600 hover:bg-red-50 hover:text-red-700 font-bold"
+                        >
+                          <X className="w-4 h-4 mr-2" />
+                          Clear All Filters
+                        </Button>
+                        <Button
+                          onClick={() => setFilterOpen(false)}
+                          className="w-full bg-gradient-to-r from-[#043927] to-emerald-700 hover:from-[#032d1f] hover:to-emerald-800 text-white font-bold"
+                        >
+                          Apply Filters
+                        </Button>
+                      </div>
+                    </div>
+                  </SheetContent>
+                </Sheet>
+
+                <Button
+                  onClick={clearAllFilters}
+                  variant="outline"
+                  className="border text-black border-gray-500 font-bold transition-all"
+                >
+                  <X className="w-4 h-4 mr-2" />
+                  Clear Filters
+                </Button>
               </div>
-
-              <Sheet open={filterOpen} onOpenChange={setFilterOpen}>
-                <SheetTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="border-[#808085] text-black font-bold"
-                  >
-                    <Filter className="w-4 h-4 mr-2" />
-                    Filter By
-                    {(sentimentFilter.length > 0 || categoryFilter.length > 0) && (
-                      <span className="ml-2 bg-[#043927] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                        {sentimentFilter.length + categoryFilter.length}
-                      </span>
-                    )}
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="right" className="w-full sm:w-96 overflow-y-auto bg-white">
-                  <SheetHeader>
-                    <SheetTitle className="text-2xl font-bold text-[#043927]">Filter Options</SheetTitle>
-                  </SheetHeader>
-
-                  <div className="space-y-6 mt-6">
-                    {/* Sentiment Filter */}
-                    <div className="space-y-3">
-                      <Label className="text-base font-bold text-gray-900">Sentiment</Label>
-                      <div className="space-y-2">
-                        {["Positive", "Neutral", "Negative"].map((sentiment) => (
-                          <div key={sentiment} className="flex items-center space-x-2">
-                            <Checkbox
-                              id={`sentiment-${sentiment}`}
-                              checked={sentimentFilter.includes(sentiment)}
-                              onCheckedChange={() => handleSentimentChange(sentiment)}
-                            />
-                            <label
-                              htmlFor={`sentiment-${sentiment}`}
-                              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer flex items-center gap-2"
-                            >
-                              {getSentimentIcon(sentiment)}
-                              {sentiment}
-                            </label>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Category Filter */}
-                    <div className="space-y-3 border-t pt-6">
-                      <Label className="text-base font-bold text-gray-900">Category</Label>
-                      <div className="space-y-2">
-                        {categories.map((category) => (
-                          <div key={category} className="flex items-center space-x-2">
-                            <Checkbox
-                              id={`category-${category}`}
-                              checked={categoryFilter.includes(category)}
-                              onCheckedChange={() => handleCategoryChange(category)}
-                            />
-                            <label
-                              htmlFor={`category-${category}`}
-                              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-                            >
-                              {category}
-                            </label>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Actions */}
-                    <div className="space-y-3 border-t pt-6">
-                      <Button
-                        onClick={clearAllFilters}
-                        variant="outline"
-                        className="w-full border-2 border-red-500 text-red-600 hover:bg-red-50 hover:text-red-700 font-bold"
-                      >
-                        <X className="w-4 h-4 mr-2" />
-                        Clear All Filters
-                      </Button>
-                      <Button
-                        onClick={() => setFilterOpen(false)}
-                        className="w-full bg-gradient-to-r from-[#043927] to-emerald-700 hover:from-[#032d1f] hover:to-emerald-800 text-white font-bold"
-                      >
-                        Apply Filters
-                      </Button>
-                    </div>
-                  </div>
-                </SheetContent>
-              </Sheet>
-
-              <Button
-                onClick={clearAllFilters}
-                variant="outline"
-                className="border-2 border-red-500 text-red-600 hover:bg-red-50 hover:text-red-700 font-bold transition-all"
-              >
-                <X className="w-4 h-4 mr-2" />
-                Clear Filters
-              </Button>
 
               <Button
                 onClick={downloadExcel}
-                className="bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white font-bold shadow-lg"
+                className="text-black bg-white font-bold border botder-gray-500"
               >
                 <Download className="w-4 h-4 mr-2" />
                 Export
@@ -394,7 +393,7 @@ const LeadManagement = () => {
                           </div>
                         </TableCell>
                         <TableCell className="hidden lg:table-cell">
-                          <span className="inline-flex px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-700 border border-purple-300">
+                          <span className="inline-flex px-3 py-1 rounded-full text-sm font-semibold">
                             {lead?.category || "-"}
                           </span>
                         </TableCell>
@@ -421,7 +420,7 @@ const LeadManagement = () => {
                                 <MoreVertical className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-40">
+                            <DropdownMenuContent align="end" className="w-40 bg-white">
                               <DropdownMenuItem
                                 onClick={() => handleEdit(lead)}
                                 className="cursor-pointer hover:bg-blue-50"
@@ -559,7 +558,7 @@ const LeadManagement = () => {
 
       {/* Edit Dialog */}
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl bg-white">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-[#043927] flex items-center gap-2">
               <Edit className="w-6 h-6" />
@@ -613,7 +612,7 @@ const LeadManagement = () => {
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent>
+        <DialogContent className="bg-white">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-red-600 flex items-center gap-2">
               <AlertCircle className="w-6 h-6" />

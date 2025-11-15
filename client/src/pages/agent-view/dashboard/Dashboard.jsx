@@ -118,9 +118,6 @@ const Dashboard = () => {
             Welcome back! Here's your overview
           </p>
         </div>
-        <button className="w-full sm:w-auto px-4 py-2 bg-primary text-white rounded-lg cursor-pointer transition-colors">
-          Generate Report
-        </button>
       </div>
 
       {/* Error hint */}
@@ -135,7 +132,7 @@ const Dashboard = () => {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
           {Object.entries(stats).map(([key, value], index) => (
             <div key={index} className="text-center">
-              <h3 className="text-sm font-medium text-gray-600 mb-2">
+              <h3 className="text-sm font-medium text-gray-600 mb-2 capitalize">
                 {key.replace(/([A-Z])/g, " $1")}
               </h3>
               <p className="text-3xl font-bold text-gray-800">{value}</p>

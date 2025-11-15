@@ -164,8 +164,8 @@ export default function Campaigns() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-green-50 p-6 space-y-6">
       {/* Header Section */}
       <div className="space-y-5">
-        <div className="bg-gradient-to-r from-[#043927] via-emerald-700 to-green-600 p-6 rounded-2xl shadow-xl">
-          <h1 className="text-4xl font-black text-white flex items-center gap-3">
+        <div className="">
+          <h1 className="text-4xl font-black text-black flex items-center gap-3">
             <Activity className="w-10 h-10" />
             Campaigns
           </h1>

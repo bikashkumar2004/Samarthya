@@ -141,7 +141,7 @@ export const SidebarLink = ({ link, className, ...props }) => {
     <Link
       to={link.path}
       className={cn(
-        "flex items-center justify-start gap-2 group/sidebar py-2",
+        "flex items-center justify-start gap-2 group/sidebar py-2 hover:font-semibold",
         className
       )}
       {...props}
