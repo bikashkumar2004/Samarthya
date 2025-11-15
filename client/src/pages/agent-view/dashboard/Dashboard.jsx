@@ -15,10 +15,24 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 import CategoryPopup from "../CategoryPopup";
-import { fetchDashboardSummary, selectSummaryMetrics, selectSummaryStatus } from "@/store/dashboard";
-import { fetchWeeklyPerformance, selectWeeklyPerformanceError, selectWeeklyPerformanceSeries, selectWeeklyPerformanceStatus } from "@/store/dashboard/wealychat";
-import { fetchCategoryDistribution, selectCategoryError, selectCategorySeries, selectCategoryStatus, selectCategoryTotal } from "@/store/dashboard/barchat";
-
+import {
+  fetchDashboardSummary,
+  selectSummaryMetrics,
+  selectSummaryStatus,
+} from "@/store/dashboard";
+import {
+  fetchWeeklyPerformance,
+  selectWeeklyPerformanceError,
+  selectWeeklyPerformanceSeries,
+  selectWeeklyPerformanceStatus,
+} from "@/store/dashboard/wealychat";
+import {
+  fetchCategoryDistribution,
+  selectCategoryError,
+  selectCategorySeries,
+  selectCategoryStatus,
+  selectCategoryTotal,
+} from "@/store/dashboard/barchat";
 
 const COLORS = ["#7C3AED", "#9333EA", "#3B82F6", "#10B981", "#D1D5DB"];
 
@@ -133,14 +147,22 @@ const Dashboard = () => {
       {/* Stats Cards */}
       <div className="bg-white p-6 rounded-lg shadow-md">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-          {Object.entries(stats).map(([key, value], index) => (
-            <div key={index} className="text-center">
-              <h3 className="text-sm font-medium text-gray-600 mb-2">
-                {key.replace(/([A-Z])/g, " $1")}
-              </h3>
-              <p className="text-3xl font-bold text-gray-800">{value}</p>
-            </div>
-          ))}
+          {Object.entries(stats).map(([key, value], index) => {
+            const titles = {
+              totalCalls: "Total Call",
+              pendingCalls: "Pending Call",
+              avgCallTime: "Avg Call Time",
+              aiCallsCompleted: "Ai Call Complited",
+            };
+            return (
+              <div key={index} className="text-center">
+                <h3 className="text-sm font-medium text-gray-600 mb-2">
+                  {titles[key] ?? key}
+                </h3>
+                <p className="text-3xl font-bold text-gray-800">{value}</p>
+              </div>
+            );
+          })}
         </div>
       </div>
 

@@ -9,14 +9,10 @@ const isValidObjectId = (v) => mongoose.isValidObjectId(String(v || "").trim());
 export async function getDashboardSummary(req, res) {
   try {
     const { sinceHours, userId, taskId, category } = req.query;
-
-    // Optional time filter for live statuses
     const timeMatch = {};
     if (sinceHours != null && !Number.isNaN(Number(sinceHours))) {
       timeMatch.updated_at_iso = { $gte: new Date(Date.now() - Number(sinceHours) * 3600 * 1000) };
-    } // [web:274]
-
-    // Total calls: distinct call_id
+    } // 
     const totalCallsPromise = Calls.distinct("call_id").then((ids) => ids.length); // [web:329]
 
     // Average call time (hours): coerce duration fields to double

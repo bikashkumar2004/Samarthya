@@ -547,72 +547,7 @@ const AICallManager = () => {
         </Card>
       </div>
 
-      {/* Live Monitor Dashboard */}
-      {/* <Card className="border-2 border-blue-200 shadow-xl">
-        <CardHeader className="bg-gradient-to-r from-blue-50 to-cyan-50 border-b-2 border-blue-200">
-          <CardTitle className="text-xl font-bold text-[#043927] flex items-center gap-2">
-            <Activity className="w-6 h-6 text-blue-600 animate-pulse" />
-            Live Monitor Dashboard
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-gray-50">
-                  <TableHead className="font-bold text-gray-900">Sl No.</TableHead>
-                  <TableHead className="font-bold text-gray-900">Name</TableHead>
-                  <TableHead className="font-bold text-gray-900 hidden sm:table-cell">Status</TableHead>
-                  <TableHead className="font-bold text-gray-900">Duration</TableHead>
-                  <TableHead className="font-bold text-gray-900 text-right">Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {rows.length > 0 ? (
-                  rows.map((call,i) => (
-                    <TableRow key={call.call_id} className="hover:bg-blue-50 transition-colors">
-                      <TableCell className="font-semibold">{i + 1}</TableCell>
-                      <TableCell>
-                        <div>
-                          <div className="font-semibold text-gray-900">{call.name}</div>
-                          <div className="text-xs text-gray-500 sm:hidden">{call.phoneNo}</div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold border ${getStatusClass(call.status)}`}>
-                          {getStatusIcon(call.status)}
-                          {call.status}
-                        </span>
-                      </TableCell>
-                      <TableCell className="font-mono text-sm font-semibold">
-                        {formatDuration(call.duration_seconds)}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button
-                          onClick={() => cancelLiveCall(call.sl)}
-                          variant="destructive"
-                          size="sm"
-                          className="bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 font-bold shadow-md"
-                        >
-                          <X className="w-4 h-4 sm:mr-1" />
-                          <span className="hidden sm:inline">Cancel</span>
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={5} className="text-center py-8 text-gray-500">
-                      <PhoneOff className="w-12 h-12 mx-auto mb-2 text-gray-400" />
-                      <p className="font-medium">No active calls at the moment</p>
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </CardContent>
-      </Card> */}
+      
       <LiveMonitor/>
 
       <CallHistory/>

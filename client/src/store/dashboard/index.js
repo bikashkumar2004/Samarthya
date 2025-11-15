@@ -4,8 +4,7 @@ import axios from "axios";
 
 const API_BASE = "http://localhost:4000";
 
-// Thunk: fetch dashboard summary with optional filters
-// args: { sinceHours?, userId?, taskId?, category? }
+
 export const fetchDashboardSummary = createAsyncThunk(
   "dashboard/summary/fetch",
   async (params = {}, { rejectWithValue }) => {
