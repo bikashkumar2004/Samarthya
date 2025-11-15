@@ -207,177 +207,6 @@ const AICallManager = () => {
         sentiment: 'Negative',
         duration: '3m 45s',
         date: '2025-10-28'
-      },
-      {
-        sl: 4,
-        name: 'Vikash Kumar',
-        phoneNo: '+91 98765 43216',
-        category: 'Fee Payment',
-        status: 'Completed',
-        sentiment: 'Positive',
-        duration: '1m 58s',
-        date: '2025-10-28'
-      },
-      {
-        sl: 5,
-        name: 'Swati Pradhan',
-        phoneNo: '+91 98765 43217',
-        category: 'Seat Allocation',
-        status: 'No Answer',
-        sentiment: 'Neutral',
-        duration: '0m 30s',
-        date: '2025-10-27'
-      },
-      {
-        sl: 6,
-        name: 'Arjun Sahoo',
-        phoneNo: '+91 98765 43218',
-        category: 'Document Submission',
-        status: 'Completed',
-        sentiment: 'Positive',
-        duration: '2m 05s',
-        date: '2025-10-27'
-      },
-      // Add more entries to demonstrate pagination
-      {
-        sl: 7,
-        name: 'Ramesh Patra',
-        phoneNo: '+91 98765 43219',
-        category: 'Admission Query',
-        status: 'Completed',
-        sentiment: 'Positive',
-        duration: '1m 45s',
-        date: '2025-10-27'
-      },
-      {
-        sl: 8,
-        name: 'Kavita Singh',
-        phoneNo: '+91 98765 43220',
-        category: 'Fee Payment',
-        status: 'No Answer',
-        sentiment: 'Neutral',
-        duration: '0m 25s',
-        date: '2025-10-26'
-      },
-      {
-        sl: 9,
-        name: 'Deepak Mishra',
-        phoneNo: '+91 98765 43221',
-        category: 'Document Verification',
-        status: 'Completed',
-        sentiment: 'Positive',
-        duration: '2m 30s',
-        date: '2025-10-26'
-      },
-      {
-        sl: 10,
-        name: 'Anita Roy',
-        phoneNo: '+91 98765 43222',
-        category: 'Scholarship Info',
-        status: 'Completed',
-        sentiment: 'Positive',
-        duration: '3m 15s',
-        date: '2025-10-26'
-      },
-      {
-        sl: 11,
-        name: 'Suresh Nayak',
-        phoneNo: '+91 98765 43223',
-        category: 'Hostel Allocation',
-        status: 'Failed',
-        sentiment: 'Negative',
-        duration: '1m 10s',
-        date: '2025-10-25'
-      },
-      {
-        sl: 12,
-        name: 'Meena Das',
-        phoneNo: '+91 98765 43224',
-        category: 'Course Registration',
-        status: 'Completed',
-        sentiment: 'Positive',
-        duration: '2m 45s',
-        date: '2025-10-25'
-      },
-      {
-        sl: 13,
-        name: 'Ravi Kumar',
-        phoneNo: '+91 98765 43225',
-        category: 'Exam Schedule',
-        status: 'Completed',
-        sentiment: 'Neutral',
-        duration: '1m 20s',
-        date: '2025-10-25'
-      },
-      {
-        sl: 14,
-        name: 'Neha Sharma',
-        phoneNo: '+91 98765 43226',
-        category: 'Library Card',
-        status: 'No Answer',
-        sentiment: 'Neutral',
-        duration: '0m 40s',
-        date: '2025-10-24'
-      },
-      {
-        sl: 15,
-        name: 'Prakash Rao',
-        phoneNo: '+91 98765 43227',
-        category: 'Sports Registration',
-        status: 'Completed',
-        sentiment: 'Positive',
-        duration: '1m 55s',
-        date: '2025-10-24'
-      },
-      {
-        sl: 16,
-        name: 'Sunita Patel',
-        phoneNo: '+91 98765 43228',
-        category: 'Medical Checkup',
-        status: 'Completed',
-        sentiment: 'Positive',
-        duration: '2m 20s',
-        date: '2025-10-24'
-      },
-      {
-        sl: 17,
-        name: 'Manoj Gupta',
-        phoneNo: '+91 98765 43229',
-        category: 'Transport Pass',
-        status: 'Failed',
-        sentiment: 'Negative',
-        duration: '0m 55s',
-        date: '2025-10-23'
-      },
-      {
-        sl: 18,
-        name: 'Pooja Reddy',
-        phoneNo: '+91 98765 43230',
-        category: 'ID Card Issue',
-        status: 'Completed',
-        sentiment: 'Positive',
-        duration: '1m 40s',
-        date: '2025-10-23'
-      },
-      {
-        sl: 19,
-        name: 'Sanjay Verma',
-        phoneNo: '+91 98765 43231',
-        category: 'Certificate Request',
-        status: 'Completed',
-        sentiment: 'Neutral',
-        duration: '2m 10s',
-        date: '2025-10-23'
-      },
-      {
-        sl: 20,
-        name: 'Rekha Bose',
-        phoneNo: '+91 98765 43232',
-        category: 'Grade Inquiry',
-        status: 'No Answer',
-        sentiment: 'Neutral',
-        duration: '0m 35s',
-        date: '2025-10-22'
       }
     ];
 
@@ -467,8 +296,8 @@ const AICallManager = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 p-4 md:p-6 space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-[#043927] via-emerald-700 to-green-600 p-6 rounded-2xl shadow-xl">
-        <h1 className="text-3xl md:text-4xl font-black text-white flex items-center gap-3">
+      <div className="">
+        <h1 className="text-3xl md:text-4xl font-black text-black flex items-center gap-3">
           <PhoneCall className="w-8 h-8 md:w-10 md:h-10" />
           AI Call Manager
         </h1>
@@ -494,7 +323,7 @@ const AICallManager = () => {
             </div>
             <Button
               onClick={onToggleAutoCaller}
-              className={`font-bold shadow-lg transition-all transform hover:scale-105 ${autocallerEnabled
+              className={`cursor-pointer font-bold shadow-lg transition-all transform hover:scale-105 ${autocallerEnabled
                 ? 'bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700'
                 : 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700'
                 }`}

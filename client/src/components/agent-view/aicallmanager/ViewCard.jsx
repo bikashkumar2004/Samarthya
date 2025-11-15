@@ -143,7 +143,7 @@ const ViewCard = ({ modalContent, setModalOpen }) => {
           {/* Summary from detail endpoint */}
           <div className="bg-gray-50 p-4 rounded-xl">
             <div className="text-sm text-gray-600 mb-2">Call Summary</div>
-            <p className="text-gray-900">{summary}</p>
+            <p className="text-gray-900 text-justify">{summary}</p>
           </div>
         </div>
       </div>

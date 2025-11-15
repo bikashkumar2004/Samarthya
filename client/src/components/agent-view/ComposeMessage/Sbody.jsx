@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CheckCircle2, Send, Sparkles, Clock, CheckCheck, Phone, Mail } from "lucide-react";
-import { generateMessage } from "./gemini";
+import { generateMessage, generateEmailMessage } from "./gemini";
 
 export default function Sbody({ selectedChannel, onMessageSent }) {
   const [recipientData, setRecipientData] = useState("");
@@ -42,7 +42,7 @@ export default function Sbody({ selectedChannel, onMessageSent }) {
           validate: (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val),
           errorMsg: "Please enter a valid email address"
         };
-      case "whatsapp":  // ✅ Add this case
+      case "whatsapp":
         return {
           label: "WhatsApp Number",
           placeholder: "+1 234-567-8900",
@@ -99,7 +99,7 @@ export default function Sbody({ selectedChannel, onMessageSent }) {
         name: "Customer",
         description: `This recipient has been verified for WHATSAPP delivery. The whatsapp address has been validated and confirmed active in the system.`
       };
-    } 
+    }
 
     setVerifiedData(newVerifiedData);
     setShowVerifiedSection(true);
@@ -113,12 +113,26 @@ export default function Sbody({ selectedChannel, onMessageSent }) {
     setIsLoading(true);
     
     try {
-      const aiMessage = await generateMessage(
-        verifiedData.purpose,
-        verifiedData.name,
-        selectedLanguage,
-        selectedChannel
-      );
+      let aiMessage;
+
+      // For EMAIL channel, generate professional email
+      if (selectedChannel === "email") {
+        aiMessage = await generateEmailMessage(
+          verifiedData.purpose,
+          verifiedData.description,
+          verifiedData.name,
+          selectedLanguage
+        );
+      } else {
+        // For SMS and WhatsApp, use existing generateMessage
+        aiMessage = await generateMessage(
+          verifiedData.purpose,
+          verifiedData.name,
+          selectedLanguage,
+          selectedChannel
+        );
+      }
+
       setGeneratedMessage(aiMessage);
       setShowGeneratedMessage(true);
     } catch (error) {
@@ -149,9 +163,9 @@ export default function Sbody({ selectedChannel, onMessageSent }) {
       } else if (selectedChannel === "email") {
         endpoint = '/api/email/send';
         payload.to_email = verifiedData.email;
-      } else if(selectedChannel === "whatsapp") {
+      } else if (selectedChannel === "whatsapp") {
         payload = {
-          to:verifiedData.number,
+          to: verifiedData.number,
           body: generatedMessage,
         };
         endpoint = '/api/send-whatsapp';
@@ -220,7 +234,7 @@ export default function Sbody({ selectedChannel, onMessageSent }) {
       {/* Search Recipient */}
       <Card>
         <CardHeader>
-          <CardTitle>Search Recipient for {selectedChannel.toUpperCase()}</CardTitle>
+          <CardTitle>Enter Recipient</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex gap-4">
@@ -230,7 +244,7 @@ export default function Sbody({ selectedChannel, onMessageSent }) {
               onChange={(e) => setRecipientData(e.target.value)}
               className="flex-1"
             />
-            <Button onClick={handleVerify}>
+            <Button onClick={handleVerify} className="bg-black text-white font-bold">
               <CheckCircle2 className="mr-2 h-4 w-4" />
               Verify
             </Button>
@@ -276,21 +290,21 @@ export default function Sbody({ selectedChannel, onMessageSent }) {
             </div>
 
             {/* Language Selection with Generate Button */}
-            <div className="flex gap-4 items-end">
-              <div className="flex-1">
+            <div className="flex gap-4 items-end bg-white">
+              <div className="flex-1 bg-white">
                 <label className="text-sm font-medium text-muted-foreground">Select Language</label>
-                <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+                <Select value={selectedLanguage} onValueChange={setSelectedLanguage} className="bg-white">
                   <SelectTrigger>
                     <SelectValue placeholder="Choose language" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-white">
                     <SelectItem value="english">English</SelectItem>
-                    <SelectItem value="hindi">हिंदी (Hindi)</SelectItem>
-                    <SelectItem value="odia">ଓଡ଼ିଆ (Odia)</SelectItem>
+                    <SelectItem value="hindi">[translate:हिंदी (Hindi)]</SelectItem>
+                    <SelectItem value="odia">[translate:ଓଡ଼ିଆ (Odia)]</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-              <Button onClick={handleGenerate} disabled={isLoading}>
+              <Button onClick={handleGenerate} disabled={isLoading} className="text-white bg-black font-bold">
                 <Sparkles className="mr-2 h-4 w-4" />
                 {isLoading ? "Generating..." : "Generate"}
               </Button>
@@ -312,7 +326,7 @@ export default function Sbody({ selectedChannel, onMessageSent }) {
               rows={6}
               className="resize-none"
             />
-            <Button onClick={handleSend} className="w-full" disabled={isLoading}>
+            <Button onClick={handleSend} className="w-full bg-black text-white" disabled={isLoading}>
               <Send className="mr-2 h-4 w-4" />
               {isLoading ? "Sending..." : `Send ${selectedChannel.toUpperCase()}`}
             </Button>

@@ -114,12 +114,10 @@ const ImportTask = () => {
   return (
     <div className="space-y-6">
       {/* Import Section */}
-      <Card className="border-2 border-gray-200 shadow-xl overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-blue-50 via-cyan-50 to-blue-50 border-b-2 border-blue-200">
-          <CardTitle className="text-2xl font-bold text-[#043927] flex items-center gap-3">
-            <div className="bg-gradient-to-br from-blue-500 to-cyan-600 p-3 rounded-xl shadow-lg">
-              <Upload className="w-6 h-6 text-white" />
-            </div>
+      <Card className="border-none shadow-xl overflow-hidden">
+        <CardHeader className="">
+          <CardTitle className="text-2xl font-bold flex items-center gap-3">
+            
             Import New Task
           </CardTitle>
         </CardHeader>
@@ -211,43 +209,14 @@ const ImportTask = () => {
         </CardContent>
       </Card>
 
-      {/* Delete Task Section */}
-      <Card className="border-2 border-gray-200 shadow-xl overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-red-50 via-rose-50 to-red-50 border-b-2 border-red-200">
-          <CardTitle className="text-2xl font-bold text-[#043927] flex items-center gap-3">
-            <div className="bg-gradient-to-br from-red-500 to-rose-600 p-3 rounded-xl shadow-lg">
-              <Trash2 className="w-6 h-6 text-white" />
-            </div>
-            Delete Task
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-6">
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Input
-              type="text"
-              placeholder="Enter Task ID (e.g., TSK001)"
-              value={deleteTaskId}
-              onChange={(e) => setDeleteTaskId(e.target.value)}
-              className="flex-1 border-2 border-gray-300 focus:border-red-500 h-12 text-base"
-            />
-            <Button
-              onClick={handleCheckTaskId}
-              className="bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white font-bold shadow-lg h-12 px-8"
-            >
-              Check Task
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      
 
       {/* Recent Imports Table */}
       <Card className="border-2 border-gray-200 shadow-xl overflow-hidden">
         <CardHeader className="bg-gradient-to-r from-gray-50 to-white border-b-2 border-gray-200">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <CardTitle className="text-2xl font-bold text-[#043927] flex items-center gap-3">
-              <div className="bg-gradient-to-br from-purple-500 to-indigo-600 p-3 rounded-xl shadow-lg">
-                <Download className="w-6 h-6 text-white" />
-              </div>
+            <CardTitle className="text-2xl font-bold text-black flex items-center gap-3">
+              
               Recent Imports
             </CardTitle>
             <div className="text-sm text-gray-600 bg-gray-100 px-4 py-2 rounded-full font-semibold">
@@ -265,7 +234,7 @@ const ImportTask = () => {
                   <TableHead>Date & Time</TableHead>
                   <TableHead className="hidden md:table-cell">File Name</TableHead>
                   <TableHead>Rows</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead className="text-right pr-20">Actions</TableHead>
                 </TableRow>
               </TableHeader>
 
@@ -302,9 +271,9 @@ const ImportTask = () => {
                             onClick={() => handleViewData(task)}
                             variant="outline"
                             size="sm"
-                            className="border-2 border-[#043927] text-[#043927] hover:bg-[#043927] hover:text-white font-bold"
+                            className="text-black border-none font-bold"
                           >
-                            <Eye className="w-4 h-4 sm:mr-1" />
+                            {/* <Eye className="w-4 h-4 sm:mr-1" /> */}
                             <span className="hidden sm:inline">View</span>
                           </Button>
                           <Button
@@ -314,9 +283,9 @@ const ImportTask = () => {
                             }}
                             variant="outline"
                             size="sm"
-                            className="border-2 border-red-500 text-red-600 hover:bg-red-500 hover:text-white font-bold"
+                            className="text-black border-none font-bold"
                           >
-                            <Trash2 className="w-4 h-4 sm:mr-1" />
+                            {/* <Trash2 className="w-4 h-4 sm:mr-1" /> */}
                             <span className="hidden sm:inline">Delete</span>
                           </Button>
                         </div>

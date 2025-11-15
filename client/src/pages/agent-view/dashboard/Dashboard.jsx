@@ -132,9 +132,6 @@ const Dashboard = () => {
             Welcome back! Here's your overview
           </p>
         </div>
-        <button className="w-full sm:w-auto px-4 py-2 bg-primary text-white rounded-lg cursor-pointer transition-colors">
-          Generate Report
-        </button>
       </div>
 
       {/* Error hint */}

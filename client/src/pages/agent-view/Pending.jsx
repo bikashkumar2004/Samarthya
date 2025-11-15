@@ -145,8 +145,8 @@ export default function Pending() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 p-4 md:p-6 space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-[#043927] via-emerald-700 to-green-600 p-6 rounded-2xl shadow-xl">
-        <h1 className="text-3xl md:text-4xl font-black text-white flex items-center gap-3">
+      <div className="">
+        <h1 className="text-3xl md:text-4xl font-black text-black flex items-center gap-3">
           <Clock className="w-8 h-8 md:w-10 md:h-10" />
           Pending Follow-ups
         </h1>
