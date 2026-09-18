@@ -1,99 +1,244 @@
 {
-  "call_id": "CA729a4417f6ae41bb64e9be8c57be7d64",
+  "call_id": "CA65ef396f0048a976dfa3263a2cae3049",
   "customer_id": "6aad08ac113ac4d73eb83249",
-  "call_start_iso": "2026-09-18T16:45:32",
-  "call_end_iso": "2026-09-18T16:46:26",
-  "call_duration_seconds": 67.17,
+  "call_start_iso": "2026-09-18T17:26:56",
+  "call_end_iso": "2026-09-18T17:29:12",
+  "call_duration_seconds": 142.1,
   "transcripts": [
     {
       "role": "assistant",
-      "timestamp_iso": "2026-09-18T16:45:32",
-      "content": "Hello Rahul Sharma! I am calling about Double deduction on monthly subscription payment and pending invoice refund"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T16:45:46",
-      "content": "It seems like there might have been a pause."
+      "timestamp_iso": "2026-09-18T17:26:56",
+      "content": "Hello sushil! I am calling about when i wake up at time i feel influences by cold fever"
     },
     {
       "role": "user",
-      "timestamp_iso": "2026-09-18T16:45:48",
-      "content": "Docs related."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T16:45:49",
-      "content": "Thank you for that clarification, Rahul."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T16:45:51",
-      "content": "I understand that you're referring to documents related to the double deduction and the pending invoice refund."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T16:45:56",
-      "content": "Could you please provide me with a bit more detail about the situation?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T16:46:00",
-      "content": "For instance, when you noticed the double deduction and any specific documents you might have regarding the pending invoice?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T16:46:07",
-      "content": "This will help me assist you better."
+      "timestamp_iso": "2026-09-18T17:27:08",
+      "content": "Actually, I'm hearing medicine."
     },
     {
       "role": "user",
-      "timestamp_iso": "2026-09-18T16:46:11",
-      "content": "Actually, I have"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T16:46:12",
-      "content": "That’s great to hear!"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T16:46:13",
-      "content": "Please go ahead and share the details you have regarding the double deduction and the pending invoice."
+      "timestamp_iso": "2026-09-18T17:27:11",
+      "content": "For paper. Can you help me find in"
     },
     {
       "role": "user",
-      "timestamp_iso": "2026-09-18T16:46:14",
-      "content": "What"
+      "timestamp_iso": "2026-09-18T17:27:13",
+      "content": "for me"
     },
     {
       "role": "assistant",
-      "timestamp_iso": "2026-09-18T16:46:15",
-      "content": "I apologize if I misunderstood."
+      "timestamp_iso": "2026-09-18T17:27:13",
+      "content": "Of course, Sushil!"
     },
     {
       "role": "assistant",
-      "timestamp_iso": "2026-09-18T16:46:17",
-      "content": "If you have documents or details related to the double deduction and the pending invoice refund, please feel free to share them with me."
+      "timestamp_iso": "2026-09-18T17:27:15",
+      "content": "Are you looking for information on medications that can help with cold and fever symptoms?"
     },
     {
       "role": "assistant",
-      "timestamp_iso": "2026-09-18T16:46:24",
-      "content": "This will help me assist you more effectively."
+      "timestamp_iso": "2026-09-18T17:27:19",
+      "content": "If you have specific questions or need details about certain types of medicine, just let me know!"
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2026-09-18T17:27:28",
+      "content": "Yeah. Can you can you help"
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2026-09-18T17:27:31",
+      "content": "can you have this"
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2026-09-18T17:27:39",
+      "content": "Then you have parity payment."
     },
     {
       "role": "assistant",
-      "timestamp_iso": "2026-09-18T16:46:26",
-      "content": "If you have any specific questions or concerns, I'm here to help!"
+      "timestamp_iso": "2026-09-18T17:27:40",
+      "content": "It seems like there might be a bit of a mix-up in your message."
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2026-09-18T17:27:42",
+      "content": "For a determination?"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T17:27:42",
+      "content": "I apologize, Sushil, but I'm having a bit of trouble understanding exactly what you're looking for."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T17:27:48",
+      "content": "Are you asking for information on a specific medication for cold and fever, or is there something else related to determination or payment that you need help with?"
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2026-09-18T17:27:55",
+      "content": "Yes,"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T17:27:55",
+      "content": "Thank you for clarifying, Sushil!"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T17:27:57",
+      "content": "Could you please provide a bit more detail on what you need?"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T17:28:00",
+      "content": "Are you looking for specific cold and fever medications, or do you have questions about something else related to your health?"
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2026-09-18T17:28:02",
+      "content": "Okay."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T17:28:03",
+      "content": "Great!"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T17:28:03",
+      "content": "Please go ahead and share any specific questions or details you have, and I’ll do my best to assist you."
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2026-09-18T17:28:05",
+      "content": "I"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T17:28:06",
+      "content": "It seems like your message got cut off."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T17:28:08",
+      "content": "Could you please provide more details?"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T17:28:10",
+      "content": "I'm here to help!"
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2026-09-18T17:28:15",
+      "content": "okay. Okay. I need"
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2026-09-18T17:28:17",
+      "content": "four paper as well as"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T17:28:19",
+      "content": "Got it, Sushil!"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T17:28:20",
+      "content": "It sounds like you need information for a paper on cold and fever medications."
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2026-09-18T17:28:21",
+      "content": "for"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T17:28:23",
+      "content": "It looks like your message got cut off again."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T17:28:25",
+      "content": "Could you please finish your thought?"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T17:28:27",
+      "content": "I want to make sure I understand how to assist you with your paper."
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2026-09-18T17:28:34",
+      "content": "Nine eight two four four zero."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T17:28:38",
+      "content": "It seems like you've shared a number."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T17:28:40",
+      "content": "However, I'm not sure how it relates to the information you're looking for."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T17:28:43",
+      "content": "Could you clarify what you need help with regarding your paper or any specific questions you have?"
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2026-09-18T17:28:52",
+      "content": "Oh, okay. Thank you. I know. I'm"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T17:28:57",
+      "content": "You're welcome, Sushil!"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T17:28:58",
+      "content": "If you have any more thoughts or questions, feel free to share."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T17:29:02",
+      "content": "I'm here to help!"
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2026-09-18T17:29:06",
+      "content": "No. No. Thank you."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T17:29:06",
+      "content": "You're welcome, Sushil!"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T17:29:08",
+      "content": "If you ever need assistance in the future, don't hesitate to reach out."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T17:29:12",
+      "content": "Have a great day!"
     }
   ],
-  "summary": "Summary unavailable",
+  "summary": "Assistant: Are you looking for information on medications that can help with cold and fever symptoms? If you have specific questions or need details about certain types of medicine, just let me know! Assistant: It seems like there might be a bit of a mix-up in your message. Assistant: Could you please provide a bit more detail on what you need?",
   "sentiment_overall": "Neutral",
   "sentiment_scores": {},
   "turn_counts": {
-    "user": 3,
-    "assistant": 13
+    "user": 16,
+    "assistant": 29
   },
-  "processed_at": "2026-09-18T16:46:41",
-  "imported_at": "2026-09-18T16:46:41",
-  "_id": "6aad1d9943535123eb824c1c"
+  "processed_at": "2026-09-18T17:29:27",
+  "imported_at": "2026-09-18T17:29:27",
+  "_id": "6aad279f5d5669f84ba6e533"
 }
