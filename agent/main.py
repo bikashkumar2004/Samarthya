@@ -4,6 +4,7 @@ from datetime import datetime
 import json
 import websockets
 import os
+import sys
 import uuid
 from dotenv import load_dotenv
 import contextlib 
@@ -12,17 +13,24 @@ import functions.transcript.model as model
 from pymongo import MongoClient
 from bson import ObjectId
 
+# Ensure immediate UTF-8 printing in PowerShell / Windows terminals
+if hasattr(sys.stdout, 'reconfigure'):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace', line_buffering=True)
+    except Exception:
+        pass
+
 load_dotenv()
-API_KEY = os.getenv("API_KEY")
-CUSTOMER_ID = os.getenv("CUSTOMER_ID")
-CALL_ID = f"call-{uuid.uuid4()}"  # Unique per session
 DEEPGRAM_API_KEY = os.getenv("DEEPGRAM_API_KEY")
-mongo_uri = os.getenv("MONGODB_URI")
-mongo_db = os.getenv("MONGODB_DB")
+mongo_uri = os.getenv("MONGODB_URI") or os.getenv("MONGODB_URL")
+mongo_db = os.getenv("MONGODB_DB", "whitespace-crm")
 
-print(f"✓ Loaded API keys - Deepgram: {'✓' if DEEPGRAM_API_KEY else '✗'}, Mongo: {'✓' if mongo_uri else '✗'}")
+print("==================================================")
+print(f"[*] Deepgram Key: {'OK' if DEEPGRAM_API_KEY else 'MISSING'}")
+print(f"[*] MongoDB:      {'OK' if mongo_uri else 'MISSING'} (Database: {mongo_db})")
+print("==================================================")
 
-client = MongoClient(mongo_uri)
+client = MongoClient(mongo_uri) if mongo_uri else None
 
 def sts_connect():
     """
@@ -30,7 +38,7 @@ def sts_connect():
     This is where the AI agent processes voice conversations
     """
     if not DEEPGRAM_API_KEY:
-        raise Exception("DEEPGRAM_API_KEY not found")
+        raise Exception("DEEPGRAM_API_KEY not found in environment")
     # Connect to Deepgram's agent service using WebSocket. The API key is passed as a subprotocol for authentication
     print("Deepgram: initiating websocket connect")
     return websockets.connect(
@@ -47,21 +55,6 @@ def load_config():
     with open("config.json", "r") as f:
         return json.load(f)
 
-# def build_config(ctx):
-#     cfg = load_config()
-#     purpose = (ctx.get("purpose") or "").strip()
-#     if purpose:
-#         base_prompt = cfg["agent"]["think"]["prompt"]
-#         cfg["agent"]["think"]["prompt"] = (
-#             f"{base_prompt}\n\n"
-#             f"Call purpose: {purpose}.\n"
-#             f"Always steer the conversation to accomplish this goal while following verification and safety steps."
-#         )
-#         print(f"Call Purpose =={purpose}")
-#         #Make the greeting reflect the purpose
-#         base_greeting = cfg["agent"].get("greeting", "How can I assist you?")
-#         cfg["agent"]["greeting"] = f"{base_greeting} This call is about: {purpose}."
-#     return cfg
 
 def build_config(customer_data):
     cfg = load_config()
@@ -145,10 +138,6 @@ async def handle_text_message(decoded, twilio_ws, sts_ws, streamsid, transcript_
             elif "user" in role or "customer" in role:
                 transcript_session.append("user", content)
                 
-    if decoded.get("type") == "FunctionCallRequest":
-        # await handle_function_call_request(decoded, sts_ws)
-        pass
-
 async def sts_sender(sts_ws, audio_queue):
     """
     Continuously sends audio data from Twilio Receiver to Deepgram
@@ -337,17 +326,17 @@ async def main():
     Main function that starts the WebSocket server
     This sets up the server to handle incoming calls from Twilio
     """
-    # Start WebSocket server on localhost port 5000
-    # Each incoming connection will be handled by twilio_handler
-    server = await websockets.serve(twilio_handler, "localhost", 5000)
-    print(f"WebSocket server started at ws://localhost:5000 at - {datetime.now()}")
+    host = os.getenv("AGENT_HOST", "0.0.0.0")
+    port = int(os.getenv("PORT", os.getenv("AGENT_PORT", 5000)))
 
-    
+    server = await websockets.serve(twilio_handler, host, port)
+    print(f"[ONLINE] WebSocket server is RUNNING at ws://{host}:{port}")
+    print("[WAITING] Ready & waiting for phone calls from Twilio...")
+    print("==================================================")
+
     try:
-        # Keep the server running indefinitely
         await asyncio.Future()  # Run forever
     finally:
-        # Only manage server shutdown here; per-call storage happens in twilio_handler
         print("Shutting down server...")
         server.close()
         await server.wait_closed()

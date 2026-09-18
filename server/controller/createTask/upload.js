@@ -14,12 +14,18 @@ const storage = multer.diskStorage({
 export const upload = multer({
   storage,
   fileFilter: (req, file, cb) => {
+    const ext = path.extname(file.originalname || "").toLowerCase();
+    const allowedExts = [".xlsx", ".xls", ".csv"];
     const allowedMimeTypes = [
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xlsx
-      "application/vnd.ms-excel", // .xls
-      "text/csv", // .csv
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "application/vnd.ms-excel",
+      "text/csv",
+      "application/csv",
+      "text/plain",
+      "application/octet-stream",
     ];
-    if (allowedMimeTypes.includes(file.mimetype)) {
+
+    if (allowedExts.includes(ext) || allowedMimeTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
       cb(new Error("Only Excel (.xls, .xlsx) or CSV (.csv) files are allowed"));

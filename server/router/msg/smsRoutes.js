@@ -21,7 +21,7 @@ router.post('/send', async (req, res) => {
     res.status(statusCode).json(result);
 
   } catch (error) {
-    console.error(`❌ SMS Route Error: ${error.message}`);
+    console.error(`SMS Route Error: ${error.message}`);
     res.status(500).json({
       success: false,
       error: error.message

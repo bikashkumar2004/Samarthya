@@ -11,7 +11,6 @@ export default function DetailDialog({ isOpen, setIsOpen, id }) {
 
   const { contactDetails, isLoading: detailsLoading } = useSelector((state) => state.contactDetails); // select detail slice [web:215]
 
-  
   const { isLoading: callLoading, successMessage, error: callError } = useSelector((state) => state.call); // select call slice [web:215]
 
   useEffect(() => {

@@ -20,9 +20,9 @@ const BATCH_DELAY = 10000;
 export const startAutoCaller = async (campaignId) => {
   try {
     if (activeCampaigns.has(campaignId)) {
-      return { 
-        success: false, 
-        message: 'Auto-caller already running for this campaign' 
+      return {
+        success: false,
+        message: 'Auto-caller already running for this campaign'
       };
     }
 
@@ -38,10 +38,10 @@ export const startAutoCaller = async (campaignId) => {
     console.log(`✓ Auto-caller started for campaign: ${campaignId}`);
     processCalls(campaignId);
 
-    return { 
-      success: true, 
-      message: 'Auto-caller started successfully', 
-      campaignId 
+    return {
+      success: true,
+      message: 'Auto-caller started successfully',
+      campaignId
     };
   } catch (error) {
     console.error('Error starting auto-caller:', error);
@@ -63,10 +63,10 @@ export const stopAutoCaller = async (campaignId) => {
     }
 
     console.log(`⏸️ Auto-caller paused for campaign: ${campaignId}`);
-    return { 
-      success: true, 
-      message: 'Auto-caller stopped', 
-      campaignId 
+    return {
+      success: true,
+      message: 'Auto-caller stopped',
+      campaignId
     };
   } catch (error) {
     console.error('Error stopping auto-caller:', error);
@@ -79,7 +79,7 @@ export const stopAutoCaller = async (campaignId) => {
 const processCalls = async (campaignId) => {
   try {
     const campaign = await Campaign.findOne({ campaignId }).populate('taskId');
-    
+
     if (!campaign || campaign.status !== 'running') {
       stopAutoCaller(campaignId);
       return;
@@ -89,8 +89,8 @@ const processCalls = async (campaignId) => {
     console.log(`📋 Task ID: ${campaign.taskId._id}`);
 
     // Get total count
-    const totalUploadDetails = await UploadDetails.countDocuments({ 
-      taskId: campaign.taskId._id 
+    const totalUploadDetails = await UploadDetails.countDocuments({
+      taskId: campaign.taskId._id
     });
     console.log(`📊 Total contacts in UploadDetails: ${totalUploadDetails}`);
 
@@ -117,7 +117,7 @@ const processCalls = async (campaignId) => {
         .map(c => c.customer_id?.toString()) // FIX: Use optional chaining
         .filter(id => id !== undefined) // Filter out undefined
     );
-    
+
     console.log(`📌 Already called: ${calledIds.size} contacts`);
 
     // Filter to get contacts that haven't been called yet
@@ -139,7 +139,7 @@ const processCalls = async (campaignId) => {
     });
 
     // Make 5 parallel calls
-    const callPromises = contactsToCall.map(contact => 
+    const callPromises = contactsToCall.map(contact =>
       makeCall(contact, campaign)
     );
     const results = await Promise.allSettled(callPromises);
@@ -204,7 +204,7 @@ const makeCall = async (contact, campaign) => {
     // Prepare TwiML
     const wsUrl = process.env.MEDIA_WS_URL_BIKASH;
     const purpose = campaign.description || campaign.campaignName;
-    
+
     const twiml = `
       <Response>
         <Connect>
@@ -233,10 +233,10 @@ const makeCall = async (contact, campaign) => {
     callRecord.summary = `Call initiated to ${contact.name}`;
     await callRecord.save();
 
-    return { 
-      success: true, 
-      contact: contact._id, 
-      callSid: twilioCall.sid 
+    return {
+      success: true,
+      contact: contact._id,
+      callSid: twilioCall.sid
     };
 
   } catch (error) {
@@ -265,7 +265,7 @@ const updateCampaignProgress = async (campaignId, taskId) => {
     if (!campaign) return;
 
     const totalContacts = await UploadDetails.countDocuments({ taskId });
-    
+
     if (totalContacts === 0) {
       console.log('⚠️ No contacts found for this task');
       return;
@@ -273,10 +273,10 @@ const updateCampaignProgress = async (campaignId, taskId) => {
 
     // Get all contact IDs for this task
     const allContactIds = await UploadDetails.find({ taskId }).select('_id').lean();
-    
+
     // FIX: Filter out null customer_id values
     const completedCalls = await Calls.countDocuments({
-      customer_id: { 
+      customer_id: {
         $in: allContactIds.map(c => c._id),
         $exists: true,
         $ne: null
@@ -290,7 +290,7 @@ const updateCampaignProgress = async (campaignId, taskId) => {
 
     // FIX: Filter null customer_id values
     const allCallsForTask = await Calls.find({
-      customer_id: { 
+      customer_id: {
         $in: allContactIds.map(c => c._id),
         $exists: true,
         $ne: null
@@ -337,10 +337,10 @@ const updateCampaignProgress = async (campaignId, taskId) => {
 
     await campaign.save();
 
-    console.log(`📈 Campaign ${campaignId} progress: ${campaign.progress}%`);
+    console.log(`Campaign ${campaignId} progress: ${campaign.progress}%`);
 
   } catch (error) {
-    console.error('❌ Error updating campaign progress:', error.message);
+    console.error('Error updating campaign progress:', error.message);
   }
 };
 
@@ -357,33 +357,33 @@ const completeCampaign = async (campaignId) => {
     campaign.completedAt = new Date();
     campaign.progress = 100;
 
-    const totalContacts = await UploadDetails.countDocuments({ 
-      taskId: campaign.taskId._id 
+    const totalContacts = await UploadDetails.countDocuments({
+      taskId: campaign.taskId._id
     });
-    
-    const allContactIds = await UploadDetails.find({ 
-      taskId: campaign.taskId._id 
+
+    const allContactIds = await UploadDetails.find({
+      taskId: campaign.taskId._id
     }).select('_id');
 
     const completedCalls = await Calls.countDocuments({
       customer_id: { $in: allContactIds.map(c => c._id) }
     });
-    
+
     // FIX: Calculate completion rate and cap at 100
     let completionRate = totalContacts > 0
       ? Math.round((completedCalls / totalContacts) * 100)
       : 0;
-    
+
     // Ensure it doesn't exceed 100
     completionRate = Math.min(completionRate, 100);
     campaign.completionRate = completionRate;
 
     await campaign.save();
 
-    console.log(`✅ Campaign completed: ${campaignId} (${campaign.completionRate}% completion rate)`);
+    console.log(`Campaign completed: ${campaignId} (${campaign.completionRate}% completion rate)`);
     return { success: true, message: 'Campaign completed', campaignId };
   } catch (error) {
-    console.error('❌ Error completing campaign:', error.message);
+    console.error('Error completing campaign:', error.message);
     throw error;
   }
 };
@@ -394,9 +394,9 @@ export const getCampaignStatus = async (campaignId) => {
   try {
     const campaign = await Campaign.findOne({ campaignId })
       .populate('taskId');
-    
+
     const isRunning = activeCampaigns.has(campaignId);
-    
+
     return {
       success: true,
       isRunning,

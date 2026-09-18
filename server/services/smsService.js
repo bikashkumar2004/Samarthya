@@ -8,7 +8,7 @@ export async function handleSMSSend(to_number, message, name = 'Customer', purpo
       cleanNumber = '+' + cleanNumber;
     }
 
-    console.log(`🔄 Processing SMS`);
+    console.log(` Processing SMS`);
     console.log(` To: ${cleanNumber}`);
     console.log(` Name: ${name}`);
     console.log(` Purpose: ${purpose}`);
@@ -31,7 +31,7 @@ export async function handleSMSSend(to_number, message, name = 'Customer', purpo
     await messageRecord.save();
 
     if (result.success) {
-      console.log(`✅ SMS sent and saved to database`);
+      console.log(`SMS sent and saved to database`);
       return {
         success: true,
         message_sid: result.message_sid,
@@ -41,7 +41,7 @@ export async function handleSMSSend(to_number, message, name = 'Customer', purpo
         id: messageRecord._id
       };
     } else {
-      console.error(`❌ SMS failed:`, result.error);
+      console.error(`SMS failed:`, result.error);
       return {
         success: false,
         error: result.error,
@@ -49,7 +49,7 @@ export async function handleSMSSend(to_number, message, name = 'Customer', purpo
       };
     }
   } catch (error) {
-    console.error(`❌ SMS Service Error: ${error.message}`);
+    console.error(` SMS Service Error: ${error.message}`);
     return {
       success: false,
       error: error.message

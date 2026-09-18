@@ -1,7 +1,6 @@
 import React, { useState, createContext, useContext } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X, LayoutDashboard, MessageSquarePlus, MessageCircle, ClipboardList, Users, Target, Phone, Clock, Megaphone, Shield } from "lucide-react";
-import Dashboard from "@/pages/agent-view/dashboard/Dashboard";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 
 // Utility function for className merging

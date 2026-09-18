@@ -15,7 +15,6 @@ import {
   Shield,
   User
 } from "lucide-react";
-import Dashboard from "@/pages/agent-view/dashboard/Dashboard";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 
 // Utility function for className merging

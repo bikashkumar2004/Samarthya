@@ -3,7 +3,7 @@ import { Message } from '../models/Message.js';
 
 export async function handleEmailSend(to_email, message, name = 'Customer', purpose = 'General') {
   try {
-    console.log(`🔄 Processing Email`);
+    console.log(`Processing Email`);
     console.log(` To: ${to_email}`);
     console.log(` Name: ${name}`);
     console.log(` Purpose: ${purpose}`);
@@ -26,7 +26,7 @@ export async function handleEmailSend(to_email, message, name = 'Customer', purp
     await messageRecord.save();
 
     if (result.success) {
-      console.log(`✅ Email sent and saved to database`);
+      console.log(`Email sent and saved to database`);
       return {
         success: true,
         message_id: result.message_id,
@@ -36,7 +36,7 @@ export async function handleEmailSend(to_email, message, name = 'Customer', purp
         id: messageRecord._id
       };
     } else {
-      console.error(`❌ Email failed:`, result.error);
+      console.error(`Email failed:`, result.error);
       return {
         success: false,
         error: result.error,
@@ -44,7 +44,7 @@ export async function handleEmailSend(to_email, message, name = 'Customer', purp
       };
     }
   } catch (error) {
-    console.error(`❌ Email Service Error: ${error.message}`);
+    console.error(`Email Service Error: ${error.message}`);
     return {
       success: false,
       error: error.message

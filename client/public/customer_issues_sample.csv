@@ -1,0 +1,11 @@
+Name,PhoneNo,EmailId,Category,Description
+Rahul Sharma,9876543210,rahul.sharma@gmail.com,Billing & Payments,double deduction on monthly subscription payment and pending invoice refund
+Priya Patel,9823456781,priya.patel@outlook.com,Technical Support,mobile banking application crashing immediately after OTP verification screen
+Amit Verma,9712345672,amit.verma@yahoo.com,KYC Verification,PAN card and address proof document rejection during account KYC onboarding
+Neha Singh,9934567893,neha.singh@gmail.com,Order & Delivery,replacement package delayed past the promised delivery date for order #ORD-8821
+Vikram Malhotra,9845678904,vikram.m@techcorp.in,Product Inquiry,inquiry regarding enterprise CRM plan pricing and custom REST API rate limits
+Ananya Iyer,9765432105,ananya.iyer@gmail.com,Account Security,suspicious login alert from an unrecognized device and password reset request
+Rajesh Kumar,9890123456,rajesh.kumar78@rediffmail.com,Subscription Renewal,automatic renewal failure for annual software license due to expired credit card
+Sneha Reddy,9811223347,sneha.reddy@gmail.com,Refund Request,refund status for returned hardware router initiated 7 days ago under ticket #REF-4402
+Rohan Mehta,9722334458,rohan.mehta@enterprise.com,Product Onboarding,assistance with team onboarding and importing existing customer CSV data into CRM
+Kavita Joshi,9833445569,kavita.joshi@gmail.com,Technical Support,email notifications and automated SMS alerts not reaching registered recipients

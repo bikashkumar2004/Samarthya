@@ -1,6 +1,7 @@
 import { processExcelFile } from "../../helper/processxl.js";
 import mongoose from "mongoose";
 import ContactDetails from "../../models/contactDetails.js";
+import UploadDetails from "../../models/uploadDetails.js";
 import Calls from "../../models/callHistory.js";
 
 export const handleContactUpload = async (req, res) => {
@@ -61,48 +62,69 @@ export const addContactDetails = async (req, res) => {
 
 export const editList = async (req, res) => {
   try {
-    const id = req.params.id.trim(); // Correct: trim the string directly
+    const id = req.params.id?.trim();
     if (!id) {
-      return res.status(201).json({
+      return res.status(400).json({
         success: false,
-        message: "Id not found",
+        message: "Contact ID not provided",
       });
     }
 
-     const { name, email, phone, whatsappNo, status,purpose } = req.body
-
-    // Optional: validate ObjectId
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res
         .status(400)
-        .json({ success: false, message: "Invalid contact ID" });
+        .json({ success: false, message: "Invalid contact ID format" });
     }
 
-    const contact = await ContactDetails.findById(id);
-    if (!contact) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Contact not found" });
+    const { name, email, phone, phoneNo, category, description, whatsappNo, status, purpose } = req.body;
+    const finalPhone = phoneNo || phone;
+
+    // 1. Check in UploadDetails (the primary contacts collection in CRM)
+    const uploadDoc = await UploadDetails.findById(id);
+    if (uploadDoc) {
+      if (name) uploadDoc.name = name.trim();
+      if (finalPhone) uploadDoc.phoneNo = finalPhone.trim();
+      if (email) uploadDoc.email = email.trim().toLowerCase();
+      if (category) uploadDoc.category = category.trim();
+      if (description !== undefined) uploadDoc.description = description ? description.trim() : "";
+
+      await uploadDoc.save();
+      console.log(`[Contact Edit] Updated UploadDetails contact: ${id} (${uploadDoc.name})`);
+
+      return res.status(200).json({
+        success: true,
+        message: "Contact updated successfully",
+        data: uploadDoc,
+      });
     }
 
-    // Update only provided fields
-    if (name) contact.name = name;
-    if (email) contact.email = email;
-    if (phone) contact.phone = phone;
-    if (whatsappNo) contact.whatsappNo = whatsappNo;
-    if (status) contact.status = status;
-    if(purpose) contact.purpose =purpose;
+    // 2. Fallback check in ContactDetails
+    const contactDoc = await ContactDetails.findById(id);
+    if (contactDoc) {
+      if (name) contactDoc.name = name;
+      if (email) contactDoc.email = email;
+      if (finalPhone) contactDoc.phone = finalPhone;
+      if (whatsappNo) contactDoc.whatsappNo = whatsappNo;
+      if (status) contactDoc.status = status;
+      if (purpose) contactDoc.purpose = purpose;
 
-    await contact.save();
+      await contactDoc.save();
+      console.log(`[Contact Edit] Updated ContactDetails contact: ${id} (${contactDoc.name})`);
 
-    res.status(200).json({
-      success: true,
-      message: "Contact updated successfully",
-      data: contact,
+      return res.status(200).json({
+        success: true,
+        message: "Contact updated successfully",
+        data: contactDoc,
+      });
+    }
+
+    return res.status(404).json({
+      success: false,
+      message: "Contact not found",
     });
   } catch (error) {
     console.error("Edit contact error:", error);
-    res.status(500).json({ success: false, message: "Error occurred" });
+    res.status(500).json({ success: false, message: "Error occurred updating contact", error: error.message });
   }
 };
 
@@ -116,32 +138,47 @@ export const deleteList = async (req, res) => {
         message: "Contact ID not provided",
       });
     }
-    const contact = await ContactDetails.findByIdAndDelete(id);
 
-    if (!contact) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid contact ID format" });
+    }
+
+    // 1. Try deleting from UploadDetails
+    let deletedContact = await UploadDetails.findByIdAndDelete(id);
+    let sourceCollection = "UploadDetails";
+
+    // 2. If not found in UploadDetails, try ContactDetails
+    if (!deletedContact) {
+      deletedContact = await ContactDetails.findByIdAndDelete(id);
+      sourceCollection = "ContactDetails";
+    }
+
+    if (!deletedContact) {
       return res.status(404).json({
         success: false,
         message: "Contact not found",
       });
     }
 
-    // Delete all related call history
+    // 3. Delete related call history records
     const deletedCalls = await Calls.deleteMany({ customer_id: id });
 
     console.log(
-      ` Deleted ${deletedCalls.deletedCount} call history records for contact: ${id}`
+      `[Contact Delete] Deleted contact ${id} (${deletedContact.name}) from ${sourceCollection} and ${deletedCalls.deletedCount} call history records.`
     );
 
-    // 3️ Respond success
     res.status(200).json({
       success: true,
-      message: `Contact and ${deletedCalls.deletedCount} related call history records deleted successfully.`,
+      message: `Contact "${deletedContact.name}" deleted successfully.`,
+      id,
     });
   } catch (error) {
     console.error("Delete contact error:", error);
     res.status(500).json({
       success: false,
-      message: "Error occurred while deleting contact and related call history",
+      message: "Error occurred while deleting contact",
       error: error.message,
     });
   }

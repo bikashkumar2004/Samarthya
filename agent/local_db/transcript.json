@@ -1,17 +1,82 @@
 [
   {
     "role": "assistant",
-    "timestamp_iso": "2025-10-31T21:19:36",
-    "content": "Hello bikash! I am calling about Interested in product demo."
+    "timestamp_iso": "2026-09-18T16:45:32",
+    "content": "Hello Rahul Sharma! I am calling about Double deduction on monthly subscription payment and pending invoice refund"
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2026-09-18T16:45:46",
+    "content": "It seems like there might have been a pause."
   },
   {
     "role": "user",
-    "timestamp_iso": "2025-10-31T21:19:44",
-    "content": "Why did you call me? I was doing some work. You interrupted me. I'm very angry."
+    "timestamp_iso": "2026-09-18T16:45:48",
+    "content": "Docs related."
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2026-09-18T16:45:49",
+    "content": "Thank you for that clarification, Rahul."
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2026-09-18T16:45:51",
+    "content": "I understand that you're referring to documents related to the double deduction and the pending invoice refund."
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2026-09-18T16:45:56",
+    "content": "Could you please provide me with a bit more detail about the situation?"
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2026-09-18T16:46:00",
+    "content": "For instance, when you noticed the double deduction and any specific documents you might have regarding the pending invoice?"
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2026-09-18T16:46:07",
+    "content": "This will help me assist you better."
   },
   {
     "role": "user",
-    "timestamp_iso": "2025-10-31T21:19:45",
-    "content": "No need to talk to me."
+    "timestamp_iso": "2026-09-18T16:46:11",
+    "content": "Actually, I have"
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2026-09-18T16:46:12",
+    "content": "That’s great to hear!"
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2026-09-18T16:46:13",
+    "content": "Please go ahead and share the details you have regarding the double deduction and the pending invoice."
+  },
+  {
+    "role": "user",
+    "timestamp_iso": "2026-09-18T16:46:14",
+    "content": "What"
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2026-09-18T16:46:15",
+    "content": "I apologize if I misunderstood."
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2026-09-18T16:46:17",
+    "content": "If you have documents or details related to the double deduction and the pending invoice refund, please feel free to share them with me."
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2026-09-18T16:46:24",
+    "content": "This will help me assist you more effectively."
+  },
+  {
+    "role": "assistant",
+    "timestamp_iso": "2026-09-18T16:46:26",
+    "content": "If you have any specific questions or concerns, I'm here to help!"
   }
 ]

@@ -1,0 +1,99 @@
+{
+  "call_id": "CA729a4417f6ae41bb64e9be8c57be7d64",
+  "customer_id": "6aad08ac113ac4d73eb83249",
+  "call_start_iso": "2026-09-18T16:45:32",
+  "call_end_iso": "2026-09-18T16:46:26",
+  "call_duration_seconds": 67.17,
+  "transcripts": [
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T16:45:32",
+      "content": "Hello Rahul Sharma! I am calling about Double deduction on monthly subscription payment and pending invoice refund"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T16:45:46",
+      "content": "It seems like there might have been a pause."
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2026-09-18T16:45:48",
+      "content": "Docs related."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T16:45:49",
+      "content": "Thank you for that clarification, Rahul."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T16:45:51",
+      "content": "I understand that you're referring to documents related to the double deduction and the pending invoice refund."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T16:45:56",
+      "content": "Could you please provide me with a bit more detail about the situation?"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T16:46:00",
+      "content": "For instance, when you noticed the double deduction and any specific documents you might have regarding the pending invoice?"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T16:46:07",
+      "content": "This will help me assist you better."
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2026-09-18T16:46:11",
+      "content": "Actually, I have"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T16:46:12",
+      "content": "That’s great to hear!"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T16:46:13",
+      "content": "Please go ahead and share the details you have regarding the double deduction and the pending invoice."
+    },
+    {
+      "role": "user",
+      "timestamp_iso": "2026-09-18T16:46:14",
+      "content": "What"
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T16:46:15",
+      "content": "I apologize if I misunderstood."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T16:46:17",
+      "content": "If you have documents or details related to the double deduction and the pending invoice refund, please feel free to share them with me."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T16:46:24",
+      "content": "This will help me assist you more effectively."
+    },
+    {
+      "role": "assistant",
+      "timestamp_iso": "2026-09-18T16:46:26",
+      "content": "If you have any specific questions or concerns, I'm here to help!"
+    }
+  ],
+  "summary": "Rahul Sharma calls to ask about double deduction on monthly subscription payment and pending invoice refund. Assistant: Could you please provide me with a bit more detail about the situation? Assistant: For instance, when you noticed the double deduction and any specific documents you might have regarding the pending invoice.",
+  "sentiment_overall": "Neutral",
+  "sentiment_scores": {},
+  "turn_counts": {
+    "user": 3,
+    "assistant": 13
+  },
+  "processed_at": "2026-09-18T16:46:41",
+  "imported_at": "2026-09-18T16:46:41",
+  "_id": "6aad1d9943535123eb824c1c"
+}

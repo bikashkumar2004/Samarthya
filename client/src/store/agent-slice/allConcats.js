@@ -42,6 +42,40 @@ export const fetchContactById = createAsyncThunk(
   }
 );
 
+// PUT: /edit/:id
+export const editContact = createAsyncThunk(
+  "agent/contactList/editContact",
+  async ({ id, formData }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(`${API_URL}/edit/${id}`, formData, {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+      });
+      return { id, data: response?.data?.data || response?.data };
+    } catch (error) {
+      return rejectWithValue(error?.response?.data?.message || error?.response?.data || error.message);
+    }
+  }
+);
+
+// DELETE: /delete/:id
+export const deleteContact = createAsyncThunk(
+  "agent/contactList/deleteContact",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(`${API_URL}/delete/${id}`, {
+        withCredentials: true,
+      });
+      return { id, ...response?.data };
+    } catch (error) {
+      return rejectWithValue(error?.response?.data?.message || error?.response?.data || error.message);
+    }
+  }
+);
+
+export const editContactList = editContact;
+export const deleteContactList = deleteContact;
+
 const contactListSlice = createSlice({
   name: "contactList",
   initialState,
@@ -91,6 +125,47 @@ const contactListSlice = createSlice({
       })
       .addCase(fetchContactById.rejected, (state, action) => {
         state.error = action.payload || "Failed to load contact";
+      })
+
+      // edit
+      .addCase(editContact.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(editContact.fulfilled, (state, action) => {
+        state.isLoading = false;
+        const updated = action.payload?.data;
+        if (updated && updated._id) {
+          state.byId[updated._id] = updated;
+          const idx = state.contactList.findIndex((c) => c._id === updated._id);
+          if (idx !== -1) {
+            state.contactList[idx] = updated;
+          }
+        }
+        state.successMessage = "Contact updated successfully";
+      })
+      .addCase(editContact.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || "Failed to update contact";
+      })
+
+      // delete
+      .addCase(deleteContact.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(deleteContact.fulfilled, (state, action) => {
+        state.isLoading = false;
+        const id = action.payload?.id;
+        if (id) {
+          delete state.byId[id];
+          state.contactList = state.contactList.filter((c) => c._id !== id);
+        }
+        state.successMessage = "Contact deleted successfully";
+      })
+      .addCase(deleteContact.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || "Failed to delete contact";
       });
   },
 });

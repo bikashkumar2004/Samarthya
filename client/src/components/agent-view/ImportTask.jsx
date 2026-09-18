@@ -42,14 +42,13 @@ const ImportTask = () => {
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
 
-  // Sample format UI only
+  // Required format matching backend processor
   const sampleFormat = [
-    { header: "Sl No.", example: "1" },
-    { header: "Name", example: "John Doe" },
-    { header: "Category", example: "Document Verification" },
-    { header: "Issue Description", example: "Certificate issue" },
-    { header: "Status", example: "Open" },
-    { header: "Time Elapsed", example: "2h 30m" },
+    { header: "Name", example: "Rahul Sharma" },
+    { header: "PhoneNo", example: "9876543210" },
+    { header: "EmailId", example: "rahul.sharma@gmail.com" },
+    { header: "Category", example: "Billing & Payments" },
+    { header: "Description", example: "double deduction on subscription payment and refund" },
   ];
 
   useEffect(() => {
@@ -66,10 +65,10 @@ const ImportTask = () => {
       formData.append("type", type);
 
       await dispatch(uploadDetails(formData)).unwrap();
-      toast.success("✅ File uploaded successfully!");
+      toast.success("File uploaded successfully!");
       await dispatch(fetchAllDetails());
     } catch (err) {
-      toast.error(err?.message || "❌ Upload failed!");
+      toast.error(err?.message || "Upload failed!");
     } finally {
       // reset input
       if (event.target) event.target.value = null;
@@ -87,7 +86,7 @@ const ImportTask = () => {
       setDeleteTaskId("");
       await dispatch(fetchAllDetails());
     } catch (err) {
-      toast.error(err?.message || "❌ Failed to delete task");
+      toast.error(err?.message || "Failed to delete task");
     }
   };
 
@@ -100,9 +99,9 @@ const ImportTask = () => {
     if (foundTask) {
       setTaskToDelete(foundTask);
       setShowDeleteConfirmation(true);
-      toast.success("✅ Task found!");
+      toast.success("Task found!");
     } else {
-      toast.error("❌ Task ID not found");
+      toast.error("Task ID not found");
     }
   };
 
@@ -117,7 +116,7 @@ const ImportTask = () => {
       <Card className="border-none shadow-xl overflow-hidden">
         <CardHeader className="">
           <CardTitle className="text-2xl font-bold flex items-center gap-3">
-            
+
             Import New Task
           </CardTitle>
         </CardHeader>
@@ -209,14 +208,14 @@ const ImportTask = () => {
         </CardContent>
       </Card>
 
-      
+
 
       {/* Recent Imports Table */}
       <Card className="border-2 border-gray-200 shadow-xl overflow-hidden">
         <CardHeader className="bg-gradient-to-r from-gray-50 to-white border-b-2 border-gray-200">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <CardTitle className="text-2xl font-bold text-black flex items-center gap-3">
-              
+
               Recent Imports
             </CardTitle>
             <div className="text-sm text-gray-600 bg-gray-100 px-4 py-2 rounded-full font-semibold">

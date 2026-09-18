@@ -43,7 +43,7 @@ export default function WhatsAppInbox() {
 
   // Fetch conversations on mount
   useEffect(() => {
-    console.log("🚀 Component mounted, fetching conversations...");
+    console.log("Component mounted, fetching conversations...");
     fetchConversations();
   }, []);
 
@@ -72,7 +72,7 @@ export default function WhatsAppInbox() {
         `${API_BASE_URL}/api/whatsapp/conversations`
       );
       const data = await response.json();
-      console.log("📥 Conversations response:", data);
+      console.log("Conversations response:", data);
 
       if (!response.ok) {
         throw new Error(data.error || "Failed to fetch conversations");
@@ -82,13 +82,13 @@ export default function WhatsAppInbox() {
         const convArray = Array.isArray(data.conversations)
           ? data.conversations
           : [];
-        console.log("✅ Conversations loaded:", convArray.length);
+        console.log("Conversations loaded:", convArray.length);
         setConversations(convArray);
       } else {
         throw new Error(data.error || "Invalid response format");
       }
     } catch (error) {
-      console.error("❌ Error fetching conversations:", error);
+      console.error("Error fetching conversations:", error);
       setError(`Failed to load conversations: ${error.message}`);
       setConversations([]);
     } finally {
@@ -105,13 +105,13 @@ export default function WhatsAppInbox() {
 
       // Extract clean phone number (remove whatsapp: prefix if present)
       const cleanNumber = normalizePhone(phoneNumber);
-      console.log("📨 Loading messages for:", cleanNumber);
+      console.log("Loading messages for:", cleanNumber);
 
       const response = await fetch(
         `${API_BASE_URL}/api/whatsapp/conversations/${encodeURIComponent(cleanNumber)}`
       );
       const data = await response.json();
-      console.log("📥 Messages response:", data);
+      console.log("Messages response:", data);
 
       if (!response.ok) {
         throw new Error(data.error || "Failed to load messages");
@@ -124,13 +124,13 @@ export default function WhatsAppInbox() {
         // Sort messages by timestamp
         const sortedMessages = Array.isArray(data.messages)
           ? data.messages.sort(
-              (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
-            )
+            (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
+          )
           : [];
 
-        console.log("✅ Messages loaded:", sortedMessages.length);
+        console.log("Messages loaded:", sortedMessages.length);
         console.log(
-          "🔍 Selected conversation now:",
+          "Selected conversation now:",
           phoneNumber,
           "Normalized:",
           normalizePhone(phoneNumber)
@@ -140,7 +140,7 @@ export default function WhatsAppInbox() {
         throw new Error(data.error || "Invalid response format");
       }
     } catch (error) {
-      console.error("❌ Error loading messages:", error);
+      console.error("Error loading messages:", error);
       if (!silent) {
         setError(`Failed to load messages: ${error.message}`);
         setMessages([]);
@@ -153,20 +153,20 @@ export default function WhatsAppInbox() {
   };
 
   const handleConversationClick = (conv) => {
-    console.log("🖱️ Conversation clicked:", conv);
-    console.log("📌 Conv phoneNumber:", conv.phoneNumber);
+    console.log("Conversation clicked:", conv);
+    console.log("Conv phoneNumber:", conv.phoneNumber);
 
     if (conv && conv.phoneNumber) {
       loadConversationMessages(conv.phoneNumber);
     } else {
-      console.error("⚠️ Invalid conversation data:", conv);
+      console.error("Invalid conversation data:", conv);
       setError("Invalid conversation selected");
     }
   };
 
   const handleSendReply = async () => {
     if (!replyText.trim() || !selectedConversation) {
-      console.warn("⚠️ Cannot send: empty message or no conversation selected");
+      console.warn("Cannot send: empty message or no conversation selected");
       return;
     }
 
@@ -174,7 +174,7 @@ export default function WhatsAppInbox() {
     setError(null);
 
     try {
-      console.log("📤 Sending message to:", selectedConversation);
+      console.log("Sending message to:", selectedConversation);
       const response = await fetch(`${API_BASE_URL}/api/send-whatsapp`, {
         method: "POST",
         headers: {
@@ -188,14 +188,14 @@ export default function WhatsAppInbox() {
       });
 
       const result = await response.json();
-      console.log("📥 Send response:", result);
+      console.log("Send response:", result);
 
       if (!response.ok) {
         throw new Error(result.error || "Failed to send message");
       }
 
       if (result.success) {
-        console.log("✅ Message sent successfully");
+        console.log("Message sent successfully");
         setReplyText("");
         // Refresh messages immediately
         await loadConversationMessages(selectedConversation, true);
@@ -204,7 +204,7 @@ export default function WhatsAppInbox() {
         throw new Error(result.error || "Failed to send message");
       }
     } catch (error) {
-      console.error("❌ Error sending reply:", error);
+      console.error("Error sending reply:", error);
       setError(`Failed to send message: ${error.message}`);
     } finally {
       setIsLoading(false);
@@ -311,11 +311,10 @@ export default function WhatsAppInbox() {
                       <button
                         key={idx}
                         onClick={() => handleConversationClick(conv)}
-                        className={`w-full p-3 rounded-lg text-left transition-all ${
-                          isSelected
-                            ? "bg-green-100 border-l-4 border-green-600"
-                            : "hover:bg-slate-100"
-                        }`}
+                        className={`w-full p-3 rounded-lg text-left transition-all ${isSelected
+                          ? "bg-green-100 border-l-4 border-green-600"
+                          : "hover:bg-slate-100"
+                          }`}
                       >
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
@@ -408,18 +407,16 @@ export default function WhatsAppInbox() {
                     {messages.map((msg, idx) => (
                       <div
                         key={idx}
-                        className={`flex ${
-                          msg.direction === "outbound"
-                            ? "justify-end"
-                            : "justify-start"
-                        }`}
+                        className={`flex ${msg.direction === "outbound"
+                          ? "justify-end"
+                          : "justify-start"
+                          }`}
                       >
                         <div
-                          className={`max-w-xs rounded-lg px-4 py-2 ${
-                            msg.direction === "outbound"
-                              ? "bg-green-600 text-white"
-                              : "bg-slate-200 text-slate-900"
-                          }`}
+                          className={`max-w-xs rounded-lg px-4 py-2 ${msg.direction === "outbound"
+                            ? "bg-green-600 text-white"
+                            : "bg-slate-200 text-slate-900"
+                            }`}
                         >
                           <p className="text-sm">{msg.body || "(No content)"}</p>
                           {msg.mediaUrl && (
@@ -433,11 +430,10 @@ export default function WhatsAppInbox() {
                             </a>
                           )}
                           <div
-                            className={`text-xs mt-1 flex items-center gap-1 ${
-                              msg.direction === "outbound"
-                                ? "text-green-100"
-                                : "text-slate-500"
-                            }`}
+                            className={`text-xs mt-1 flex items-center gap-1 ${msg.direction === "outbound"
+                              ? "text-green-100"
+                              : "text-slate-500"
+                              }`}
                           >
                             {formatTime(msg.timestamp)}
                             {msg.direction === "outbound" && (
