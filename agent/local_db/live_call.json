@@ -1,0 +1,20 @@
+{
+  "call_id": "CALL-TEST-002",
+  "customer_id": "CUST-002",
+  "call_status": "in_progress",
+  "duration_seconds": 0.0,
+  "turns_count": 1,
+  "live_overall_sentiment": "Neutral",
+  "live_sentiment_score": 0.0,
+  "transcripts": [
+    {
+      "turn_id": 1,
+      "role": "assistant",
+      "content": "Good afternoon, this is Samarthya Health Agent.",
+      "sentiment": "Positive",
+      "sentiment_score": 0.55,
+      "tone": "Positive / Cooperative",
+      "timestamp_iso": "2026-09-18T19:28:54"
+    }
+  ]
+}

@@ -1,0 +1,121 @@
+[
+  {
+    "id": "med_aspirin",
+    "title": "Aspirin 325mg (Acetylsalicylic Acid)",
+    "category": "Pain Relief / NSAID / Antiplatelet",
+    "content": "Aspirin 325mg is a non-steroidal anti-inflammatory drug (NSAID) and antiplatelet agent. Brand names include Bayer, Bufferin, Ecotrin. Price: $5.99 for 30 tablets. Indications: pain relief, fever reduction, inflammation, heart attack prevention. Typical dosage: 325mg to 650mg every 4 to 6 hours with food. Side effects: stomach upset, heartburn, bleeding risk. Prescription required: No (Over-The-Counter).",
+    "keywords": ["aspirin", "bayer", "pain", "headache", "fever", "heart attack", "blood thinner"]
+  },
+  {
+    "id": "med_ibuprofen",
+    "title": "Ibuprofen 400mg",
+    "category": "Pain Relief / NSAID",
+    "content": "Ibuprofen 400mg is an anti-inflammatory pain reliever. Brand names include Advil, Motrin, Nurofen, Brufen. Price: $7.99 for 20 tablets. Indications: headaches, toothaches, menstrual cramps, arthritis, muscle aches, fever. Typical dosage: 200mg to 400mg every 4 to 6 hours with food, max 1200mg/day OTC. Side effects: stomach irritation, nausea, dizziness. Prescription required: No.",
+    "keywords": ["ibuprofen", "advil", "motrin", "pain", "inflammation", "cramps", "toothache"]
+  },
+  {
+    "id": "med_acetaminophen",
+    "title": "Acetaminophen 500mg (Paracetamol)",
+    "category": "Pain Relief / Antipyretic",
+    "content": "Acetaminophen 500mg (Paracetamol) is an analgesic and fever reducer that is gentle on the stomach. Brand names include Tylenol, Panadol, Calpol, Crocin, Dolo. Price: $6.99 for 25 caplets. Indications: headache, body aches, fever, post-vaccine soreness. Dosage: 500mg to 1000mg every 4 to 6 hours, max 3000mg-4000mg/24h. Avoid alcohol to protect the liver. Prescription required: No.",
+    "keywords": ["paracetamol", "acetaminophen", "tylenol", "panadol", "dolo", "crocin", "calpol", "fever", "headache", "cold", "body pain"]
+  },
+  {
+    "id": "condition_cold_fever",
+    "title": "Cold & Fever Treatment (Medication Guide)",
+    "category": "Cold / Fever / Flu",
+    "content": "For cold, fever, body aches, and flu symptoms, the best non-prescription options are: 1) Paracetamol / Acetaminophen 500mg (Brands: Dolo, Crocin, Tylenol) priced at $6.99 for 25 tablets. 2) Ibuprofen 400mg (Brands: Advil, Brufen) priced at $7.99 for 20 tablets. For allergy or runny nose, Cetirizine 10mg ($8.99) is ideal. Both are in stock and available for same-day delivery.",
+    "keywords": ["cold", "fever", "flu", "cold fever", "cough", "body pain", "temperature", "paracetamol", "dolo", "crocin", "calpol", "ibuprofen"]
+  },
+  {
+    "id": "med_tramadol",
+    "title": "Tramadol 50mg",
+    "category": "Opioid Analgesic",
+    "content": "Tramadol 50mg is a prescription opioid analgesic for moderate to severe pain. Brand names include Ultram, ConZip. Price: $18.50 for 30 tablets. Indications: severe chronic or post-surgical pain. Dosage: 50mg to 100mg every 4 to 6 hours as needed, max 400mg/day. Side effects: dizziness, drowsiness, constipation, dependence. Prescription required: YES. Customer must upload or present a verified prescription.",
+    "keywords": ["tramadol", "ultram", "severe pain", "prescription", "narcotic", "surgery"]
+  },
+  {
+    "id": "med_amoxicillin",
+    "title": "Amoxicillin 500mg",
+    "category": "Antibiotic (Penicillin class)",
+    "content": "Amoxicillin 500mg is a broad-spectrum penicillin antibiotic. Brand names include Amoxil, Moxatag, Trimox. Price: $14.25 for 30 capsules. Indications: bacterial infections like strep throat, ear infections, bronchitis, dental abscesses, UTIs. Dosage: 500mg every 8 hours or 875mg every 12 hours for 7 to 10 days. Always finish full course. Side effects: mild diarrhea, rash. Prescription required: YES.",
+    "keywords": ["amoxicillin", "amoxil", "antibiotic", "bacterial infection", "strep", "ear infection", "dental"]
+  },
+  {
+    "id": "med_azithromycin",
+    "title": "Azithromycin 250mg (Z-Pak)",
+    "category": "Antibiotic (Macrolide)",
+    "content": "Azithromycin 250mg is a fast-acting macrolide antibiotic. Brand names include Zithromax, Z-Pak. Price: $22.00 for 6 tablets. Indications: chest infections, pneumonia, sinus infections, strep throat. Dosage: 500mg day 1, then 250mg once daily days 2-5. Prescription required: YES.",
+    "keywords": ["azithromycin", "z-pak", "zithromax", "antibiotic", "sinus", "chest infection"]
+  },
+  {
+    "id": "med_cetirizine",
+    "title": "Cetirizine 10mg",
+    "category": "Antihistamine / Allergy",
+    "content": "Cetirizine 10mg is a 24-hour second-generation antihistamine. Brand names include Zyrtec, Reactine, Cetzine. Price: $8.99 for 30 tablets. Indications: seasonal allergies, hay fever, hives, itchy eyes, runny nose, pet allergies. Dosage: 10mg once daily. Non-drowsy for most patients. Prescription required: No.",
+    "keywords": ["cetirizine", "zyrtec", "allergy", "sneezing", "hives", "runny nose", "hay fever"]
+  },
+  {
+    "id": "med_loratadine",
+    "title": "Loratadine 10mg",
+    "category": "Antihistamine / Allergy",
+    "content": "Loratadine 10mg is a non-drowsy 24-hour antihistamine. Brand names include Claritin, Clarityn. Price: $9.49 for 30 tablets. Indications: allergic rhinitis, watery eyes, sneezing, skin itching. Dosage: 10mg once daily with water. Prescription required: No.",
+    "keywords": ["loratadine", "claritin", "allergy", "non-drowsy", "pollen"]
+  },
+  {
+    "id": "med_omeprazole",
+    "title": "Omeprazole 20mg",
+    "category": "Proton Pump Inhibitor (PPI) / Acid Reducer",
+    "content": "Omeprazole 20mg reduces stomach acid production. Brand names include Prilosec, Losec, Omez. Price: $11.99 for 28 capsules. Indications: frequent heartburn, GERD, acid reflux, stomach ulcers. Dosage: 20mg once daily before breakfast for up to 14 days. Prescription required: No for OTC course, Yes for long-term therapy.",
+    "keywords": ["omeprazole", "prilosec", "omez", "heartburn", "acid reflux", "gerd", "stomach"]
+  },
+  {
+    "id": "med_metformin",
+    "title": "Metformin 500mg",
+    "category": "Antidiabetic / Biguanide",
+    "content": "Metformin 500mg is a first-line medication for type 2 diabetes. Brand names include Glucophage, Fortamet, Glycomet. Price: $10.50 for 60 tablets. Indications: blood sugar control in type 2 diabetes, insulin resistance. Dosage: 500mg once or twice daily with meals to avoid upset stomach. Prescription required: YES.",
+    "keywords": ["metformin", "glucophage", "diabetes", "blood sugar", "insulin"]
+  },
+  {
+    "id": "med_atorvastatin",
+    "title": "Atorvastatin 20mg",
+    "category": "Statin / Cholesterol Lowering",
+    "content": "Atorvastatin 20mg lowers LDL bad cholesterol and reduces cardiovascular risk. Brand names include Lipitor, Atorva. Price: $15.00 for 30 tablets. Indications: high cholesterol, prevention of heart attack and stroke. Dosage: 10mg to 20mg once daily, preferably in the evening. Prescription required: YES.",
+    "keywords": ["atorvastatin", "lipitor", "cholesterol", "heart", "statin"]
+  },
+  {
+    "id": "med_lisinopril",
+    "title": "Lisinopril 10mg",
+    "category": "ACE Inhibitor / Blood Pressure",
+    "content": "Lisinopril 10mg treats high blood pressure and heart failure. Brand names include Prinivil, Zestril. Price: $9.00 for 30 tablets. Indications: hypertension, post-myocardial infarction recovery. Dosage: 10mg once daily. Side effects: dry cough, dizziness. Prescription required: YES.",
+    "keywords": ["lisinopril", "prinivil", "zestril", "blood pressure", "hypertension"]
+  },
+  {
+    "id": "policy_prescription_rules",
+    "title": "Prescription Verification & Order Policy",
+    "category": "Pharmacy Policy",
+    "content": "For all prescription medications (e.g. Tramadol, Amoxicillin, Metformin, Atorvastatin, Lisinopril), orders are initially marked as 'prescription_check'. The patient must upload a valid doctor's prescription via SMS/portal or present it to the delivery courier. OTC medications (Aspirin, Ibuprofen, Tylenol, Cetirizine, Omeprazole) do not require a prescription.",
+    "keywords": ["prescription", "doctor note", "order policy", "rx required", "verification"]
+  },
+  {
+    "id": "policy_delivery_shipping",
+    "title": "Delivery Options & Shipping Times",
+    "category": "Pharmacy Policy",
+    "content": "Standard delivery takes 24 to 48 hours for $3.99, or free on orders over $35. Express same-day delivery is available for $8.99 on orders placed before 2:00 PM. Temperature-sensitive medications are shipped in insulated cold packs at no extra charge.",
+    "keywords": ["delivery", "shipping", "express delivery", "same day", "courier", "cost", "tracking"]
+  },
+  {
+    "id": "policy_returns_refunds",
+    "title": "Returns, Cancellations, and Refunds",
+    "category": "Pharmacy Policy",
+    "content": "Under federal healthcare regulations, opened or dispensed prescription medications cannot be returned. If an order has not yet been dispatched, it can be cancelled for an immediate 100% refund. For damaged, defective, or incorrect shipments, report within 48 hours for a free replacement or full refund.",
+    "keywords": ["return", "refund", "cancel order", "damaged", "wrong medication"]
+  },
+  {
+    "id": "crm_support_hours",
+    "title": "Customer Support & Pharmacist Consultation Hours",
+    "category": "Support / Hours",
+    "content": "Our AI calling assistant is available 24/7. Licensed human pharmacists are available for live telephone consultation Monday through Friday from 8:00 AM to 8:00 PM EST, and Saturday from 9:00 AM to 5:00 PM EST. For medical emergencies, callers must be directed to hang up and call 911 immediately.",
+    "keywords": ["hours", "support", "pharmacist", "consultation", "emergency", "911", "talk to human"]
+  }
+]

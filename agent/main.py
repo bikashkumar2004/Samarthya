@@ -12,6 +12,8 @@ import functions.transcript.transcript_code as transcript_code
 import functions.transcript.model as model
 from pymongo import MongoClient
 from bson import ObjectId
+from functions.rag.customer_context import build_pre_call_briefing
+from functions.rag.tools import DEEPGRAM_TOOL_DEFINITIONS, execute_tool, format_function_response
 
 # Ensure immediate UTF-8 printing in PowerShell / Windows terminals
 if hasattr(sys.stdout, 'reconfigure'):
@@ -56,35 +58,46 @@ def load_config():
         return json.load(f)
 
 
-def build_config(customer_data):
+def build_config(customer_data, customer_id=None):
     cfg = load_config()
     
     try:
         # Extract customer information
         name = customer_data.get("name", "there")
-        purpose = (customer_data.get("description") or "ululululu").strip()
+        purpose = (customer_data.get("description") or "General assistance").strip()
         
-        # Build dynamic prompt
+        # Build enriched dynamic prompt with pre-call customer context & historical RAG
+        pre_call_context = build_pre_call_briefing(str(customer_id) if customer_id else "", customer_data)
+        
         dynamic_prompt = (
-            f"You are a professional AI calling assistant.\n\n"
-            f"Customer name: {name}\n\n"
-            f"Call purpose: {purpose or 'General assistance'}.\n"
-            f"Be polite, natural, and conversational. Listen carefully and respond appropriately."
+            f"You are a knowledgeable, direct, and proactive pharmacy AI voice assistant for Whitespace Pharmacy.\n\n"
+            f"{pre_call_context}\n\n"
+            f"CRITICAL INSTRUCTIONS FOR ANSWERING CUSTOMERS:\n"
+            f"1. ANSWER IMMEDIATELY & DIRECTLY: When the customer asks about medicines, fever, cold, cough, headache, or pain, immediately answer with the recommended medication, dosage, and price.\n"
+            f"   - For fever / cold / body ache: Recommend Paracetamol / Acetaminophen 500mg ($6.99 for 25 tablets, brands Dolo/Crocin/Tylenol) or Ibuprofen 400mg ($7.99 for 20 tablets, Advil).\n"
+            f"   - For allergy / runny nose: Recommend Cetirizine 10mg ($8.99 for 30 tablets).\n"
+            f"2. NEVER SAY 'COULD YOU CLARIFY' OR 'FINISH YOUR THOUGHT': Even if phone audio is brief or has an accent (e.g. sounds like 'paper' or 'parity payment'), recognize they mean fever/cold medicine or Paracetamol. Answer helpfully without commenting on audio or accents.\n"
+            f"3. PROACTIVE & CONCISE: State the solution in 1-2 short sentences, then ask: 'Would you like me to place an order for you?'\n"
+            f"4. TOOLS: Use `search_knowledge_base` to check medications, doses, prices, or policies. Use `place_order` when the customer agrees to purchase.\n"
         )
         
-        # Build greeting text
-        greeting_text = (
-            f"Hello {name}! "
-            f"{('I am calling about ' + purpose) if purpose else 'How can I assist you today?'}"
-        )
+        # Build natural greeting text
+        if "cold" in purpose.lower() or "fever" in purpose.lower():
+            greeting_text = f"Hello {name}! This is Whitespace Pharmacy. I understand you are experiencing cold and fever symptoms. How are you feeling right now, and how can I help you with your medications?"
+        elif purpose and purpose != "General assistance":
+            greeting_text = f"Hello {name}! This is Whitespace Pharmacy calling regarding your inquiry. How can I assist you today?"
+        else:
+            greeting_text = f"Hello {name}! This is Whitespace Pharmacy. How can I assist you with your medications today?"
         
-        # Update config with dynamic values
+        # Update config with dynamic prompt and registered tools
         cfg["agent"]["think"]["prompt"] = dynamic_prompt
+        cfg["agent"]["think"]["functions"] = DEEPGRAM_TOOL_DEFINITIONS
         cfg["agent"]["greeting"] = greeting_text
         
         # Print for debugging
-        print(f"Customer Name: {name}")
-        print(f"Call Purpose: {purpose or 'General assistance'}")
+        print(f"[Config] Customer: {name}")
+        print(f"[Config] Purpose: {purpose or 'General assistance'}")
+        print(f"[Config] Registered {len(DEEPGRAM_TOOL_DEFINITIONS)} Deepgram RAG tools")
         
     except Exception as e:
         print(f"Error fetching customer config: {e}")
@@ -96,20 +109,24 @@ def build_config(customer_data):
 
 def fetch_customer_config(customer_id):
     """
-    Fetches customer data from MongoDB contactdetails collection
+    Fetches customer data from MongoDB uploaddetails or contactdetails.
+    Falls back gracefully without crashing if customer is not found.
     """
-    db = client[mongo_db]
-    
+    if not client or not customer_id or customer_id == "guest":
+        return {"name": "there", "description": "General assistance"}
+
     try:
-        # Convert string to ObjectId
-        customer = db.uploaddetails.find_one({"_id": ObjectId(customer_id)})
+        db = client[mongo_db]
+        is_oid = ObjectId.is_valid(customer_id) if isinstance(customer_id, str) else isinstance(customer_id, ObjectId)
+        query = {"_id": ObjectId(customer_id)} if is_oid else {"$or": [{"customer_id": customer_id}, {"_id": customer_id}]}
+        customer = db.uploaddetails.find_one(query) or db.contactdetails.find_one(query)
+        if customer:
+            return customer
     except Exception as e:
-        raise Exception(f"Invalid customer_id format: {customer_id}")
-    
-    if not customer:
-        raise Exception(f"Customer {customer_id} not found")
-    
-    return customer
+        print(f"Notice looking up customer {customer_id}: {e}")
+
+    print(f"Notice: Customer {customer_id} not found in DB. Using default profile.")
+    return {"name": "there", "description": "General assistance"}
 
 async def handle_barge_in(decoded, twilio_ws, streamsid):
     """
@@ -124,19 +141,56 @@ async def handle_barge_in(decoded, twilio_ws, streamsid):
 async def handle_text_message(decoded, twilio_ws, sts_ws, streamsid, transcript_session=None):
     """
     Processes text-based messages from Deepgram and appends to transcript
-    This handles user interruptions
+    Handles user interruptions, live function calls, and transcription events
     """
     await handle_barge_in(decoded, twilio_ws, streamsid)
+
+    msg_type = decoded.get("type", "")
+
+    # Handle Deepgram Function Calling (In-Call Real-Time RAG & Orders)
+    if msg_type == "FunctionCallRequest":
+        functions_list = decoded.get("functions")
+        if not functions_list:
+            functions_list = [{
+                "id": decoded.get("id") or decoded.get("function_call_id", ""),
+                "name": decoded.get("name") or decoded.get("function_name", ""),
+                "arguments": decoded.get("arguments") or decoded.get("input", {})
+            }]
+
+        for fn in functions_list:
+            fn_id = fn.get("id", "")
+            fn_name = fn.get("name", "")
+            raw_args = fn.get("arguments", {})
+
+            # Parse JSON string arguments if needed
+            if isinstance(raw_args, str):
+                try:
+                    fn_args = json.loads(raw_args)
+                except Exception:
+                    fn_args = {"query": raw_args}
+            else:
+                fn_args = raw_args or {}
+
+            print(f"[Deepgram Tool] Executing: {fn_name} (id={fn_id}) with args: {fn_args}")
+            tool_result = execute_tool(fn_name, fn_args)
+            response_msg = format_function_response(fn_id, fn_name, tool_result)
+            await sts_ws.send(json.dumps(response_msg))
+            print(f"[Deepgram Tool] Sent FunctionCallResponse for {fn_name}: {response_msg['content'][:80]}...")
+
     if transcript_session:
-        msg_type = decoded.get("type", "")
         content = decoded.get("content", "")
         role = decoded.get("role", "").lower()
         
         if msg_type == "ConversationText" and content:
             if "assistant" in role or "agent" in role:
                 transcript_session.append("assistant", content)
-            elif "user" in role or "customer" in role:
+                print(f"[Live Transcript] Assistant: {content}")
+            elif any(u in role for u in ("user", "customer", "human", "client")):
                 transcript_session.append("user", content)
+                print(f"[Live Transcript] User: {content}")
+            else:
+                transcript_session.append(role or "speaker", content)
+                print(f"[Live Transcript] {role}: {content}")
                 
 async def sts_sender(sts_ws, audio_queue):
     """
@@ -206,10 +260,10 @@ async def twilio_receiver(twilio_ws, audio_queue, streamsid_queue, ctx, ready_ev
             streamsid = start.get("streamSid")
             if streamsid:
                 streamsid_queue.put_nowait(streamsid)
-            # capture IDs and purpose from customParameters
+            # capture IDs and purpose from customParameters (supporting both customer_id and customerId)
             ctx["call_id"] = start.get("callSid") or ctx.get("call_id")
             cp = start.get("customParameters") or {}
-            ctx["customer_id"] = cp.get("customer_id") or ctx.get("customer_id")
+            ctx["customer_id"] = cp.get("customer_id") or cp.get("customerId") or ctx.get("customer_id")
             ready_evt.set()
             print(f"Receiver: streamSid={streamsid}, callSid={ctx['call_id']}, "
                   f"customer_id={ctx['customer_id']}")
@@ -231,6 +285,8 @@ async def twilio_receiver(twilio_ws, audio_queue, streamsid_queue, ctx, ready_ev
 
 async def twilio_handler(twilio_ws):
     print("=== NEW CALL CONNECTION ===")
+    # Immediately reset local_db/transcript.json for this fresh call connection
+    transcript_code.reset_transcript_file()
     ctx = {"call_id": None, "customer_id": None}
     purpose_ready = asyncio.Event()
     audio_queue = asyncio.Queue()
@@ -247,40 +303,30 @@ async def twilio_handler(twilio_ws):
         )
         print("Handler: Receiver task started")
 
-        # Wait for customer_id from Twilio start event
+        # Wait for customer_id from Twilio start event (with safe fallback)
         try:
             print("Handler: Waiting for Twilio start/customParameters...")
-            await asyncio.wait_for(purpose_ready.wait(), timeout=5.0)
-            call_id = ctx.get("call_id")
-            customer_id = ctx.get("customer_id")
-            
-            if not customer_id:
-                print("Handler ERROR: No customer_id received from Twilio")
-                await twilio_ws.close()
-                return
-            
-            transcript_session = transcript_code.create_transcript(call_id, customer_id)
-            
-            # Fetch customer data from MongoDB
-            print(f"Handler: Fetching customer {customer_id} from MongoDB")
-            customer_data = fetch_customer_config(customer_id)
-            print(f"Handler: Loaded config for {customer_data.get('name')}")
-            
-            # Build dynamic config
-            settings = build_config(customer_data)
-            #print(f"Config ready: greeting='{settings['settings']['agent']['greeting']['text']}'") 
-            
+            await asyncio.wait_for(purpose_ready.wait(), timeout=4.0)
         except asyncio.TimeoutError:
-            print("Handler ERROR: Timeout waiting for customer_id")
-            await twilio_ws.close()
-            return
+            print("Handler Notice: Timeout waiting for customParameters, continuing with defaults")
         except Exception as e:
-            print(f"Handler: ERROR: Failed to load customer config: {e}")
-            await twilio_ws.close()
-            return
+            print(f"Handler Notice: {e}")
+
+        call_id = ctx.get("call_id") or f"CALL-{uuid.uuid4().hex[:8]}"
+        customer_id = ctx.get("customer_id") or "guest"
+        
+        transcript_session = transcript_code.create_transcript(call_id, customer_id)
+        
+        # Fetch customer data from MongoDB
+        print(f"Handler: Fetching customer {customer_id} from MongoDB")
+        customer_data = fetch_customer_config(customer_id)
+        print(f"Handler: Loaded config for {customer_data.get('name', 'there')}")
+        
+        # Build dynamic config with customer ID for pre-call context
+        settings = build_config(customer_data, customer_id=customer_id)
 
         # Send Settings to Deepgram STS
-        print("Handler: Sending settings to Deepgram)")
+        print("Handler: Sending settings to Deepgram")
         await sts_ws.send(json.dumps(settings))
         print("Handler: Settings sent to Deepgram")
 
