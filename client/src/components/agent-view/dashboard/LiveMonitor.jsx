@@ -25,6 +25,13 @@ import {
   Activity,
   CheckCircle,
   AlertCircle,
+  Radio,
+  Play,
+  Square,
+  Clock,
+  Phone,
+  User,
+  Zap,
 } from "lucide-react";
 
 function formatDuration(totalSec = 0) {
@@ -40,7 +47,7 @@ function formatDuration(totalSec = 0) {
 
 export default function LiveMonitor() {
   const dispatch = useDispatch();
-  const rows = useSelector(selectLiveData);
+  const rows = useSelector(selectLiveData) || [];
   const loading = useSelector(selectLiveLoading);
   const polling = useSelector(selectLivePolling);
   const firstDurationSec = useSelector(selectFirstDurationSec);
@@ -55,7 +62,7 @@ export default function LiveMonitor() {
     dispatch(fetchLiveMonitor());
     pollRef.current = window.setInterval(() => {
       dispatch(fetchLiveMonitor());
-    }, 4000);
+    }, 3000);
   }, [dispatch]);
 
   const endPolling = React.useCallback(() => {
@@ -96,89 +103,176 @@ export default function LiveMonitor() {
     }, 500);
   };
 
-  const getStatusClass = (status) => {
-    const classes = {
-      Completed: "bg-green-100 text-green-700 border-green-300",
-      "In Progress": "bg-blue-100 text-blue-700 border-blue-300",
-      "No Answer": "bg-yellow-100 text-yellow-700 border-yellow-300",
-      Failed: "bg-red-100 text-red-700 border-red-300",
-    };
-    return classes[status] || "bg-gray-100 text-gray-700 border-gray-300";
-  };
-
-  const getStatusIcon = (status) => {
-    if (status === "Completed") return <CheckCircle className="w-4 h-4" />;
-    if (status === "In Progress") return <Activity className="w-4 h-4 animate-pulse" />;
-    if (status === "Failed") return <AlertCircle className="w-4 h-4" />;
-    if (status === "No Answer") return <PhoneOff className="w-4 h-4" />;
-    return null;
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case "In Progress":
+      case "ringing":
+      case "in-progress":
+        return (
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping" />
+            Active Call
+          </span>
+        );
+      case "Completed":
+      case "completed":
+        return (
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+            <CheckCircle className="w-3.5 h-3.5" />
+            Completed
+          </span>
+        );
+      case "No Answer":
+      case "no-answer":
+        return (
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+            <PhoneOff className="w-3.5 h-3.5" />
+            No Answer
+          </span>
+        );
+      case "Failed":
+      case "failed":
+        return (
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">
+            <AlertCircle className="w-3.5 h-3.5" />
+            Failed
+          </span>
+        );
+      default:
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+            {status || "Queued"}
+          </span>
+        );
+    }
   };
 
   return (
-    <div>
-      <Card className="border-2 border-blue-200 shadow-xl">
-        <CardHeader className="bg-gradient-to-r from-blue-50 to-cyan-50 border-b-2 border-blue-200">
-          <CardTitle className="text-xl font-bold text-[#043927] flex items-center gap-2">
-            <Activity className="w-6 h-6 text-blue-600 animate-pulse" />
-            Live Monitor Dashboard
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-gray-50">
-                  <TableHead className="font-bold text-gray-900">Sl No.</TableHead>
-                  <TableHead className="font-bold text-gray-900">Name</TableHead>
-                  <TableHead className="font-bold text-gray-900 hidden sm:table-cell">Status</TableHead>
-                  <TableHead className="font-bold text-gray-900">Duration</TableHead>
-                  <TableHead className="font-bold text-gray-900 text-right pr-5">Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {rows.length > 0 ? (
-                  rows.map((call, i) => (
-                    <TableRow key={call.call_id || i} className="hover:bg-blue-50 transition-colors">
-                      <TableCell className="font-semibold">{i + 1}</TableCell>
-                      <TableCell>
-                        <div>
-                          <div className="font-semibold text-gray-900">{call.name}</div>
-                          <div className="text-xs text-gray-500 sm:hidden">{call.phoneNo}</div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold border ${getStatusClass(call.status)}`}>
-                          {getStatusIcon(call.status)}
-                          {call.status}
-                        </span>
-                      </TableCell>
-                      <TableCell className="font-mono text-sm font-semibold">
-                        {formatDuration(call.duration_seconds)}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          className="font-bold"
-                        >
-                          <span className="hidden sm:inline cursor-pointer text-black">Cancel</span>
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={5} className="text-center py-8 text-gray-500">
-                      <PhoneOff className="w-12 h-12 mx-auto mb-2 text-gray-400" />
-                      <p className="font-medium">No active calls at the moment</p>
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
+    <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+      {/* Header */}
+      <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-gradient-to-r from-slate-50 via-white to-indigo-50/30 dark:from-slate-900 dark:via-slate-900 dark:to-indigo-950/20">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+            <Activity className="w-5 h-5 animate-pulse" />
           </div>
-        </CardContent>
-      </Card>
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+                Live Telephony Monitor
+              </h2>
+              {polling && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                  Streaming Live
+                </span>
+              )}
+            </div>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Real-time media streams between Twilio and Deepgram Voice Agent
+            </p>
+          </div>
+        </div>
+
+        {/* Action Controls */}
+        <div className="flex items-center gap-3">
+          <Button
+            onClick={onToggleAutoCaller}
+            variant={enabled ? "destructive" : "default"}
+            size="sm"
+            className={`font-semibold rounded-xl gap-2 shadow-sm transition-all ${
+              enabled
+                ? "bg-rose-600 hover:bg-rose-700 text-white"
+                : "bg-indigo-600 hover:bg-indigo-700 text-white"
+            }`}
+          >
+            {enabled ? (
+              <>
+                <Square className="w-3.5 h-3.5 fill-current" />
+                <span>Stop Auto-Caller</span>
+              </>
+            ) : (
+              <>
+                <Play className="w-3.5 h-3.5 fill-current" />
+                <span>Start Auto-Caller</span>
+              </>
+            )}
+          </Button>
+        </div>
+      </div>
+
+      {/* Table Content */}
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow className="border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+              <TableHead className="w-16 text-xs font-bold text-slate-500 dark:text-slate-400">#</TableHead>
+              <TableHead className="text-xs font-bold text-slate-500 dark:text-slate-400">Caller / Customer</TableHead>
+              <TableHead className="text-xs font-bold text-slate-500 dark:text-slate-400 hidden sm:table-cell">Live Status</TableHead>
+              <TableHead className="text-xs font-bold text-slate-500 dark:text-slate-400">Active Duration</TableHead>
+              <TableHead className="text-xs font-bold text-slate-500 dark:text-slate-400 text-right pr-6">Controls</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {rows.length > 0 ? (
+              rows.map((call, i) => (
+                <TableRow
+                  key={call.call_id || i}
+                  className="border-b border-slate-100 dark:border-slate-800/60 hover:bg-indigo-50/40 dark:hover:bg-slate-800/40 transition-colors"
+                >
+                  <TableCell className="font-mono text-xs text-slate-400">{i + 1}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-xs font-bold text-indigo-600 dark:text-indigo-400 shrink-0">
+                        {call.name ? call.name.charAt(0).toUpperCase() : "C"}
+                      </div>
+                      <div>
+                        <div className="font-bold text-slate-900 dark:text-white text-sm">
+                          {call.name || "Customer Inquirer"}
+                        </div>
+                        <div className="text-xs text-slate-500 dark:text-slate-400 font-mono">
+                          {call.phoneNo || "Twilio Stream"}
+                        </div>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell className="hidden sm:table-cell">
+                    {getStatusBadge(call.status)}
+                  </TableCell>
+                  <TableCell>
+                    <div className="inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-lg">
+                      <Clock className="w-3.5 h-3.5 text-slate-400" />
+                      <span>{formatDuration(call.duration_seconds || firstDurationSec)}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-right pr-6">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-lg"
+                    >
+                      Disconnect
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={5} className="text-center py-12 text-slate-500 dark:text-slate-400">
+                  <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800/60 flex items-center justify-center mx-auto mb-3 text-slate-400">
+                    <PhoneOff className="w-7 h-7" />
+                  </div>
+                  <p className="font-semibold text-sm text-slate-700 dark:text-slate-300">
+                    No active telephone sessions right now
+                  </p>
+                  <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
+                    The Voice AI assistant is idle on WebSocket port 5000 waiting for incoming Twilio calls.
+                  </p>
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

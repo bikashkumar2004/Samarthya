@@ -191,7 +191,7 @@ export default function WhatsAppInbox() {
   };
 
   return (
-    <div className="flex h-screen gap-4 p-4 bg-slate-50">
+    <div className="flex h-[calc(100vh-6rem)] gap-4 p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
       {/* Left Sidebar - Conversation List Component */}
       <div className="w-1/3 flex flex-col gap-3">
         <ConversationList

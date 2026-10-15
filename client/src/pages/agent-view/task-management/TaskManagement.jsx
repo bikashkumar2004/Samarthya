@@ -8,41 +8,41 @@ const TaskManagement = () => {
   const [value, setValue] = useState("imported_tasks");
 
   return (
-    <div className="min-h-screen p-4 md:p-6 space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto">
       {/* Header Section */}
-      <div>
-        <div className="flex items-center gap-4 mb-3">
-          <div className="bg-white/20 p-3 rounded-xl backdrop-blur-sm">
-            <ListTodo className="w-8 h-8 md:w-10 md:h-10 text-black" />
-          </div>
-          <h1 className="text-3xl md:text-4xl font-black text-black">
-            Task Management
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight">
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+              <ListTodo className="w-5 h-5" />
+            </div>
+            <span>Task Management</span>
           </h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+            {value === "imported_tasks"
+              ? "Import and stage customer contact lists from Excel or CSV files"
+              : "Review tasks assigned directly by your pharmacy clinical supervisor"}
+          </p>
         </div>
-        <p className="text-gray-900 text-base md:text-lg ml-0 md:ml-16">
-          {value === "imported_tasks"
-            ? "Import customer contact tasks from CSV or Excel files"
-            : "Tasks assigned by your manager"}
-        </p>
       </div>
 
       {/* Tabs Section */}
-      <Tabs value={value} onValueChange={setValue}>
-        <div className="w-full flex justify-center">
-          <TabsList className="grid grid-cols-2 rounded-xl shadow px-4 w-[60%] md:h-16">
+      <Tabs value={value} onValueChange={setValue} className="w-full">
+        <div className="bg-white dark:bg-slate-900 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm max-w-md mx-auto">
+          <TabsList className="grid grid-cols-2 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl h-11">
             <TabsTrigger
               value="imported_tasks"
-              className="data-[state=active]:bg-black data-[state=active]:text-white data-[state=active]:shadow-lg font-bold text-sm md:text-base rounded-lg transition-all flex items-center gap-2"
+              className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-sm font-semibold text-xs sm:text-sm rounded-lg transition-all flex items-center justify-center gap-2"
             >
-              <FileUp className="w-4 h-4 md:w-5 md:h-5" />
-              Imported Tasks
+              <FileUp className="w-4 h-4" />
+              <span>Imported Tasks</span>
             </TabsTrigger>
             <TabsTrigger
               value="assigned_tasks"
-              className="data-[state=active]:bg-black data-[state=active]:text-white data-[state=active]:shadow-lg font-bold text-sm md:text-base rounded-lg transition-all flex items-center gap-2"
+              className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-sm font-semibold text-xs sm:text-sm rounded-lg transition-all flex items-center justify-center gap-2"
             >
-              <UserCheck className="w-4 h-4 md:w-5 md:h-5" />
-              Assigned Tasks
+              <UserCheck className="w-4 h-4" />
+              <span>Assigned Tasks</span>
             </TabsTrigger>
           </TabsList>
         </div>

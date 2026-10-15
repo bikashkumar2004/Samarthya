@@ -140,60 +140,60 @@ export default function Campaigns() {
   const [startCampaignOpen, setStartCampaignOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-green-50 p-6 space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto">
       {/* Header Section */}
-      <div className="space-y-5">
-        <div className="">
-          <h1 className="text-4xl font-black text-black flex items-center gap-3">
-            <Activity className="w-10 h-10" />
-            Campaigns
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight">
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+              <Activity className="w-5 h-5" />
+            </div>
+            <span>Campaigns</span>
           </h1>
-        </div>
-        
-        <div className="flex flex-col items-center space-y-3 bg-white p-8 rounded-2xl shadow-lg border-2 border-gray-100">
-          <Button 
-            onClick={() => setStartCampaignOpen(true)}
-            className="bg-gradient-to-r from-[#043927] via-emerald-600 to-green-500 hover:from-[#032d1f] hover:via-emerald-700 hover:to-green-600 text-white font-bold text-lg px-8 py-6 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
-            size="lg"
-          >
-            <Plus className="w-5 h-5 mr-2" />
-            Start Campaign
-          </Button>
-          
-          <p className="text-gray-500 text-base">
-            No data? <span className="text-[#043927] font-bold cursor-pointer hover:underline hover:text-emerald-600 transition-colors">Import now!</span>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+            Create, schedule, and track automated outbound voice and message campaigns
           </p>
         </div>
+
+        <Button 
+          onClick={() => setStartCampaignOpen(true)}
+          className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl shadow-sm transition-all flex items-center gap-2"
+        >
+          <Plus className="w-4 h-4" />
+          <span>New Campaign</span>
+        </Button>
       </div>
 
       {/* Tabs Section */}
       <Tabs defaultValue="active" className="w-full" onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4 bg-gradient-to-r from-gray-100 to-gray-50 p-1 rounded-xl shadow-md h-14">
-          <TabsTrigger 
-            value="active" 
-            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#043927] data-[state=active]:to-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-lg font-bold text-base rounded-lg transition-all"
-          >
-            Active ({campaignsData.active.length})
-          </TabsTrigger>
-          <TabsTrigger 
-            value="scheduled"
-            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-cyan-500 data-[state=active]:text-white data-[state=active]:shadow-lg font-bold text-base rounded-lg transition-all"
-          >
-            Scheduled ({campaignsData.scheduled.length})
-          </TabsTrigger>
-          <TabsTrigger 
-            value="completed"
-            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-600 data-[state=active]:to-emerald-500 data-[state=active]:text-white data-[state=active]:shadow-lg font-bold text-base rounded-lg transition-all"
-          >
-            Completed ({campaignsData.completed.length})
-          </TabsTrigger>
-          <TabsTrigger 
-            value="draft"
-            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-600 data-[state=active]:to-yellow-500 data-[state=active]:text-white data-[state=active]:shadow-lg font-bold text-base rounded-lg transition-all"
-          >
-            Draft ({campaignsData.draft.length})
-          </TabsTrigger>
-        </TabsList>
+        <div className="bg-white dark:bg-slate-900 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <TabsList className="grid w-full grid-cols-4 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl h-11">
+            <TabsTrigger 
+              value="active" 
+              className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-sm font-semibold text-xs sm:text-sm rounded-lg transition-all"
+            >
+              Active ({campaignsData.active.length})
+            </TabsTrigger>
+            <TabsTrigger 
+              value="scheduled"
+              className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-sm font-semibold text-xs sm:text-sm rounded-lg transition-all"
+            >
+              Scheduled ({campaignsData.scheduled.length})
+            </TabsTrigger>
+            <TabsTrigger 
+              value="completed"
+              className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-sm font-semibold text-xs sm:text-sm rounded-lg transition-all"
+            >
+              Completed ({campaignsData.completed.length})
+            </TabsTrigger>
+            <TabsTrigger 
+              value="draft"
+              className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-sm font-semibold text-xs sm:text-sm rounded-lg transition-all"
+            >
+              Drafts ({campaignsData.draft.length})
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         <TabsContent value="active" className="mt-6">
           <ActiveCampaigns campaigns={campaignsData.active}/>
@@ -214,10 +214,10 @@ export default function Campaigns() {
 
       {/* Start Campaign Sheet */}
       <Sheet open={startCampaignOpen} onOpenChange={setStartCampaignOpen}>
-        <SheetContent side="right" className="w-full sm:max-w-2xl overflow-y-auto p-0 bg-white">
-          <SheetHeader className="bg-gradient-to-r from-[#043927] via-emerald-700 to-green-600 p-6 sticky top-0 z-10">
-            <SheetTitle className="text-2xl font-bold text-white flex items-center gap-2">
-              <Plus className="w-6 h-6" />
+        <SheetContent side="right" className="w-full sm:max-w-2xl overflow-y-auto p-0 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800">
+          <SheetHeader className="bg-gradient-to-r from-slate-900 to-indigo-950 p-6 sticky top-0 z-10 text-white">
+            <SheetTitle className="text-xl font-bold text-white flex items-center gap-2">
+              <Plus className="w-5 h-5 text-indigo-400" />
               Start New Campaign
             </SheetTitle>
           </SheetHeader>

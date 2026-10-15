@@ -154,65 +154,68 @@ const LeadManagement = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50 p-4 md:p-6 space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl md:text-4xl font-black text-black flex items-center gap-3">
-          <Users className="w-8 h-8 md:w-10 md:h-10" />
-          Lead Management
-        </h1>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight">
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+              <Users className="w-5 h-5" />
+            </div>
+            <span>Lead Management</span>
+          </h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+            Capture, qualify, and convert inbound patient leads and medical inquiries
+          </p>
+        </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-cyan-50 hover:shadow-xl transition-shadow">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-blue-700">Total Leads</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-4xl font-black bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-              {isLoading ? "…" : totalCount}
-            </div>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 shadow-sm">
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            Total Captured Leads
+          </span>
+          <div className="text-3xl font-extrabold text-slate-900 dark:text-white mt-2">
+            {isLoading ? "…" : totalCount}
+          </div>
+          <p className="text-xs text-slate-400 mt-1">From phone inquiries & forms</p>
+        </div>
 
-        <Card className="border-2 border-green-200 bg-gradient-to-br from-green-50 to-emerald-50 hover:shadow-xl transition-shadow">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-green-700">Positive</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-4xl font-black bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-              {isLoading ? "…" : positiveCount}
-            </div>
-          </CardContent>
-        </Card>
+        <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 shadow-sm">
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            Positive Sentiment
+          </span>
+          <div className="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-2">
+            {isLoading ? "…" : positiveCount}
+          </div>
+          <p className="text-xs text-slate-400 mt-1">High conversion propensity</p>
+        </div>
 
-        <Card className="border-2 border-yellow-200 bg-gradient-to-br from-yellow-50 to-amber-50 hover:shadow-xl transition-shadow">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-yellow-700">Neutral</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-4xl font-black bg-gradient-to-r from-yellow-600 to-amber-600 bg-clip-text text-transparent">
-              {isLoading ? "…" : neutralCount}
-            </div>
-          </CardContent>
-        </Card>
+        <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 shadow-sm">
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            Neutral Inquiries
+          </span>
+          <div className="text-3xl font-extrabold text-indigo-600 dark:text-indigo-400 mt-2">
+            {isLoading ? "…" : neutralCount}
+          </div>
+          <p className="text-xs text-slate-400 mt-1">General catalog & pricing requests</p>
+        </div>
 
-        <Card className="border-2 border-red-200 bg-gradient-to-br from-red-50 to-rose-50 hover:shadow-xl transition-shadow">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-red-700">Negative</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-4xl font-black bg-gradient-to-r from-red-600 to-rose-600 bg-clip-text text-transparent">
-              {isLoading ? "…" : negativeCount}
-            </div>
-          </CardContent>
-        </Card>
+        <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 shadow-sm">
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            Requires Escalation
+          </span>
+          <div className="text-3xl font-extrabold text-rose-600 dark:text-rose-400 mt-2">
+            {isLoading ? "…" : negativeCount}
+          </div>
+          <p className="text-xs text-slate-400 mt-1">Needs pharmacist intervention</p>
+        </div>
       </div>
 
       {/* Leads Table */}
-      <Card className="border-2 border-gray-200 shadow-xl overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-gray-50 to-white border-b-2 border-gray-200">
+      <Card className="rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden bg-white dark:bg-slate-900">
+        <CardHeader className="bg-slate-50/50 dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-800 p-4">
           <div className="sm:items-center">
             <div className="flex justify-between w-full sm:w-auto">
               <div className="flex gap-3">

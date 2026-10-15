@@ -67,6 +67,7 @@ export default function App() {
           <Route path="leads" element={<LeadManagement />} />
           <Route path="Leads" element={<LeadManagement />} />
           <Route path="aicallmanager" element={<AiCallMannager />} />
+          
           <Route path="pending-followups" element={<Pending />} />
 
           <Route path="campaigns" element={<Campaigns />} />

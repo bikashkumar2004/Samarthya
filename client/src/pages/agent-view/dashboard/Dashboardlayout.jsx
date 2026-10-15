@@ -5,11 +5,9 @@ import PendingDash from "@/components/agent-view/dashboard/PendingDash";
 
 export default function Dashboardlayout() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 max-w-7xl mx-auto">
       <DashboardOverview />
-      <div className="mt-5">
-        <LiveMonitor />
-      </div>
+      <LiveMonitor />
       <PendingDash />
     </div>
   );

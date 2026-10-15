@@ -13,7 +13,8 @@ import {
   Clock,
   Megaphone,
   Shield,
-  User
+  User,
+  Bot
 } from "lucide-react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 
@@ -136,22 +137,30 @@ export const MobileSidebar = ({ className, children, ...props }) => {
 
 export const SidebarLink = ({ link, className, ...props }) => {
   const { open, animate } = useSidebar();
+  const location = window.location ? window.location.pathname : "";
+  const isActive = location === link.path || (link.path !== "/agent/dashboard" && location.startsWith(link.path));
+
   return (
     <Link
       to={link.path}
       className={cn(
-        "flex items-center justify-start gap-2 group/sidebar py-2 hover:font-semibold",
+        "flex items-center justify-start gap-3 px-3 py-2.5 rounded-xl transition-all text-sm font-medium",
+        isActive
+          ? "bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 font-semibold shadow-sm"
+          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/60",
         className
       )}
       {...props}
     >
-      {link.icon}
+      <div className={cn("transition-colors", isActive ? "text-indigo-600 dark:text-indigo-400" : "text-slate-500 dark:text-slate-400")}>
+        {link.icon}
+      </div>
       <motion.span
         animate={{
           display: animate ? (open ? "inline-block" : "none") : "inline-block",
           opacity: animate ? (open ? 1 : 0) : 1,
         }}
-        className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
+        className="truncate inline-block !p-0 !m-0"
       >
         {link.label}
       </motion.span>
@@ -162,36 +171,34 @@ export const SidebarLink = ({ link, className, ...props }) => {
 // Logo Components
 export const Logo = () => {
   return (
-    <a
-      href="/agent/dashboard"
-      className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20"
+    <Link
+      to="/agent/dashboard"
+      className="flex items-center gap-2.5 py-2 px-1 relative z-20 group"
     >
-      <Shield
-        className="h-5 w-6 text-blue-600 dark:text-blue-400"
-        strokeWidth={2.5}
-      />
+      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 shrink-0">
+        <Bot className="h-4 w-4" />
+      </div>
       <motion.span
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="font-medium text-black dark:text-white whitespace-pre"
+        className="font-bold text-slate-900 dark:text-white text-base tracking-tight truncate"
       >
-        Samarthya
+        Whitespace CRM
       </motion.span>
-    </a>
+    </Link>
   );
 };
 
 export const LogoIcon = () => {
   return (
-    <a
-      href="#"
-      className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20"
+    <Link
+      to="/agent/dashboard"
+      className="flex items-center justify-center py-2 relative z-20"
     >
-      <Shield
-        className="h-5 w-6 text-blue-600 dark:text-blue-400"
-        strokeWidth={2.5}
-      />
-    </a>
+      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
+        <Bot className="h-4 w-4" />
+      </div>
+    </Link>
   );
 };
 
@@ -298,7 +305,7 @@ export default function SidebarDemo() {
             </div>
           </SidebarBody>
         </Sidebar>
-        <main className="flex-1 overflow-y-auto overflow-x-hidden bg-[#f9fbfa] p-8">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden bg-slate-50/70 dark:bg-slate-950 p-4 sm:p-6 lg:p-8">
           <Outlet />
         </main>
       </div>

@@ -165,33 +165,37 @@ const ContactManagement = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50 p-4 md:p-6 space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto">
       {/* Page Header */}
-      <div>
-        <h1 className="text-3xl md:text-4xl font-black text-black flex items-center gap-3">
-          <Users className="w-8 h-8 md:w-10 md:h-10" />
-          My Contacts
-        </h1>
-        <p className="text-gray-600 text-sm mt-1">
-          Manage, search, edit, and export customer contacts
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight">
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+              <Users className="w-5 h-5" />
+            </div>
+            <span>My Contacts</span>
+          </h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+            Manage, search, edit, and export your patient directory and CRM contact records
+          </p>
+        </div>
       </div>
 
       {/* Loading / Error States */}
       {isLoading && (
-        <div className="rounded-md border p-3 text-sm text-gray-700 bg-yellow-50">
+        <div className="rounded-xl border border-amber-200 dark:border-amber-800/60 p-3 text-xs text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40">
           Loading contacts…
         </div>
       )}
       {error && (
-        <div className="rounded-md border p-3 text-sm text-red-700 bg-red-50">
+        <div className="rounded-xl border border-rose-200 dark:border-rose-800/60 p-3 text-xs text-rose-700 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/40">
           {typeof error === "string" ? error : "Failed to load contacts"}
         </div>
       )}
 
       {/* Main Table Card */}
-      <Card className="border-2 border-gray-200 shadow-xl overflow-hidden bg-white">
-        <CardHeader className="bg-gradient-to-r from-gray-50 to-white border-b-2 border-gray-200 p-4">
+      <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+        <div className="border-b border-slate-200 dark:border-slate-800 p-4 bg-slate-50/50 dark:bg-slate-900/50">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
               <div className="relative flex-1 sm:flex-initial">
@@ -238,9 +242,9 @@ const ContactManagement = () => {
               Export Excel
             </Button>
           </div>
-        </CardHeader>
+        </div>
 
-        <CardContent className="p-0">
+        <div className="p-0">
           {/* Modular Table */}
           <ContactTable
             contacts={currentContact}
@@ -258,8 +262,8 @@ const ContactManagement = () => {
             endIndex={endIndex}
             onPageChange={setCurrentPage}
           />
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Edit Dialog Subcomponent */}
       <EditContactDialog

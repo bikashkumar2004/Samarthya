@@ -111,104 +111,110 @@ const AICallManager = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 p-4 md:p-6 space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl md:text-4xl font-black text-black flex items-center gap-3">
-          <PhoneCall className="w-8 h-8 md:w-10 md:h-10" />
-          AI Call Manager
-        </h1>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight">
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+              <PhoneCall className="w-5 h-5" />
+            </div>
+            <span>AI Call Manager</span>
+          </h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+            Dispatch autonomous calls, monitor live Twilio audio streams, and review post-call intelligence
+          </p>
+        </div>
       </div>
 
-      {/* Auto Caller Toggle */}
-      <Card className="border-2 border-gray-200 shadow-lg">
-        <CardContent className="p-4 md:p-6">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div
-                className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                  autocallerEnabled
-                    ? "bg-gradient-to-r from-green-500 to-emerald-600"
-                    : "bg-gray-200"
-                }`}
-              >
-                <Phone
-                  className={`w-6 h-6 ${
-                    autocallerEnabled ? "text-white" : "text-gray-500"
-                  }`}
-                />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-gray-900">Auto Caller</h3>
-                <p className="text-sm text-gray-600">
-                  {autocallerEnabled ? "Currently Active" : "Currently Inactive"}
-                </p>
-              </div>
-            </div>
-            <Button
-              onClick={onToggleAutoCaller}
-              className={`cursor-pointer font-bold shadow-lg transition-all transform hover:scale-105 ${
+      {/* Auto Caller Control Card */}
+      <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div
+              className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${
                 autocallerEnabled
-                  ? "bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700"
-                  : "bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
+                  ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
+                  : "bg-slate-100 dark:bg-slate-800 text-slate-400"
               }`}
             >
-              {autocallerEnabled ? "Disable Auto Caller" : "Enable Auto Caller"}
-            </Button>
+              <Phone className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">Auto-Dialer Engine</h3>
+                {autocallerEnabled ? (
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                    Dispatching
+                  </span>
+                ) : (
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-500">
+                    Standby
+                  </span>
+                )}
+              </div>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Automatically sequences calls through patient queues using Twilio Media Streams
+              </p>
+            </div>
           </div>
-        </CardContent>
-      </Card>
+
+          <Button
+            onClick={onToggleAutoCaller}
+            size="sm"
+            className={`font-semibold rounded-xl px-5 py-2.5 shadow-sm transition-all ${
+              autocallerEnabled
+                ? "bg-rose-600 hover:bg-rose-700 text-white"
+                : "bg-indigo-600 hover:bg-indigo-700 text-white"
+            }`}
+          >
+            {autocallerEnabled ? "Disable Auto-Caller" : "Enable Auto-Caller"}
+          </Button>
+        </div>
+      </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="border-2 border-gray-200 hover:shadow-xl transition-shadow">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-600">
-              Total Calls
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-black text-[#043927]">
-              {sampleCalls.length}
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-2 border-gray-200 hover:shadow-xl transition-shadow">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-600">
-              Completed
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-black text-green-600">
-              {sampleCalls.filter((c) => c.status === "Completed").length}
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-2 border-gray-200 hover:shadow-xl transition-shadow">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-600">
-              Failed
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-black text-red-600">
-              {sampleCalls.filter((c) => c.status === "Failed").length}
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-2 border-gray-200 hover:shadow-xl transition-shadow">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-gray-600">
-              Positive Sentiment
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-black text-emerald-600">
-              {sampleCalls.filter((c) => c.sentiment === "Positive").length}
-            </div>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 shadow-sm">
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            Total Telephony Calls
+          </span>
+          <div className="text-3xl font-extrabold text-slate-900 dark:text-white mt-2">
+            {rows.length || sampleCalls.length}
+          </div>
+          <p className="text-xs text-slate-400 mt-1">Logged call interactions</p>
+        </div>
+
+        <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 shadow-sm">
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            Completed Calls
+          </span>
+          <div className="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-2">
+            {sampleCalls.filter((c) => c.status === "Completed").length}
+          </div>
+          <p className="text-xs text-slate-400 mt-1">Resolved without errors</p>
+        </div>
+
+        <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 shadow-sm">
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            Failed / Dropped
+          </span>
+          <div className="text-3xl font-extrabold text-rose-600 dark:text-rose-400 mt-2">
+            {sampleCalls.filter((c) => c.status === "Failed").length}
+          </div>
+          <p className="text-xs text-slate-400 mt-1">Unreachable or network drop</p>
+        </div>
+
+        <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 shadow-sm">
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            Positive Sentiment
+          </span>
+          <div className="text-3xl font-extrabold text-indigo-600 dark:text-indigo-400 mt-2">
+            {sampleCalls.filter((c) => c.sentiment === "Positive").length}
+          </div>
+          <p className="text-xs text-slate-400 mt-1">High customer satisfaction</p>
+        </div>
       </div>
 
       <LiveMonitor />
