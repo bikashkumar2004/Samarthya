@@ -33,9 +33,9 @@ order_tool_res = execute_tool("place_order", {
 print("[Tool Order Result]:", order_tool_res["speech_response"])
 
 # Test format_function_response
-response_packet = format_function_response("call_abc123", order_tool_res)
+response_packet = format_function_response("call_abc123", "place_order", order_tool_res)
 print("[Formatted Packet Type]:", response_packet["type"])
-print("[Formatted Packet ID]:", response_packet["function_call_id"])
+print("[Formatted Packet ID]:", response_packet["id"])
 
 print("\n=== 3. TEST PRE-CALL DYNAMIC BRIEFING ===")
 mock_customer = {

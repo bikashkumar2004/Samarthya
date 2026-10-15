@@ -1,244 +1,232 @@
 {
-  "call_id": "CA65ef396f0048a976dfa3263a2cae3049",
+  "call_id": "CAe8568c86b412aaf3c0b27645dcc176a3",
   "customer_id": "6aad08ac113ac4d73eb83249",
-  "call_start_iso": "2026-09-18T17:26:56",
-  "call_end_iso": "2026-09-18T17:29:12",
-  "call_duration_seconds": 142.1,
+  "call_start_iso": "2026-09-19T19:31:10",
+  "call_end_iso": "2026-09-19T19:31:57",
+  "call_duration_seconds": 71.66,
   "transcripts": [
     {
+      "turn_id": 1,
       "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:26:56",
-      "content": "Hello sushil! I am calling about when i wake up at time i feel influences by cold fever"
+      "content": "Hello sushil! This is Whitespace Pharmacy. I understand you are experiencing cold and fever symptoms. How are you feeling right now, and how can I help you with your medications?",
+      "sentiment": "Negative",
+      "sentiment_score": -0.75,
+      "tone": "Symptom / Health Distress",
+      "timestamp_iso": "2026-09-19T19:31:10"
     },
     {
+      "turn_id": 2,
       "role": "user",
-      "timestamp_iso": "2026-09-18T17:27:08",
-      "content": "Actually, I'm hearing medicine."
+      "content": "I feel great.",
+      "sentiment": "Positive",
+      "sentiment_score": 0.55,
+      "tone": "Gratitude / Satisfaction",
+      "timestamp_iso": "2026-09-19T19:31:24"
     },
     {
+      "turn_id": 3,
+      "role": "assistant",
+      "content": "That's good to hear!",
+      "sentiment": "Positive",
+      "sentiment_score": 0.55,
+      "tone": "Positive / Cooperative",
+      "timestamp_iso": "2026-09-19T19:31:30"
+    },
+    {
+      "turn_id": 4,
       "role": "user",
-      "timestamp_iso": "2026-09-18T17:27:11",
-      "content": "For paper. Can you help me find in"
+      "content": "Hello?",
+      "sentiment": "Neutral",
+      "sentiment_score": 0.0,
+      "tone": "Inquiry / Neutral",
+      "timestamp_iso": "2026-09-19T19:31:32"
     },
     {
+      "turn_id": 5,
+      "role": "assistant",
+      "content": "I'm here!",
+      "sentiment": "Neutral",
+      "sentiment_score": 0.0,
+      "tone": "Inquiry / Neutral",
+      "timestamp_iso": "2026-09-19T19:31:32"
+    },
+    {
+      "turn_id": 6,
       "role": "user",
-      "timestamp_iso": "2026-09-18T17:27:13",
-      "content": "for me"
+      "content": "Can you",
+      "sentiment": "Neutral",
+      "sentiment_score": 0.0,
+      "tone": "Inquiry / Neutral",
+      "timestamp_iso": "2026-09-19T19:31:32"
     },
     {
+      "turn_id": 7,
       "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:27:13",
-      "content": "Of course, Sushil!"
+      "content": "It seems like your message got cut off.",
+      "sentiment": "Neutral",
+      "sentiment_score": 0.0,
+      "tone": "Inquiry / Neutral",
+      "timestamp_iso": "2026-09-19T19:31:33"
     },
     {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:27:15",
-      "content": "Are you looking for information on medications that can help with cold and fever symptoms?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:27:19",
-      "content": "If you have specific questions or need details about certain types of medicine, just let me know!"
-    },
-    {
+      "turn_id": 8,
       "role": "user",
-      "timestamp_iso": "2026-09-18T17:27:28",
-      "content": "Yeah. Can you can you help"
+      "content": "can you",
+      "sentiment": "Neutral",
+      "sentiment_score": 0.0,
+      "tone": "Inquiry / Neutral",
+      "timestamp_iso": "2026-09-19T19:31:34"
     },
     {
+      "turn_id": 9,
+      "role": "assistant",
+      "content": "It looks like your message is still incomplete.",
+      "sentiment": "Neutral",
+      "sentiment_score": 0.0,
+      "tone": "Symptom / Health Distress",
+      "timestamp_iso": "2026-09-19T19:31:35"
+    },
+    {
+      "turn_id": 10,
+      "role": "assistant",
+      "content": "It seems like there might be some connection issues.",
+      "sentiment": "Neutral",
+      "sentiment_score": 0.0,
+      "tone": "Inquiry / Neutral",
+      "timestamp_iso": "2026-09-19T19:31:42"
+    },
+    {
+      "turn_id": 11,
       "role": "user",
-      "timestamp_iso": "2026-09-18T17:27:31",
-      "content": "can you have this"
+      "content": "need some medicines.",
+      "sentiment": "Neutral",
+      "sentiment_score": 0.0,
+      "tone": "Inquiry / Neutral",
+      "timestamp_iso": "2026-09-19T19:31:44"
     },
     {
-      "role": "user",
-      "timestamp_iso": "2026-09-18T17:27:39",
-      "content": "Then you have parity payment."
-    },
-    {
+      "turn_id": 12,
       "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:27:40",
-      "content": "It seems like there might be a bit of a mix-up in your message."
+      "content": "Sure!",
+      "sentiment": "Positive",
+      "sentiment_score": 0.55,
+      "tone": "Positive / Cooperative",
+      "timestamp_iso": "2026-09-19T19:31:45"
     },
     {
-      "role": "user",
-      "timestamp_iso": "2026-09-18T17:27:42",
-      "content": "For a determination?"
-    },
-    {
+      "turn_id": 13,
       "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:27:42",
-      "content": "I apologize, Sushil, but I'm having a bit of trouble understanding exactly what you're looking for."
+      "content": "For cold and fever symptoms, I recommend either Paracetamol 500mg ($6.99 for 25 tablets) or Ibuprofen 400mg ($7.99 for 20 tablets).",
+      "sentiment": "Negative",
+      "sentiment_score": -0.75,
+      "tone": "Symptom / Health Distress",
+      "timestamp_iso": "2026-09-19T19:31:45"
     },
     {
+      "turn_id": 14,
       "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:27:48",
-      "content": "Are you asking for information on a specific medication for cold and fever, or is there something else related to determination or payment that you need help with?"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2026-09-18T17:27:55",
-      "content": "Yes,"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:27:55",
-      "content": "Thank you for clarifying, Sushil!"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:27:57",
-      "content": "Could you please provide a bit more detail on what you need?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:28:00",
-      "content": "Are you looking for specific cold and fever medications, or do you have questions about something else related to your health?"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2026-09-18T17:28:02",
-      "content": "Okay."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:28:03",
-      "content": "Great!"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:28:03",
-      "content": "Please go ahead and share any specific questions or details you have, and I’ll do my best to assist you."
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2026-09-18T17:28:05",
-      "content": "I"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:28:06",
-      "content": "It seems like your message got cut off."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:28:08",
-      "content": "Could you please provide more details?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:28:10",
-      "content": "I'm here to help!"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2026-09-18T17:28:15",
-      "content": "okay. Okay. I need"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2026-09-18T17:28:17",
-      "content": "four paper as well as"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:28:19",
-      "content": "Got it, Sushil!"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:28:20",
-      "content": "It sounds like you need information for a paper on cold and fever medications."
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2026-09-18T17:28:21",
-      "content": "for"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:28:23",
-      "content": "It looks like your message got cut off again."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:28:25",
-      "content": "Could you please finish your thought?"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:28:27",
-      "content": "I want to make sure I understand how to assist you with your paper."
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2026-09-18T17:28:34",
-      "content": "Nine eight two four four zero."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:28:38",
-      "content": "It seems like you've shared a number."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:28:40",
-      "content": "However, I'm not sure how it relates to the information you're looking for."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:28:43",
-      "content": "Could you clarify what you need help with regarding your paper or any specific questions you have?"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2026-09-18T17:28:52",
-      "content": "Oh, okay. Thank you. I know. I'm"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:28:57",
-      "content": "You're welcome, Sushil!"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:28:58",
-      "content": "If you have any more thoughts or questions, feel free to share."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:29:02",
-      "content": "I'm here to help!"
-    },
-    {
-      "role": "user",
-      "timestamp_iso": "2026-09-18T17:29:06",
-      "content": "No. No. Thank you."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:29:06",
-      "content": "You're welcome, Sushil!"
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:29:08",
-      "content": "If you ever need assistance in the future, don't hesitate to reach out."
-    },
-    {
-      "role": "assistant",
-      "timestamp_iso": "2026-09-18T17:29:12",
-      "content": "Have a great day!"
+      "content": "Would you like me to place an order for you?",
+      "sentiment": "Neutral",
+      "sentiment_score": 0.0,
+      "tone": "Inquiry / Neutral",
+      "timestamp_iso": "2026-09-19T19:31:57"
     }
   ],
-  "summary": "Assistant: Are you looking for information on medications that can help with cold and fever symptoms? If you have specific questions or need details about certain types of medicine, just let me know! Assistant: It seems like there might be a bit of a mix-up in your message. Assistant: Could you please provide a bit more detail on what you need?",
-  "sentiment_overall": "Neutral",
-  "sentiment_scores": {},
-  "turn_counts": {
-    "user": 16,
-    "assistant": 29
+  "transcript": [
+    {
+      "speaker": "Agent",
+      "text": "Hello sushil! This is Whitespace Pharmacy. I understand you are experiencing cold and fever symptoms. How are you feeling right now, and how can I help you with your medications?",
+      "timestamp": "2026-09-19T19:31:10"
+    },
+    {
+      "speaker": "User",
+      "text": "I feel great.",
+      "timestamp": "2026-09-19T19:31:24"
+    },
+    {
+      "speaker": "Agent",
+      "text": "That's good to hear!",
+      "timestamp": "2026-09-19T19:31:30"
+    },
+    {
+      "speaker": "User",
+      "text": "Hello?",
+      "timestamp": "2026-09-19T19:31:32"
+    },
+    {
+      "speaker": "Agent",
+      "text": "I'm here!",
+      "timestamp": "2026-09-19T19:31:32"
+    },
+    {
+      "speaker": "User",
+      "text": "Can you",
+      "timestamp": "2026-09-19T19:31:32"
+    },
+    {
+      "speaker": "Agent",
+      "text": "It seems like your message got cut off.",
+      "timestamp": "2026-09-19T19:31:33"
+    },
+    {
+      "speaker": "User",
+      "text": "can you",
+      "timestamp": "2026-09-19T19:31:34"
+    },
+    {
+      "speaker": "Agent",
+      "text": "It looks like your message is still incomplete.",
+      "timestamp": "2026-09-19T19:31:35"
+    },
+    {
+      "speaker": "Agent",
+      "text": "It seems like there might be some connection issues.",
+      "timestamp": "2026-09-19T19:31:42"
+    },
+    {
+      "speaker": "User",
+      "text": "need some medicines.",
+      "timestamp": "2026-09-19T19:31:44"
+    },
+    {
+      "speaker": "Agent",
+      "text": "Sure!",
+      "timestamp": "2026-09-19T19:31:45"
+    },
+    {
+      "speaker": "Agent",
+      "text": "For cold and fever symptoms, I recommend either Paracetamol 500mg ($6.99 for 25 tablets) or Ibuprofen 400mg ($7.99 for 20 tablets).",
+      "timestamp": "2026-09-19T19:31:45"
+    },
+    {
+      "speaker": "Agent",
+      "text": "Would you like me to place an order for you?",
+      "timestamp": "2026-09-19T19:31:57"
+    }
+  ],
+  "transcription": "Agent: Hello sushil! This is Whitespace Pharmacy. I understand you are experiencing cold and fever symptoms. How are you feeling right now, and how can I help you with your medications?\nCustomer: I feel great.\nAgent: That's good to hear!\nCustomer: Hello?\nAgent: I'm here!\nCustomer: Can you\nAgent: It seems like your message got cut off.\nCustomer: can you\nAgent: It looks like your message is still incomplete.\nAgent: It seems like there might be some connection issues.\nCustomer: need some medicines.\nAgent: Sure!\nAgent: For cold and fever symptoms, I recommend either Paracetamol 500mg ($6.99 for 25 tablets) or Ibuprofen 400mg ($7.99 for 20 tablets).\nAgent: Would you like me to place an order for you?",
+  "summary": "Customer inquired about Ibuprofen, Paracetamol, Order Management. The agent provided product guidance and assistance.",
+  "sentiment_overall": "Positive",
+  "sentiment_scores": {
+    "score": 0.6,
+    "reasoning": "Customer expressed satisfaction and positive feedback during the interaction."
   },
-  "processed_at": "2026-09-18T17:29:27",
-  "imported_at": "2026-09-18T17:29:27",
-  "_id": "6aad279f5d5669f84ba6e533"
+  "action_items": [
+    {
+      "task_title": "Verify and dispatch order for sushil",
+      "priority": "High",
+      "category": "Order"
+    }
+  ],
+  "draft_followup_message": "Hi sushil, thank you for calling Whitespace Pharmacy! Following up on our conversation today regarding your inquiry. If you have any further questions, please reply to this message or call us back.",
+  "key_topics": [
+    "Ibuprofen",
+    "Paracetamol",
+    "Order Management"
+  ],
+  "turn_counts": {
+    "user": 5,
+    "assistant": 9
+  },
+  "processed_at": "2026-09-19T19:32:22"
 }

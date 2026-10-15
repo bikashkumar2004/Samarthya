@@ -12,27 +12,20 @@ import EmailVerify from "./pages/auth/EmailVerify";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { checkAuth } from "./store/auth-slice";
-import AgentLayouts from "./components/agent-view/AgentLayouts";
-// import Leads from "./pages/agent-view/Leads";
-import TaskManagement from "./pages/agent-view/TaskManagement";
-import AiCallMannager from "./pages/agent-view/AiCallManager";
-import Dashboard from "./pages/agent-view/Dashboardlayout";
+import TaskManagement from "./pages/agent-view/task-management";
+import AiCallMannager from "./pages/agent-view/aicallmanager";
+import Dashboard from "./pages/agent-view/dashboard";
 import Landing from "./pages/landing/Landing";
-import Campaigns from "./pages/agent-view/Campaigns";
-import LeadManagement from "./pages/agent-view/LeadManagement";
-import Pending from "./pages/agent-view/Pending";
-import Inbox from "./components/agent-view/Inbox";
-import Sms from "./pages/agent-view/Sms";
-import Email from "./pages/agent-view/Email";
-import Whatsapp from "./pages/agent-view/Whatsapp";
-import SamarthyaLanding from "./pages/SamarthyaLanding";
+import Campaigns from "./pages/agent-view/campaigns";
+import LeadManagement from "./pages/agent-view/leads";
+import Pending from "./pages/agent-view/pending-followups";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
-import ContactManagement from "./pages/agent-view/ContactManagement";
+import ContactManagement from "./pages/agent-view/contacts";
 import EmailVer from "./pages/auth/EmailVer";
-import ComposeMsg from "./pages/agent-view/ComposeMsg";
+import ComposeMsg from "./pages/agent-view/compose-message";
 import SidebarDemo from "./components/agent-view/SidebarDemo";
-import WhatsappInbox from "./pages/agent-view/WhatsappInbox";
+import WhatsappInbox from "./pages/agent-view/whatsapp-inbox";
 import Man from "./pages/manager-view/Man";
 import SidebarManager from "./components/manager-view/SidebarManager";
 import Assign from "./pages/manager-view/Assign";
@@ -71,6 +64,7 @@ export default function App() {
 
           <Route path="task-management" element={<TaskManagement />} />
           <Route path="my-contacts" element={<ContactManagement />} />
+          <Route path="leads" element={<LeadManagement />} />
           <Route path="Leads" element={<LeadManagement />} />
           <Route path="aicallmanager" element={<AiCallMannager />} />
           <Route path="pending-followups" element={<Pending />} />

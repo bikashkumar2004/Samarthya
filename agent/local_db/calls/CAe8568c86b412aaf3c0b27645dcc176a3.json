@@ -1,0 +1,232 @@
+{
+  "call_id": "CAe8568c86b412aaf3c0b27645dcc176a3",
+  "customer_id": "6aad08ac113ac4d73eb83249",
+  "call_start_iso": "2026-09-19T19:31:10",
+  "call_end_iso": "2026-09-19T19:31:57",
+  "call_duration_seconds": 71.66,
+  "transcripts": [
+    {
+      "turn_id": 1,
+      "role": "assistant",
+      "content": "Hello sushil! This is Whitespace Pharmacy. I understand you are experiencing cold and fever symptoms. How are you feeling right now, and how can I help you with your medications?",
+      "sentiment": "Negative",
+      "sentiment_score": -0.75,
+      "tone": "Symptom / Health Distress",
+      "timestamp_iso": "2026-09-19T19:31:10"
+    },
+    {
+      "turn_id": 2,
+      "role": "user",
+      "content": "I feel great.",
+      "sentiment": "Positive",
+      "sentiment_score": 0.55,
+      "tone": "Gratitude / Satisfaction",
+      "timestamp_iso": "2026-09-19T19:31:24"
+    },
+    {
+      "turn_id": 3,
+      "role": "assistant",
+      "content": "That's good to hear!",
+      "sentiment": "Positive",
+      "sentiment_score": 0.55,
+      "tone": "Positive / Cooperative",
+      "timestamp_iso": "2026-09-19T19:31:30"
+    },
+    {
+      "turn_id": 4,
+      "role": "user",
+      "content": "Hello?",
+      "sentiment": "Neutral",
+      "sentiment_score": 0.0,
+      "tone": "Inquiry / Neutral",
+      "timestamp_iso": "2026-09-19T19:31:32"
+    },
+    {
+      "turn_id": 5,
+      "role": "assistant",
+      "content": "I'm here!",
+      "sentiment": "Neutral",
+      "sentiment_score": 0.0,
+      "tone": "Inquiry / Neutral",
+      "timestamp_iso": "2026-09-19T19:31:32"
+    },
+    {
+      "turn_id": 6,
+      "role": "user",
+      "content": "Can you",
+      "sentiment": "Neutral",
+      "sentiment_score": 0.0,
+      "tone": "Inquiry / Neutral",
+      "timestamp_iso": "2026-09-19T19:31:32"
+    },
+    {
+      "turn_id": 7,
+      "role": "assistant",
+      "content": "It seems like your message got cut off.",
+      "sentiment": "Neutral",
+      "sentiment_score": 0.0,
+      "tone": "Inquiry / Neutral",
+      "timestamp_iso": "2026-09-19T19:31:33"
+    },
+    {
+      "turn_id": 8,
+      "role": "user",
+      "content": "can you",
+      "sentiment": "Neutral",
+      "sentiment_score": 0.0,
+      "tone": "Inquiry / Neutral",
+      "timestamp_iso": "2026-09-19T19:31:34"
+    },
+    {
+      "turn_id": 9,
+      "role": "assistant",
+      "content": "It looks like your message is still incomplete.",
+      "sentiment": "Neutral",
+      "sentiment_score": 0.0,
+      "tone": "Symptom / Health Distress",
+      "timestamp_iso": "2026-09-19T19:31:35"
+    },
+    {
+      "turn_id": 10,
+      "role": "assistant",
+      "content": "It seems like there might be some connection issues.",
+      "sentiment": "Neutral",
+      "sentiment_score": 0.0,
+      "tone": "Inquiry / Neutral",
+      "timestamp_iso": "2026-09-19T19:31:42"
+    },
+    {
+      "turn_id": 11,
+      "role": "user",
+      "content": "need some medicines.",
+      "sentiment": "Neutral",
+      "sentiment_score": 0.0,
+      "tone": "Inquiry / Neutral",
+      "timestamp_iso": "2026-09-19T19:31:44"
+    },
+    {
+      "turn_id": 12,
+      "role": "assistant",
+      "content": "Sure!",
+      "sentiment": "Positive",
+      "sentiment_score": 0.55,
+      "tone": "Positive / Cooperative",
+      "timestamp_iso": "2026-09-19T19:31:45"
+    },
+    {
+      "turn_id": 13,
+      "role": "assistant",
+      "content": "For cold and fever symptoms, I recommend either Paracetamol 500mg ($6.99 for 25 tablets) or Ibuprofen 400mg ($7.99 for 20 tablets).",
+      "sentiment": "Negative",
+      "sentiment_score": -0.75,
+      "tone": "Symptom / Health Distress",
+      "timestamp_iso": "2026-09-19T19:31:45"
+    },
+    {
+      "turn_id": 14,
+      "role": "assistant",
+      "content": "Would you like me to place an order for you?",
+      "sentiment": "Neutral",
+      "sentiment_score": 0.0,
+      "tone": "Inquiry / Neutral",
+      "timestamp_iso": "2026-09-19T19:31:57"
+    }
+  ],
+  "transcript": [
+    {
+      "speaker": "Agent",
+      "text": "Hello sushil! This is Whitespace Pharmacy. I understand you are experiencing cold and fever symptoms. How are you feeling right now, and how can I help you with your medications?",
+      "timestamp": "2026-09-19T19:31:10"
+    },
+    {
+      "speaker": "User",
+      "text": "I feel great.",
+      "timestamp": "2026-09-19T19:31:24"
+    },
+    {
+      "speaker": "Agent",
+      "text": "That's good to hear!",
+      "timestamp": "2026-09-19T19:31:30"
+    },
+    {
+      "speaker": "User",
+      "text": "Hello?",
+      "timestamp": "2026-09-19T19:31:32"
+    },
+    {
+      "speaker": "Agent",
+      "text": "I'm here!",
+      "timestamp": "2026-09-19T19:31:32"
+    },
+    {
+      "speaker": "User",
+      "text": "Can you",
+      "timestamp": "2026-09-19T19:31:32"
+    },
+    {
+      "speaker": "Agent",
+      "text": "It seems like your message got cut off.",
+      "timestamp": "2026-09-19T19:31:33"
+    },
+    {
+      "speaker": "User",
+      "text": "can you",
+      "timestamp": "2026-09-19T19:31:34"
+    },
+    {
+      "speaker": "Agent",
+      "text": "It looks like your message is still incomplete.",
+      "timestamp": "2026-09-19T19:31:35"
+    },
+    {
+      "speaker": "Agent",
+      "text": "It seems like there might be some connection issues.",
+      "timestamp": "2026-09-19T19:31:42"
+    },
+    {
+      "speaker": "User",
+      "text": "need some medicines.",
+      "timestamp": "2026-09-19T19:31:44"
+    },
+    {
+      "speaker": "Agent",
+      "text": "Sure!",
+      "timestamp": "2026-09-19T19:31:45"
+    },
+    {
+      "speaker": "Agent",
+      "text": "For cold and fever symptoms, I recommend either Paracetamol 500mg ($6.99 for 25 tablets) or Ibuprofen 400mg ($7.99 for 20 tablets).",
+      "timestamp": "2026-09-19T19:31:45"
+    },
+    {
+      "speaker": "Agent",
+      "text": "Would you like me to place an order for you?",
+      "timestamp": "2026-09-19T19:31:57"
+    }
+  ],
+  "transcription": "Agent: Hello sushil! This is Whitespace Pharmacy. I understand you are experiencing cold and fever symptoms. How are you feeling right now, and how can I help you with your medications?\nCustomer: I feel great.\nAgent: That's good to hear!\nCustomer: Hello?\nAgent: I'm here!\nCustomer: Can you\nAgent: It seems like your message got cut off.\nCustomer: can you\nAgent: It looks like your message is still incomplete.\nAgent: It seems like there might be some connection issues.\nCustomer: need some medicines.\nAgent: Sure!\nAgent: For cold and fever symptoms, I recommend either Paracetamol 500mg ($6.99 for 25 tablets) or Ibuprofen 400mg ($7.99 for 20 tablets).\nAgent: Would you like me to place an order for you?",
+  "summary": "Customer inquired about Ibuprofen, Paracetamol, Order Management. The agent provided product guidance and assistance.",
+  "sentiment_overall": "Positive",
+  "sentiment_scores": {
+    "score": 0.6,
+    "reasoning": "Customer expressed satisfaction and positive feedback during the interaction."
+  },
+  "action_items": [
+    {
+      "task_title": "Verify and dispatch order for sushil",
+      "priority": "High",
+      "category": "Order"
+    }
+  ],
+  "draft_followup_message": "Hi sushil, thank you for calling Whitespace Pharmacy! Following up on our conversation today regarding your inquiry. If you have any further questions, please reply to this message or call us back.",
+  "key_topics": [
+    "Ibuprofen",
+    "Paracetamol",
+    "Order Management"
+  ],
+  "turn_counts": {
+    "user": 5,
+    "assistant": 9
+  },
+  "processed_at": "2026-09-19T19:32:22"
+}
