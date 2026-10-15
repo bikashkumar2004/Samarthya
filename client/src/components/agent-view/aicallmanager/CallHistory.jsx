@@ -218,51 +218,56 @@ const CallHistory = () => {
   };
 
   return (
-    <div>
-      <Card className="border-2 border-gray-200 shadow-xl">
-        <CardHeader className="bg-gradient-to-r from-gray-50 to-white border-b-2 border-gray-200">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <CardTitle className="text-2xl font-bold text-[#043927] flex items-center gap-2">
-              <Phone className="w-6 h-6" />
-              Call History
-            </CardTitle>
-            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-              <div className="relative flex-1 sm:flex-initial">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input
-                  placeholder="Search name or phone..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 w-full sm:w-64"
-                />
-              </div>
+    <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+      <div className="border-b border-slate-200 dark:border-slate-800 p-6 bg-slate-50/50 dark:bg-slate-900/50">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <Phone className="w-5 h-5 text-indigo-500" />
+              <span>Historical Voice Inquiries & Records</span>
+            </h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              Comprehensive log of all AI telephony sessions, sentiment ratings, and audio durations
+            </p>
+          </div>
 
-              <Sheet open={filterOpen} onOpenChange={setFilterOpen}>
-                <SheetTrigger asChild>
-                  <Button variant="outline" className="border text-black border-gray-500 cursor-pointer font-bold">
-                    <Filter className="w-4 h-4 mr-2" />
-                    Filter By
-                    {(statusFilter.length > 0 ||
-                      sentimentFilter.length > 0 ||
-                      durationFilter ||
-                      dateFilter) && (
-                      <span className="ml-2 bg-[#043927] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                        {statusFilter.length +
-                          sentimentFilter.length +
-                          (durationFilter ? 1 : 0) +
-                          (dateFilter ? 1 : 0)}
-                      </span>
-                    )}
-                  </Button>
-                </SheetTrigger>
+          <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+            <div className="relative flex-1 sm:flex-initial">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
+              <Input
+                placeholder="Search name or phone..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-9 text-xs h-9 rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 w-full sm:w-56"
+              />
+            </div>
 
-                <SheetContent side="right" className="w-full sm:w-96 overflow-y-auto bg-white">
-                  <SheetHeader>
-                    <SheetTitle className="text-2xl font-bold text-[#043927]">Filter Options</SheetTitle>
-                  </SheetHeader>
+            <Sheet open={filterOpen} onOpenChange={setFilterOpen}>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="sm" className="rounded-xl text-xs font-semibold border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 gap-1.5">
+                  <Filter className="w-3.5 h-3.5 text-indigo-500" />
+                  <span>Filter</span>
+                  {(statusFilter.length > 0 ||
+                    sentimentFilter.length > 0 ||
+                    durationFilter ||
+                    dateFilter) && (
+                    <span className="ml-1 bg-indigo-600 text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">
+                      {statusFilter.length +
+                        sentimentFilter.length +
+                        (durationFilter ? 1 : 0) +
+                        (dateFilter ? 1 : 0)}
+                    </span>
+                  )}
+                </Button>
+              </SheetTrigger>
 
-                  <div className="space-y-6 mt-6">
-                    {/* Status Filter */}
+              <SheetContent side="right" className="w-full sm:w-96 overflow-y-auto bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 p-6">
+                <SheetHeader className="border-b border-slate-200 dark:border-slate-800 pb-4">
+                  <SheetTitle className="text-lg font-bold text-slate-900 dark:text-white">Filter Voice Calls</SheetTitle>
+                </SheetHeader>
+
+                <div className="space-y-6 mt-6">
+                  {/* Status Filter */}
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
                         <Label className="text-base font-bold text-gray-900">Status</Label>
