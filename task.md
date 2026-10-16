@@ -24,6 +24,12 @@
   - [x] Showcased Omnichannel Customer 360°, WhatsApp Inbox, Visual Lead Pipelines, Manager Workload Balancing, and Sub-50ms Autonomous Voice AI.
   - [x] Added interactive CRM experience hub with tabbed Customer 360, Kanban Pipeline, Voice Telephony, and Manager Command Center views.
   - [x] Provided direct role navigation for Frontline Agents (`/agent/dashboard`) and Clinic/Sales Managers (`/manager/dashboard`).
+- [x] **Forgot Password & Password Reset Suite**:
+  - [x] Created [ForgotPasswordPage.jsx](file:///c:/Users/HP/OneDrive/%E3%83%89%E3%82%AD%E3%83%A5%E3%83%A1%E3%83%B3%E3%83%88/GitHub/whitespace-crm/client/src/pages/auth/ForgotPasswordPage.jsx) featuring a 2-step password recovery flow (Email OTP request + New password reset).
+  - [x] Connected Redux thunks `resetOTP` and `resetPassword` to backend `/api/auth/reset-OTP` and `/api/auth/reset-Password`.
+  - [x] Fixed `authRoute.js` to allow public password reset access without requiring a pre-existing authenticated token.
+  - [x] Registered routes `/auth/forgot-password` and `/auth/reset-password` in [App.jsx](file:///c:/Users/HP/OneDrive/%E3%83%89%E3%82%AD%E3%83%A5%E3%83%A1%E3%83%B3%E3%83%88/GitHub/whitespace-crm/client/src/App.jsx).
+  - [x] Linked "Forgot password?" in [LoginPage.jsx](file:///c:/Users/HP/OneDrive/%E3%83%89%E3%82%AD%E3%83%A5%E3%83%A1%E3%83%B3%E3%83%88/GitHub/whitespace-crm/client/src/pages/auth/LoginPage.jsx) directly to the new recovery flow.
 - [x] **Documentation Suite Created**:
   - [x] `PRD.md`
   - [x] `architecture.md`

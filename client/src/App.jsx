@@ -23,6 +23,7 @@ import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import ContactManagement from "./pages/agent-view/contacts";
 import EmailVer from "./pages/auth/EmailVer";
+import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import ComposeMsg from "./pages/agent-view/compose-message";
 import SidebarDemo from "./components/agent-view/SidebarDemo";
 import WhatsappInbox from "./pages/agent-view/whatsapp-inbox";
@@ -54,6 +55,8 @@ export default function App() {
           <Route path="register" element={<RegisterPage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="send-verify-otp" element={<EmailVer />} />
+          <Route path="forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="reset-password" element={<ForgotPasswordPage />} />
         </Route>
 
         <Route path="/agent" element={<SidebarDemo />}>
