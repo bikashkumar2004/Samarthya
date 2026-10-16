@@ -232,19 +232,19 @@ export default function Sbody({ selectedChannel, onMessageSent }) {
   return (
     <div className="space-y-6">
       {/* Search Recipient */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Enter Recipient</CardTitle>
+      <Card className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+        <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800">
+          <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">Enter Recipient</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="flex gap-4">
+        <CardContent className="pt-4">
+          <div className="flex gap-3">
             <Input 
               placeholder={config.placeholder}
               value={recipientData}
               onChange={(e) => setRecipientData(e.target.value)}
-              className="flex-1"
+              className="flex-1 rounded-xl bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-sm focus:border-indigo-600"
             />
-            <Button onClick={handleVerify} className="bg-black text-white font-bold">
+            <Button onClick={handleVerify} className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-xs px-5">
               <CheckCircle2 className="mr-2 h-4 w-4" />
               Verify
             </Button>
@@ -254,59 +254,59 @@ export default function Sbody({ selectedChannel, onMessageSent }) {
 
       {/* Verified Recipient */}
       {showVerifiedSection && verifiedData && (
-        <Card className="border-green-500">
-          <CardHeader>
-            <CardTitle className="flex items-center text-green-600">
-              <CheckCircle2 className="mr-2 h-5 w-5" />
-              Verified Recipient
+        <Card className="rounded-2xl border border-emerald-300 dark:border-emerald-800/60 bg-emerald-50/30 dark:bg-emerald-950/20 shadow-sm">
+          <CardHeader className="pb-3 border-b border-emerald-100 dark:border-emerald-900/40">
+            <CardTitle className="flex items-center text-emerald-700 dark:text-emerald-400 text-sm font-bold">
+              <CheckCircle2 className="mr-2 h-4 w-4 text-emerald-600" />
+              Verified Contact Profile
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 pt-4">
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Channel</p>
-                <p className="text-base font-semibold">{selectedChannel.toUpperCase()}</p>
+              <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-emerald-100 dark:border-emerald-900/30">
+                <p className="text-xs font-medium text-slate-500">Dispatch Channel</p>
+                <p className="text-sm font-bold text-slate-800 dark:text-slate-200 mt-0.5">{selectedChannel.toUpperCase()}</p>
               </div>
               {verifiedData.number && (
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Number</p>
-                  <p className="text-base font-semibold">{verifiedData.number}</p>
+                <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-emerald-100 dark:border-emerald-900/30">
+                  <p className="text-xs font-medium text-slate-500">Phone Endpoint</p>
+                  <p className="text-sm font-bold text-slate-800 dark:text-slate-200 mt-0.5">{verifiedData.number}</p>
                 </div>
               )}
               {verifiedData.email && (
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Email</p>
-                  <p className="text-base font-semibold">{verifiedData.email}</p>
+                <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-emerald-100 dark:border-emerald-900/30">
+                  <p className="text-xs font-medium text-slate-500">Email Address</p>
+                  <p className="text-sm font-bold text-slate-800 dark:text-slate-200 mt-0.5">{verifiedData.email}</p>
                 </div>
               )}
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Purpose</p>
-                <p className="text-base font-semibold">{verifiedData.purpose}</p>
+              <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-emerald-100 dark:border-emerald-900/30">
+                <p className="text-xs font-medium text-slate-500">Intent Purpose</p>
+                <p className="text-sm font-bold text-slate-800 dark:text-slate-200 mt-0.5">{verifiedData.purpose}</p>
               </div>
             </div>
             <div>
-              <p className="text-sm font-medium text-muted-foreground">Description</p>
-              <p className="text-sm text-gray-600 mt-1">{verifiedData.description}</p>
+              <p className="text-xs font-medium text-slate-500">System Verification Audit</p>
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">{verifiedData.description}</p>
             </div>
 
             {/* Language Selection with Generate Button */}
-            <div className="flex gap-4 items-end bg-white">
-              <div className="flex-1 bg-white">
-                <label className="text-sm font-medium text-muted-foreground">Select Language</label>
-                <Select value={selectedLanguage} onValueChange={setSelectedLanguage} className="bg-white">
-                  <SelectTrigger>
+            <div className="flex gap-3 items-end pt-2">
+              <div className="flex-1">
+                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 block">AI Generation Language</label>
+                <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+                  <SelectTrigger className="rounded-xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs">
                     <SelectValue placeholder="Choose language" />
                   </SelectTrigger>
-                  <SelectContent className="bg-white">
-                    <SelectItem value="english">English</SelectItem>
-                    <SelectItem value="hindi">[translate:हिंदी (Hindi)]</SelectItem>
-                    <SelectItem value="odia">[translate:ଓଡ଼ିଆ (Odia)]</SelectItem>
+                  <SelectContent className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-xs">
+                    <SelectItem value="english">English (US/UK)</SelectItem>
+                    <SelectItem value="hindi">Hindi (हिंदी)</SelectItem>
+                    <SelectItem value="odia">Odia (ଓଡ଼ିଆ)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-              <Button onClick={handleGenerate} disabled={isLoading} className="text-white bg-black font-bold">
+              <Button onClick={handleGenerate} disabled={isLoading} className="text-white bg-indigo-600 hover:bg-indigo-700 font-semibold rounded-xl shadow-xs px-5">
                 <Sparkles className="mr-2 h-4 w-4" />
-                {isLoading ? "Generating..." : "Generate"}
+                {isLoading ? "Generating..." : "Generate AI Draft"}
               </Button>
             </div>
           </CardContent>
@@ -315,20 +315,20 @@ export default function Sbody({ selectedChannel, onMessageSent }) {
 
       {/* Generated Message */}
       {showGeneratedMessage && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Message</CardTitle>
+        <Card className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+          <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800">
+            <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">Generated Message Content</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 pt-4">
             <Textarea 
               value={generatedMessage}
               onChange={(e) => setGeneratedMessage(e.target.value)}
               rows={6}
-              className="resize-none"
+              className="resize-none rounded-xl bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-xs leading-relaxed focus:border-indigo-600"
             />
-            <Button onClick={handleSend} className="w-full bg-black text-white" disabled={isLoading}>
+            <Button onClick={handleSend} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-xs py-3" disabled={isLoading}>
               <Send className="mr-2 h-4 w-4" />
-              {isLoading ? "Sending..." : `Send ${selectedChannel.toUpperCase()}`}
+              {isLoading ? "Dispatching..." : `Send ${selectedChannel.toUpperCase()} Message`}
             </Button>
           </CardContent>
         </Card>
@@ -336,38 +336,38 @@ export default function Sbody({ selectedChannel, onMessageSent }) {
 
       {/* Message Status */}
       {messageStatus && (
-        <Card className="border-blue-500">
-          <CardHeader>
-            <CardTitle className="flex items-center text-blue-600">
-              <CheckCheck className="mr-2 h-5 w-5" />
-              Message Status
+        <Card className="rounded-2xl border border-indigo-200 dark:border-indigo-800/60 bg-indigo-50/30 dark:bg-indigo-950/20 shadow-sm">
+          <CardHeader className="pb-3 border-b border-indigo-100 dark:border-indigo-900/40">
+            <CardTitle className="flex items-center text-indigo-700 dark:text-indigo-400 text-sm font-bold">
+              <CheckCheck className="mr-2 h-4 w-4 text-indigo-600" />
+              Delivery Status Confirmation
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-4">
             <div className="grid grid-cols-3 gap-4">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Status</p>
-                <p className="text-base font-semibold" style={{ color: messageStatus.status === "Sent" ? "#16a34a" : "#dc2626" }}>
+              <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800">
+                <p className="text-[11px] font-medium text-slate-400">Execution Status</p>
+                <p className="text-sm font-bold mt-0.5" style={{ color: messageStatus.status === "Sent" ? "#16a34a" : "#dc2626" }}>
                   {messageStatus.status}
                 </p>
               </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">
-                  <Clock className="inline mr-1 h-4 w-4" />
-                  Timestamp
+              <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800">
+                <p className="text-[11px] font-medium text-slate-400">
+                  <Clock className="inline mr-1 h-3 w-3" />
+                  Dispatch Timestamp
                 </p>
-                <p className="text-base">{messageStatus.timestamp}</p>
+                <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 mt-1">{messageStatus.timestamp}</p>
               </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Delivery</p>
-                <p className="text-base font-semibold" style={{ color: messageStatus.status === "Sent" ? "#16a34a" : "#dc2626" }}>
+              <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800">
+                <p className="text-[11px] font-medium text-slate-400">Gateway Response</p>
+                <p className="text-sm font-bold mt-0.5" style={{ color: messageStatus.status === "Sent" ? "#16a34a" : "#dc2626" }}>
                   {messageStatus.deliveryStatus}
                 </p>
               </div>
             </div>
             {messageStatus.messageSid && (
-              <div className="mt-4 p-2 bg-gray-100 rounded">
-                <p className="text-xs text-gray-600">Message ID: {messageStatus.messageSid}</p>
+              <div className="mt-4 p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl">
+                <p className="text-[11px] font-mono text-slate-500">Twilio / Gateway SID: {messageStatus.messageSid}</p>
               </div>
             )}
           </CardContent>

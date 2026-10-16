@@ -218,8 +218,9 @@ const CallHistory = () => {
   };
 
   return (
-    <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-      <div className="border-b border-slate-200 dark:border-slate-800 p-6 bg-slate-50/50 dark:bg-slate-900/50">
+    <>
+      <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+        <div className="border-b border-slate-200 dark:border-slate-800 p-6 bg-slate-50/50 dark:bg-slate-900/50">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -398,16 +399,16 @@ const CallHistory = () => {
 
               <Button
                 onClick={downloadExcel}
-                className=" text-black font-bold border border-gray-500 cursor-pointer bg-white"
+                className="rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 bg-white dark:bg-slate-900"
               >
-                <Download className="w-4 h-4 mr-2" />
+                <Download className="w-3.5 h-3.5 mr-1.5" />
                 Export
               </Button>
             </div>
           </div>
-        </CardHeader>
+        </div>
 
-        <CardContent className="p-0">
+        <div className="p-0">
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
@@ -584,13 +585,13 @@ const CallHistory = () => {
               </div>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {modalOpen && modalContent && (
         <ViewCard modalContent={modalContent} setModalOpen={setModalOpen} />
       )}
-    </div>
+    </>
   );
 };
 

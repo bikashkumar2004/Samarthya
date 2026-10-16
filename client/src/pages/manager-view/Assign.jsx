@@ -109,258 +109,213 @@ const Assign = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-6">
-      <div className="max-w-6xl mx-auto space-y-6">
-        
-        {/* Main Heading */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 mb-2">
-            Assign New Task
+    <div className="max-w-5xl mx-auto space-y-6">
+      {/* Header */}
+      <div>
+        <div className="flex items-center gap-2">
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            Batch Lead Assignment
           </h1>
-          <p className="text-gray-600">Assign leads to agents efficiently</p>
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200/50">
+            Allocation Engine
+          </span>
         </div>
+        <p className="text-xs md:text-sm text-slate-500 mt-1">Import clinical or prospect lead sheets and distribute directly to active agent queues</p>
+      </div>
 
-        {/* Horizontal Line */}
-        <div className="border-t-2 border-gray-300 mb-8"></div>
-
-        {/* Bulk Task Assignment Section */}
-        <div className="mb-6">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-              <FileUp className="w-6 h-6 text-blue-600" />
-              Bulk Task Assignment
-            </h2>
-            <p className="text-sm text-gray-600 mt-1">Import leads from CSV or Excel file</p>
+      {/* Step 1: Select Leads to Assign with Import Button */}
+      <Card className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
+        <CardHeader className="py-4 px-5 border-b border-slate-100 dark:border-slate-800">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <CardTitle className="flex items-center gap-2.5 text-sm font-bold text-slate-900 dark:text-slate-100">
+              <div className="flex items-center justify-center w-6 h-6 bg-indigo-600 text-white rounded-lg font-bold text-xs shadow-xs">
+                1
+              </div>
+              Import Lead Roster (.CSV / .XLSX)
+              {parsedLeads.length > 0 && (
+                <span className="ml-2 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200/50">
+                  {parsedLeads.length} leads loaded
+                </span>
+              )}
+            </CardTitle>
+            
+            {/* Import File Button */}
+            <div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".csv,.xlsx,.xls"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
+              <Button 
+                onClick={handleImportClick}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-xs"
+              >
+                <Upload className="w-3.5 h-3.5 mr-1.5" />
+                Upload CSV File
+              </Button>
+            </div>
           </div>
-        </div>
-
-        {/* Step 1: Select Leads to Assign with Import Button */}
-        <Card className="border-0 shadow-xl bg-white hover:shadow-2xl transition-shadow duration-300">
-          <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-              <CardTitle className="flex items-center gap-2 text-gray-800">
-                <div className="flex items-center justify-center w-8 h-8 bg-blue-600 text-white rounded-full font-bold text-sm">
-                  1
+        </CardHeader>
+        <CardContent className="p-5">
+          {/* Show uploaded file if exists */}
+          {uploadedFile ? (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-3.5 bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/40 rounded-xl">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-emerald-100 dark:bg-emerald-900/60 rounded-lg">
+                    <FileText className="w-4 h-4 text-emerald-700 dark:text-emerald-300" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-xs text-slate-800 dark:text-slate-200">{uploadedFile.name}</p>
+                    <p className="text-[11px] text-slate-500">
+                      {(uploadedFile.size / 1024).toFixed(1)} KB • {parsedLeads.length} valid rows
+                    </p>
+                  </div>
                 </div>
-                Select Leads to Assign
-                {parsedLeads.length > 0 && (
-                  <span className="ml-2 text-sm font-normal text-gray-600">
-                    {parsedLeads.length} leads selected
-                  </span>
-                )}
-              </CardTitle>
-              
-              {/* Import File Button */}
-              <div>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".csv,.xlsx,.xls"
-                  onChange={handleFileUpload}
-                  className="hidden"
-                />
-                <Button 
-                  onClick={handleImportClick}
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-md hover:shadow-lg transition-all duration-200"
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleRemoveFile}
+                  className="h-8 w-8 p-0 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg"
                 >
-                  <Upload className="w-4 h-4 mr-2" />
-                  Import File
+                  <X className="w-4 h-4" />
                 </Button>
               </div>
-            </div>
-          </CardHeader>
-          <CardContent className="pt-6">
-            {/* Show uploaded file if exists */}
-            {uploadedFile ? (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-4 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-green-100 rounded-lg">
-                      <FileText className="w-5 h-5 text-green-600" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-gray-800">{uploadedFile.name}</p>
-                      <p className="text-sm text-gray-600">
-                        {(uploadedFile.size / 1024).toFixed(2)} KB
-                      </p>
-                    </div>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleRemoveFile}
-                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                  >
-                    <X className="w-5 h-5" />
-                  </Button>
-                </div>
-                
-                <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-blue-600 mt-0.5" />
-                  <div>
-                    <p className="text-sm font-semibold text-blue-800">File Uploaded Successfully</p>
-                    <p className="text-xs text-blue-600 mt-1">
-                      {parsedLeads.length} leads found. Click reject to remove unwanted leads.
-                    </p>
-                  </div>
-                </div>
 
-                {/* Display Parsed Leads */}
-                {parsedLeads.length > 0 && (
-                  <div className="space-y-3">
-                    {parsedLeads.map((lead) => (
-                      <div 
-                        key={lead.id}
-                        className="flex items-center justify-between p-4 rounded-lg border-2 border-gray-200 bg-white hover:shadow-md transition-all duration-200"
-                      >
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="font-semibold text-gray-800">{lead.name}</p>
-                              <p className="text-sm text-gray-600">{lead.phone}</p>
-                            </div>
-                            <div className="flex items-center gap-3">
-                              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                                lead.status === 'New' ? 'bg-green-100 text-green-700' :
-                                lead.status === 'Contacted' ? 'bg-blue-100 text-blue-700' :
-                                'bg-purple-100 text-purple-700'
-                              }`}>
-                                {lead.status}
-                              </span>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handleRejectLead(lead.id)}
-                                className="text-red-600 border-red-300 hover:bg-red-50 hover:text-red-700 hover:border-red-400"
-                              >
-                                <UserX className="w-4 h-4 mr-1" />
-                                Reject
-                              </Button>
-                            </div>
-                          </div>
+              {/* Display Parsed Leads */}
+              {parsedLeads.length > 0 && (
+                <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
+                  {parsedLeads.map((lead) => (
+                    <div 
+                      key={lead.id}
+                      className="flex items-center justify-between p-3 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 hover:bg-white dark:hover:bg-slate-900 transition"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 flex items-center justify-center text-indigo-600 text-xs font-bold">
+                          {lead.name.charAt(0)}
+                        </div>
+                        <div>
+                          <p className="font-semibold text-xs text-slate-800 dark:text-slate-200">{lead.name}</p>
+                          <p className="text-[11px] text-slate-400">{lead.phone}</p>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                )}
-
-                {parsedLeads.length === 0 && uploadedFile && (
-                  <div className="text-center py-8 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50">
-                    <UserX className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-600 font-medium mb-2">All leads have been rejected</p>
-                    <p className="text-sm text-gray-500">
-                      Upload a new file to continue
-                    </p>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="text-center py-12 px-4 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50">
-                <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600 font-medium mb-2">No file uploaded yet</p>
-                <p className="text-sm text-gray-500">
-                  Click the "Import File" button above to upload a CSV or Excel file
-                </p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Step 2: Choose Agent */}
-        <Card className="border-0 shadow-xl bg-white hover:shadow-2xl transition-shadow duration-300">
-          <CardHeader className="bg-gradient-to-r from-purple-50 to-pink-50 border-b">
-            <CardTitle className="flex items-center gap-2 text-gray-800">
-              <div className="flex items-center justify-center w-8 h-8 bg-purple-600 text-white rounded-full font-bold text-sm">
-                2
-              </div>
-              Choose Agent
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="pt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Select Agent Dropdown */}
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                  <Users className="w-4 h-4" />
-                  Select Agent
-                </label>
-                <Select 
-                  value={selectedAgent} 
-                  onValueChange={setSelectedAgent}
-                  disabled={autoDistribute}
-                >
-                  <SelectTrigger className={`w-full ${autoDistribute ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                    <SelectValue placeholder="Choose an agent" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {agentsData.map((agent) => (
-                      <SelectItem key={agent.id} value={agent.name}>
-                        <div className="flex items-center justify-between gap-3">
-                          <span>{agent.name}</span>
-                          <span className={`text-xs px-2 py-1 rounded ${
-                            agent.workload === 'Low' ? 'bg-green-100 text-green-700' :
-                            agent.workload === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
-                            'bg-red-100 text-red-700'
-                          }`}>
-                            {agent.workload}
-                          </span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Auto Distribute Checkbox */}
-              <div className="flex items-end">
-                <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg border-2 border-indigo-200 w-full">
-                  <Checkbox 
-                    id="auto-distribute"
-                    checked={autoDistribute}
-                    onCheckedChange={setAutoDistribute}
-                    className="border-2"
-                  />
-                  <div>
-                    <label 
-                      htmlFor="auto-distribute" 
-                      className="text-sm font-semibold text-gray-800 cursor-pointer block"
-                    >
-                      Auto Distribute
-                    </label>
-                    <p className="text-xs text-gray-600 mt-1">
-                      Distribute leads evenly across all agents
-                    </p>
-                  </div>
+                      <div className="flex items-center gap-2">
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/50">
+                          {lead.status}
+                        </span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleRejectLead(lead.id)}
+                          className="h-7 px-2 text-rose-600 hover:bg-rose-50 rounded-lg text-xs"
+                        >
+                          <UserX className="w-3.5 h-3.5 mr-1" />
+                          Dismiss
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
+              )}
+            </div>
+          ) : (
+            <div 
+              onClick={handleImportClick}
+              className="text-center py-10 px-4 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl bg-slate-50/50 dark:bg-slate-950/50 cursor-pointer hover:border-indigo-400 transition"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 flex items-center justify-center mx-auto mb-3">
+                <Upload className="w-6 h-6" />
               </div>
+              <p className="text-xs font-bold text-slate-800 dark:text-slate-200 mb-1">Click to select CSV lead manifest</p>
+              <p className="text-[11px] text-slate-400">
+                Supports standard comma-separated columns: Name, Phone, Email, Status, City
+              </p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Step 2: Choose Agent */}
+      <Card className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
+        <CardHeader className="py-4 px-5 border-b border-slate-100 dark:border-slate-800">
+          <CardTitle className="flex items-center gap-2.5 text-sm font-bold text-slate-900 dark:text-slate-100">
+            <div className="flex items-center justify-center w-6 h-6 bg-indigo-600 text-white rounded-lg font-bold text-xs shadow-xs">
+              2
+            </div>
+            Designate Agent or Enable Workload Auto-Balancing
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {/* Select Agent Dropdown */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                <Users className="w-3.5 h-3.5 text-indigo-600" />
+                Dedicated Agent
+              </label>
+              <Select 
+                value={selectedAgent} 
+                onValueChange={setSelectedAgent}
+                disabled={autoDistribute}
+              >
+                <SelectTrigger className={`w-full rounded-xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs ${autoDistribute ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                  <SelectValue placeholder="Choose an agent" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs">
+                  {agentsData.map((agent) => (
+                    <SelectItem key={agent.id} value={agent.name}>
+                      <div className="flex items-center justify-between gap-3 w-full">
+                        <span>{agent.name}</span>
+                        <span className={`text-[10px] px-2 py-0.5 rounded font-semibold ${
+                          agent.workload === 'Low' ? 'bg-emerald-50 text-emerald-700' :
+                          agent.workload === 'Medium' ? 'bg-amber-50 text-amber-700' :
+                          'bg-rose-50 text-rose-700'
+                        }`}>
+                          {agent.workload} Load
+                        </span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
-            {/* Info Message */}
-            {autoDistribute && (
-              <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-blue-600 mt-0.5" />
-                <div>
-                  <p className="text-sm font-semibold text-blue-800">Auto Distribution Enabled</p>
-                  <p className="text-xs text-blue-600 mt-1">
-                    Selected leads will be automatically distributed among available agents based on their current workload.
-                  </p>
-                </div>
+            {/* Auto Distribute Checkbox */}
+            <div className="flex items-center gap-3 p-3.5 rounded-xl border border-indigo-200/70 dark:border-indigo-900/50 bg-indigo-50/30 dark:bg-indigo-950/20">
+              <Checkbox 
+                id="auto-distribute"
+                checked={autoDistribute}
+                onCheckedChange={setAutoDistribute}
+                className="rounded border-indigo-300 data-[state=checked]:bg-indigo-600"
+              />
+              <div>
+                <label 
+                  htmlFor="auto-distribute" 
+                  className="text-xs font-bold text-slate-800 dark:text-slate-200 cursor-pointer block"
+                >
+                  Smart Auto-Distribute
+                </label>
+                <p className="text-[11px] text-slate-500">
+                  Round-robin distribute evenly based on agent queue capacity
+                </p>
               </div>
-            )}
-          </CardContent>
-        </Card>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
-        {/* Assign Button */}
-        <div className="flex justify-end pt-4">
-          <Button 
-            onClick={handleAssign}
-            disabled={!uploadedFile || parsedLeads.length === 0}
-            className="bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white shadow-xl hover:shadow-2xl transition-all duration-200 px-8 py-6 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <UserPlus className="w-5 h-5 mr-2" />
-            Assign Tasks
-          </Button>
-        </div>
+      {/* Assign Button */}
+      <div className="flex justify-end pt-2">
+        <Button 
+          onClick={handleAssign}
+          disabled={!uploadedFile || parsedLeads.length === 0}
+          className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl px-7 py-3 text-sm font-semibold shadow-xs disabled:opacity-50"
+        >
+          <UserPlus className="w-4 h-4 mr-2" />
+          Dispatch {parsedLeads.length > 0 ? `${parsedLeads.length} Tasks` : 'Tasks'}
+        </Button>
       </div>
     </div>
   );

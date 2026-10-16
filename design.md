@@ -59,10 +59,30 @@ Every page must use consistent semantic status colors:
 - Inactive State: `text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 rounded-xl transition-all`.
 - Unified brand header: Whitespace CRM logo with glowing AI icon.
 
-### 2.3 Tables (`LiveMonitor`, `PendingDash`, `ContactTable`, `CallHistory`)
+### 2.3 Tables (`LiveMonitor`, `PendingDash`, `ContactTable`, `CallHistory`, `TeamTable`, `LeadTable`)
 - Header: `bg-slate-50/60 dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-500 uppercase tracking-wider`
 - Rows: `hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors border-b border-slate-100 dark:border-slate-800/60`
 - Numbers & Durations: Monospaced font (`font-mono text-xs`) for clean numerical alignment.
+
+### 2.4 Manager Command Center & Team Allocation (`/manager/*`)
+- **Navigation (`SidebarManager.jsx`)**: Unified Whitespace CRM branding, `useLocation` active route pill indicators (`bg-indigo-50 text-indigo-700`), and responsive mobile drawer.
+- **Manager Dashboard (`Man.jsx`)**: Executive metric cards for voice session volume, average connect rate, clinical sentiment distribution matrix, and priority supervisor action queue.
+- **Team Workload Overview (`Team.jsx`)**: Live agent capacity tracker, workload intensity meters (`High` / `Medium` / `Low`), and sorting by open tasks or active campaign count.
+- **Batch Lead Assignment (`Assign.jsx`)**: 2-step allocation wizard with drag-and-drop CSV parser, lead row inspection/rejection, dedicated agent selector, and round-robin auto-distributor.
+- **Task Rejection Audits (`ReviewRejection.jsx`)**: Manager review cards with agent justifications, lead metadata, and one-click Approve Dismissal or Reassign actions.
+
+### 2.5 Real-Time Communication Hubs & Multi-Channel Dispatch
+- **WhatsApp Inbox (`WhatsappInbox.jsx`, `ConversationList`, `ChatWindow`)**:
+  - Live conversation list with unread counters, contact search, and auto-poll toggle.
+  - Chat window with outbound message bubbles in unified Indigo (`bg-indigo-600 text-white`), inbound white cards, and instant reply dispatch.
+- **Compose Message (`ComposeMsg.jsx`, `Channels.jsx`, `Sbody.jsx`)**:
+  - Channel selector tabs with Indigo active state for SMS, Email, and WhatsApp.
+  - Multi-language AI draft generator (English, Hindi, Odia) powered by Gemini.
+  - Delivery status confirmation with Twilio gateway message SID inspection.
+
+### 2.6 Authentication Experience (`LoginPage.jsx`, `RegisterPage.jsx`, `EmailVer.jsx`)
+- Clean split layout with interactive cursor eye-tracking characters on brand gradient canvas.
+- Crisp Whitespace CRM logo badge, modern rounded inputs with focus rings, and 6-digit OTP verification inputs.
 
 ---
 
@@ -121,3 +141,30 @@ Caller Query ("Do you have Paracetamol 500mg?")
 
 1. **Local Hybrid Retrieval**: Combines semantic closeness with exact keyword matching in under 50ms without external network hops.
 2. **MongoDB Grounding**: Pre-call patient history is retrieved from `uploaddetails` and `calls` prior to audio streaming.
+
+---
+
+## 5. CRM Platform Landing Page Architecture
+
+The landing page represents a complete **Customer Relationship Management (CRM) Platform** where Autonomous Voice AI serves as a built-in superpower rather than an isolated developer bot tool:
+
+1. **Omnichannel Core**: Highlights unified interactions across WhatsApp, SMS, Email, and live phone calls in a single timeline.
+2. **Customer 360° Profiles**: Shows rich contact records, medical/prescription notes, tags, and lifetime value.
+3. **Visual Lead Pipelines**: Showcases deal stages (New Inbound, Contacted, Proposal, Won) with velocity metrics.
+4. **Autonomous Voice AI & RAG Engine**: Demonstrates sub-50ms knowledge lookups, full barge-in, and instant post-call CRM action logging.
+5. **Manager Command & Operations**: Features team workload balancing, round-robin lead allocation, and supervisor rejection audit workflows.
+6. **Dual Role Navigation**: Clear entry points for Frontline Agents (`/agent/dashboard`) and Clinic/Sales Managers (`/manager/dashboard`).
+
+---
+
+## 6. Authentication & Onboarding Visual System Alignment
+
+All authentication pages (`/auth/login`, `/auth/register`, `/auth/send-verify-otp`) are styled to seamlessly match the Landing page's clinical dark aesthetic:
+
+- **Canvas & Ambient Lighting**: `bg-slate-950` with high-elevation `blur-[140px]` gradient glows (`indigo-600/20`, `purple-600/20`, `emerald-500/15`).
+- **Brand Header**: Whitespace CRM logo badge with high-contrast text and a direct `← Back to Home` return link.
+- **Glassmorphism Panels**: `rounded-3xl bg-slate-900/70 border border-slate-800/80 backdrop-blur-2xl shadow-2xl shadow-indigo-950/50`.
+- **Form Controls**: Deep slate inputs (`bg-slate-950/80 border-slate-800`) with glowing `indigo-500` focus rings and gradient submit buttons (`bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-600`).
+- **Enterprise Showcase**: Desktop views display a live customer preview card highlighting real-time WhatsApp sync, sub-50ms RAG telemetry, and HIPAA compliance badges.
+
+

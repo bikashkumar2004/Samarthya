@@ -12,11 +12,9 @@ import {
   Phone,
   Clock,
   Megaphone,
-  Shield,
-  User,
   Bot
 } from "lucide-react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 
 // Utility function for className merging
 const cn = (...classes) => {
@@ -74,11 +72,11 @@ export const DesktopSidebar = ({ className, children, ...props }) => {
   return (
     <motion.div
       className={cn(
-        "h-full px-4 py-4 hidden md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 w-[300px] flex-shrink-0",
+        "h-full px-3 py-4 hidden md:flex md:flex-col bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex-shrink-0 z-20 shadow-sm transition-all duration-200",
         className
       )}
       animate={{
-        width: animate ? (open ? "220px" : "60px") : "220px",
+        width: animate ? (open ? "240px" : "68px") : "240px",
       }}
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
@@ -95,13 +93,19 @@ export const MobileSidebar = ({ className, children, ...props }) => {
     <>
       <div
         className={cn(
-          "h-10 px-4 py-4 flex flex-row md:hidden items-center justify-between bg-neutral-100 dark:bg-neutral-800 w-full"
+          "h-14 px-4 flex flex-row md:hidden items-center justify-between bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 w-full"
         )}
         {...props}
       >
-        <div className="flex justify-end z-20 w-full">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-white shadow-xs">
+            <Bot className="h-4 w-4" />
+          </div>
+          <span className="font-bold text-slate-900 dark:text-slate-100 text-sm">Whitespace CRM</span>
+        </div>
+        <div className="flex justify-end z-20">
           <Menu
-            className="text-neutral-800 dark:text-neutral-200 cursor-pointer"
+            className="text-slate-700 dark:text-slate-200 cursor-pointer w-5 h-5"
             onClick={() => setOpen(!open)}
           />
         </div>
@@ -112,19 +116,19 @@ export const MobileSidebar = ({ className, children, ...props }) => {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: "-100%", opacity: 0 }}
               transition={{
-                duration: 0.3,
+                duration: 0.25,
                 ease: "easeInOut",
               }}
               className={cn(
-                "fixed h-full w-full inset-0 bg-white dark:bg-neutral-900 p-10 z-[100] flex flex-col justify-between",
+                "fixed h-full w-full inset-0 bg-white dark:bg-slate-900 p-6 z-[100] flex flex-col justify-between",
                 className
               )}
             >
               <div
-                className="absolute right-10 top-10 z-50 text-neutral-800 dark:text-neutral-200 cursor-pointer"
+                className="absolute right-6 top-6 z-50 text-slate-700 dark:text-slate-200 cursor-pointer"
                 onClick={() => setOpen(!open)}
               >
-                <X />
+                <X className="w-5 h-5" />
               </div>
               {children}
             </motion.div>
@@ -137,22 +141,35 @@ export const MobileSidebar = ({ className, children, ...props }) => {
 
 export const SidebarLink = ({ link, className, ...props }) => {
   const { open, animate } = useSidebar();
-  const location = window.location ? window.location.pathname : "";
-  const isActive = location === link.path || (link.path !== "/agent/dashboard" && location.startsWith(link.path));
+  const location = useLocation();
+  const isActive =
+    location.pathname === link.path ||
+    (link.path !== "/agent/dashboard" && location.pathname.startsWith(link.path));
 
   return (
     <Link
       to={link.path}
+      title={!open ? link.label : undefined}
       className={cn(
-        "flex items-center justify-start gap-3 px-3 py-2.5 rounded-xl transition-all text-sm font-medium",
+        "transition-all duration-150 group relative",
+        open
+          ? "w-full flex items-center justify-start gap-3 px-3 py-2.5 rounded-xl text-sm font-medium"
+          : "w-10 h-10 mx-auto flex items-center justify-center rounded-xl p-0",
         isActive
-          ? "bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 font-semibold shadow-sm"
-          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/60",
+          ? "bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 font-semibold shadow-xs"
+          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60",
         className
       )}
       {...props}
     >
-      <div className={cn("transition-colors", isActive ? "text-indigo-600 dark:text-indigo-400" : "text-slate-500 dark:text-slate-400")}>
+      <div
+        className={cn(
+          "flex-shrink-0 transition-colors flex items-center justify-center",
+          isActive
+            ? "text-indigo-600 dark:text-indigo-400"
+            : "text-slate-500 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200"
+        )}
+      >
         {link.icon}
       </div>
       <motion.span
@@ -173,18 +190,23 @@ export const Logo = () => {
   return (
     <Link
       to="/agent/dashboard"
-      className="flex items-center gap-2.5 py-2 px-1 relative z-20 group"
+      className="flex items-center gap-3 px-1 py-1 relative z-20 group"
     >
-      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 shrink-0">
-        <Bot className="h-4 w-4" />
+      <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 shrink-0">
+        <Bot className="h-5 w-5" />
       </div>
-      <motion.span
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="font-bold text-slate-900 dark:text-white text-base tracking-tight truncate"
+        className="flex flex-col truncate"
       >
-        Whitespace CRM
-      </motion.span>
+        <span className="font-bold text-slate-900 dark:text-white text-base leading-tight tracking-tight truncate">
+          Whitespace CRM
+        </span>
+        <span className="text-[10px] font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+          Voice AI Platform
+        </span>
+      </motion.div>
     </Link>
   );
 };
@@ -193,10 +215,11 @@ export const LogoIcon = () => {
   return (
     <Link
       to="/agent/dashboard"
-      className="flex items-center justify-center py-2 relative z-20"
+      className="w-10 h-10 mx-auto flex items-center justify-center relative z-20"
+      title="Whitespace CRM"
     >
-      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
-        <Bot className="h-4 w-4" />
+      <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
+        <Bot className="h-5 w-5" />
       </div>
     </Link>
   );
@@ -208,107 +231,88 @@ export default function SidebarDemo() {
     {
       label: "Dashboard",
       path: "/agent/dashboard",
-      icon: (
-        <LayoutDashboard className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
+      icon: <LayoutDashboard className="h-5 w-5 flex-shrink-0" />,
     },
     {
       label: "Compose Message",
       path: "/agent/composemessage",
-      icon: (
-        <MessageSquarePlus className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
+      icon: <MessageSquarePlus className="h-5 w-5 flex-shrink-0" />,
     },
     {
-      label: "Whatsapp Inbox",
+      label: "WhatsApp Inbox",
       path: "/agent/whatsapp-inbox",
-      icon: (
-        <MessageCircle className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
+      icon: <MessageCircle className="h-5 w-5 flex-shrink-0" />,
     },
     {
       label: "Task Management",
       path: "/agent/task-management",
-      icon: (
-        <ClipboardList className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
+      icon: <ClipboardList className="h-5 w-5 flex-shrink-0" />,
     },
     {
       label: "My Contacts",
       path: "/agent/my-contacts",
-      icon: (
-        <Users className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
+      icon: <Users className="h-5 w-5 flex-shrink-0" />,
     },
     {
       label: "Leads",
       path: "/agent/leads",
-      icon: (
-        <Target className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
+      icon: <Target className="h-5 w-5 flex-shrink-0" />,
     },
     {
       label: "AI Call Manager",
       path: "/agent/aicallmanager",
-      icon: (
-        <Phone className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
+      icon: <Phone className="h-5 w-5 flex-shrink-0" />,
     },
     {
       label: "Pending Followups",
       path: "/agent/pending-followups",
-      icon: (
-        <Clock className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
+      icon: <Clock className="h-5 w-5 flex-shrink-0" />,
     },
     {
       label: "Campaigns",
       path: "/agent/campaigns",
-      icon: (
-        <Megaphone className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
+      icon: <Megaphone className="h-5 w-5 flex-shrink-0" />,
     },
   ];
 
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="h-screen w-full bg-neutral-100 dark:bg-neutral-900">
-      <div
-        className={cn(
-          "rounded-md flex flex-col justify-end md:flex-row w-screen flex-1  border border-neutral-200 dark:border-neutral-700 overflow-hidden",
-          "h-screen"
-        )}
-      >
-        <Sidebar open={open} setOpen={setOpen}>
-          <SidebarBody className="justify-between gap-10">
-            <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-              {open ? <Logo /> : <LogoIcon />}
-              <div className="mt-8 flex flex-col gap-2">
-                {links.map((link, idx) => (
-                  <SidebarLink key={idx} link={link} />
-                ))}
+    <div className="h-screen w-full bg-slate-50/70 dark:bg-slate-950 flex flex-col md:flex-row overflow-hidden">
+      <Sidebar open={open} setOpen={setOpen}>
+        <SidebarBody className="justify-between gap-6">
+          <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+            {open ? <Logo /> : <LogoIcon />}
+            <div className="mt-6 flex flex-col gap-1.5">
+              {links.map((link, idx) => (
+                <SidebarLink key={idx} link={link} />
+              ))}
+            </div>
+          </div>
+          <div className="border-t border-slate-200 dark:border-slate-800 pt-3">
+            {open ? (
+              <div className="flex items-center gap-3 px-2 py-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                <div className="h-8 w-8 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 font-bold flex items-center justify-center text-xs flex-shrink-0">
+                  A1
+                </div>
+                <div className="flex flex-col truncate">
+                  <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">Agent Clinical Portal</span>
+                  <span className="text-[11px] text-slate-500 truncate">agent@whitespace.ai</span>
+                </div>
               </div>
-            </div>
-            <div>
-              <SidebarLink
-                link={{
-                  label: "Agent 1",
-                  href: "#",
-                  icon: (
-                    <div className="h-7 w-7 flex-shrink-0 rounded-full bg-gray-200 flex items-center justify-center">
-                      <User className="h-4 w-4 text-gray-700" />
-                    </div>
-                  ),
-                }}
-              />
-            </div>
-          </SidebarBody>
-        </Sidebar>
-        <main className="flex-1 overflow-y-auto overflow-x-hidden bg-slate-50/70 dark:bg-slate-950 p-4 sm:p-6 lg:p-8">
-          <Outlet />
-        </main>
-      </div>
+            ) : (
+              <div className="w-10 h-10 mx-auto rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center transition" title="Agent Clinical Portal">
+                <div className="h-8 w-8 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 font-bold flex items-center justify-center text-xs">
+                  A1
+                </div>
+              </div>
+            )}
+          </div>
+        </SidebarBody>
+      </Sidebar>
+      <main className="flex-1 overflow-y-auto overflow-x-hidden bg-slate-50/70 dark:bg-slate-950 p-4 sm:p-6 lg:p-8">
+        <Outlet />
+      </main>
     </div>
   );
 }

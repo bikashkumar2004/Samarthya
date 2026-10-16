@@ -11,19 +11,19 @@
   --font-grotesk: "Space Grotesk", sans-serif;
   
   /* Default: light theme colors */
-  --color-primary: #043927;
-  --color-secondary: #d8fdd2;
-  --bg-color: #f8f8f8;
-  --text-color: #000000;
+  --color-primary: #4f46e5;
+  --color-secondary: #e0e7ff;
+  --bg-color: #f8fafc;
+  --text-color: #0f172a;
 }
 
 /* Dark mode variables */
 .dark {
   color-scheme: dark;
-  --color-primary: #d8fdd2;
-  --color-secondary: #043927;
-  --bg-color: #0a0a0a;
-  --text-color: #ffffff;
+  --color-primary: #6366f1;
+  --color-secondary: #1e1b4b;
+  --bg-color: #020617;
+  --text-color: #f8fafc;
 }
 
 @layer base {

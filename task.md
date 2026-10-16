@@ -19,6 +19,11 @@
 - [x] **Post-Call LangChain Intelligence Pipeline**:
   - [x] Built structured LangChain extraction for executive summary, sentiment analysis, and action items.
   - [x] Implemented automatic task insertion into MongoDB `taskdetails` collection.
+- [x] **CRM Platform Landing Page Transformation**:
+  - [x] Repositioned `Landing.jsx` from an isolated Voice bot page to a comprehensive **Customer Relationship Management (CRM) Platform**.
+  - [x] Showcased Omnichannel Customer 360°, WhatsApp Inbox, Visual Lead Pipelines, Manager Workload Balancing, and Sub-50ms Autonomous Voice AI.
+  - [x] Added interactive CRM experience hub with tabbed Customer 360, Kanban Pipeline, Voice Telephony, and Manager Command Center views.
+  - [x] Provided direct role navigation for Frontline Agents (`/agent/dashboard`) and Clinic/Sales Managers (`/manager/dashboard`).
 - [x] **Documentation Suite Created**:
   - [x] `PRD.md`
   - [x] `architecture.md`

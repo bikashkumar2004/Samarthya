@@ -1,65 +1,72 @@
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Clock, AlertCircle, PhoneOff, AlertTriangle } from "lucide-react";
 
 export default function PendingStatsCards({ stats }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <Card className="border-2 border-red-200 bg-gradient-to-br from-red-50 to-rose-50 hover:shadow-xl transition-shadow">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold text-red-700 flex items-center gap-2">
-            <AlertCircle className="w-4 h-4" />
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      {/* Calls Rejected */}
+      <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 shadow-sm">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
             Calls Rejected
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-4xl font-black bg-gradient-to-r from-red-600 to-rose-600 bg-clip-text text-transparent">
-            {stats.rejected}
+          </span>
+          <div className="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+            <AlertCircle className="w-4 h-4" />
           </div>
-        </CardContent>
-      </Card>
+        </div>
+        <div className="text-3xl font-extrabold text-slate-900 dark:text-white mt-2">
+          {stats.rejected}
+        </div>
+        <p className="text-xs text-slate-400 mt-1">Declined or dropped by caller</p>
+      </div>
 
-      <Card className="border-2 border-yellow-200 bg-gradient-to-br from-yellow-50 to-amber-50 hover:shadow-xl transition-shadow">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold text-yellow-700 flex items-center gap-2">
-            <Clock className="w-4 h-4" />
+      {/* Follow-ups Needed */}
+      <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 shadow-sm">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
             Follow-ups Needed
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-4xl font-black bg-gradient-to-r from-yellow-600 to-amber-600 bg-clip-text text-transparent">
-            {stats.followups}
+          </span>
+          <div className="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+            <Clock className="w-4 h-4" />
           </div>
-        </CardContent>
-      </Card>
+        </div>
+        <div className="text-3xl font-extrabold text-amber-600 dark:text-amber-400 mt-2">
+          {stats.followups}
+        </div>
+        <p className="text-xs text-slate-400 mt-1">Awaiting pharmacist verification</p>
+      </div>
 
-      <Card className="border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-cyan-50 hover:shadow-xl transition-shadow">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold text-blue-700 flex items-center gap-2">
+      {/* Missed Calls */}
+      <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 shadow-sm">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            Missed / No Answer
+          </span>
+          <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
             <PhoneOff className="w-4 h-4" />
-            Missed Calls
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-4xl font-black bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-            {stats.missed}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+        <div className="text-3xl font-extrabold text-indigo-600 dark:text-indigo-400 mt-2">
+          {stats.missed}
+        </div>
+        <p className="text-xs text-slate-400 mt-1">Automatic redial queued</p>
+      </div>
 
-      <Card className="border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50 hover:shadow-xl transition-shadow">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold text-purple-700 flex items-center gap-2">
+      {/* Urgent Follow-ups */}
+      <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 shadow-sm">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            Urgent Attention
+          </span>
+          <div className="w-8 h-8 rounded-lg bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center">
             <AlertTriangle className="w-4 h-4" />
-            Urgent Follow-ups
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-4xl font-black bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-            {stats.urgent}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+        <div className="text-3xl font-extrabold text-rose-600 dark:text-rose-400 mt-2">
+          {stats.urgent}
+        </div>
+        <p className="text-xs text-slate-400 mt-1">Negative sentiment or urgent side effect</p>
+      </div>
     </div>
   );
 }
